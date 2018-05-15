@@ -1,0 +1,285 @@
+﻿<div class="card m-1">
+    <div class="card-header bg-darkblue text-white" data-toggle="collapse" data-target="#step1" aria-expanded="false" aria-controls="step1">
+        <img src="../../img/one.svg" class="img img-fluid" alt="Responsive image"> <strong>Before Mortuary</strong>
+    </div>
+    <div class="card-body show" id="step1">
+        <form>
+            <div class="form-row m-1">
+                <h4>Deceased Information</h4>
+            </div>
+            <div class="card-body border-left border-primary">
+                <div class="form-row m-2">
+                    <div class="form-group col-md-6">
+                        <label>Deceased Last name</label>
+                        <input type="text" class="form-control" ng-model="deceased.LastName">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Deceased First name</label>
+                        <input type="text" class="form-control" ng-model="deceased.FirstName">
+                    </div>
+                </div>
+                <div class="form-row m-2">
+                    <div class="form-group col-md-6">
+                        <label>Deceased ID Number </label>
+                        <input type="text" class="form-control" ng-model="deceased.SAIdNumber">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputCity">Date of death</label>
+                        <div class="form-group">
+                            <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker4" ng-model="deceased.DateOfBirth" />
+                                <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            $(function () {
+                                $('#datetimepicker4').datetimepicker({
+                                    format: 'L'
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+                <div class="form-row m-2">
+                    <div class="form-group col-md-6">
+                        <label>Gender</label>
+                        <div class="custom-controls-stacked d-block">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="genderMale" name="gender" class="custom-control-input" ng-model="deceased.GenderId">
+                                <label class="custom-control-label" for="genderMale">Male</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="genderFemale" name="gender" class="custom-control-input" ng-model="deceased.GenderId">
+                                <label class="custom-control-label" for="genderFemale">Female</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>The body of the deceased was retrieved from</label>
+                        <div class="custom-controls-stacked d-block">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="hospital" name="placeOfDeath" class="custom-control-input" ng-model="funeral.WhereWasTheBodyRetrieved">
+                                <label class="custom-control-label" for="hospital">Hospital</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="mortuary" name="placeOfDeath" class="custom-control-input" ng-model="funeral.WhereWasTheBodyRetrieved">
+                                <label class="custom-control-label" for="mortuary">Home</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="other" name="placeOfDeath" class="custom-control-input">
+                                <label class="custom-control-label" for="other">Other</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row m-2">
+                    <div class="form-group col-md-12">
+                        <label for="inputCity">Address of Deceased</label>
+                        <input type="text" class="form-control" ng-model="deceased.FullAddress">
+                    </div>
+                </div>
+                <div class="form-row m-2">
+                    <div class="form-group col-md-12">
+                        <label for="inputCity">Place of Death</label>
+                        <input type="text" class="form-control" ng-model="deceased.PlaceOfDeath">
+                    </div>
+                </div>
+                <div class="form-row m-2">
+                    <div class="form-group col-md-12">
+                        <label for="inputCity">Cause of Death</label>
+                        <textarea class="form-control" ng-model="deceased.CauseOfDeath"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row m-1">
+                <h4>Informant</h4>
+            </div>
+            <div class="card-body border-left border-primary">
+                <div class="form-row m-2">
+                    <div class="form-group col-md-6">
+                        <label>First name</label>
+                        <input type="text" class="form-control" ng-model="informant.FirstName">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Last name</label>
+                        <input type="text" class="form-control" ng-model="informant.LastName">
+                    </div>
+                </div>
+                <div class="form-row m-2">
+                    <div class="form-group col-md-6">
+                        <label>Contact number</label>
+                        <input type="text" class="form-control" ng-model="informant.ContactNumber">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Relationshipt to deceased</label>
+                        <input type="text" class="form-control" ng-model="informant.RelationshipToDeceased">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row m-1">
+                <h4>Next of Kin</h4>
+            </div>
+            <div class="card-body border-left border-primary">
+                <div class="form-row m-2">
+                    <div class="form-group col-md-6">
+                        <label>First name</label>
+                        <input type="text" class="form-control" ng-model="nextOfKin.FirstName">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Last name</label>
+                        <input type="text" class="form-control" ng-model="nextOfKin.LastName">
+                    </div>
+                </div>
+                <div class="form-row m-2">
+                    <div class="form-group col-md-6">
+                        <label>Contact number</label>
+                        <input type="text" class="form-control" ng-model="nextOfKin.ContactNumber">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Relationshipt to deceased</label>
+                        <input type="text" class="form-control" ng-model="nextOfKin.RelationshipToDeceased">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row m-1">
+                <h4>Doctor</h4>
+            </div>
+            <div class="card-body border-left border-primary">
+                <div class="form-row m-2">
+                    <div class="form-group col-md-6">
+                        <label>First name</label>
+                        <input type="text" class="form-control" ng-model="doctor.FirstName">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Last name</label>
+                        <input type="text" class="form-control" ng-model="doctor.LastName">
+                    </div>
+                </div>
+                <div class="form-row m-2">
+                    <div class="form-group col-md-6">
+                        <label>Contact number</label>
+                        <input type="text" class="form-control" ng-model="doctor.ContactNumber">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row m-1">
+                <h4>Home Affairs Officer</h4>
+            </div>
+            <div class="card-body border-left border-primary">
+                <div class="form-row m-2">
+                    <div class="form-group col-md-6">
+                        <label>First name</label>
+                        <input type="text" class="form-control" ng-model="homeAffairesOfficer.FirstName">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Last name</label>
+                        <input type="text" class="form-control" ng-model="homeAffairesOfficer.LastName">
+                    </div>
+                </div>
+                <div class="form-row m-2">
+                    <div class="form-group col-md-6">
+                        <label>Contact number</label>
+                        <input type="text" class="form-control" ng-model="homeAffairesOfficer.ContactNumber">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="card m-1">
+    <div class="card-header bg-darkblue text-white" data-toggle="collapse" data-target="#step2" aria-expanded="false" aria-controls="step2">
+        <img src="../../img/two.svg" class="img img-fluid" alt="Responsive image"> <strong>During Mortuary</strong>
+    </div>
+    <div class="card-body show" id="step2">
+        <form>
+            <div class="form-row m-1">
+                <h4>General Information</h4>
+            </div>
+            <div class="card-body border-left border-primary">
+                <div class="form-row m-2">
+                    <div class="form-group col-md-6">
+                        <label>Mortuary</label>
+                        <input type="text" class="form-control" ng-model="funeral.MortuaryId">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Cemetery</label>
+                        <input type="text" class="form-control" ng-model="funeral.CemeteryId">
+                    </div>
+                </div>
+                <div class="form-row m-2">
+                    <div class="form-group col-md-6">
+                        <label>Grave Number</label>
+                        <input type="text" class="form-control" ng-model="funeral.GraveNumber">
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="card m-1">
+    <div class="card-header bg-darkblue text-white" data-toggle="collapse" data-target="#step3" aria-expanded="false" aria-controls="step3">
+        <img src="../../img/three.svg" class="img img-fluid" alt="Responsive image"> <strong>After Mortuary</strong>
+    </div>
+    <div class="card-body show" id="step3">
+        <form>
+            <div class="form-row m-1">
+                <h4>Purchased Items</h4>
+            </div>
+            <div class="card-body border-left border-primary">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Casket</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Coffin</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <input type="text" class="form-control" />
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" />
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-dark btn-block">Add</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-row m-1">
+                <h4>Deceased Information</h4>
+            </div>
+            <div class="card-body border-left border-primary">
+                <div class="form-row m-2">
+                    <div class="form-group col-md-6">
+                        <label>Cemetery</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Hospital</label>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

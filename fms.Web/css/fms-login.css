@@ -1,0 +1,16 @@
+body {
+    margin: 0;
+    background-color: #34495e;
+    text-align: center;
+}
+
+.login {
+    position: absolute;
+    top: 20%;
+    left: 40%;
+    width: 20%;
+    background: #fff;
+    margin: auto;
+    padding: 50px;
+}
+

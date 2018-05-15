@@ -1,0 +1,25 @@
+﻿<!--<div class="wrapper">
+    <nav id="sidebar">
+        <div ui-view="sidemenu"></div>
+    </nav>
+    <div id="content">
+        <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" ui-view="toolbar"></nav>
+        <div ui-view="body" id="main"></div>
+    </div>
+    <nav class="navbar navbar-expand-sm fixed-bottom navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Fixed bottom</a>
+    </nav>
+</div>-->
+
+
+<div class="wrapper">
+    <!-- Sidebar Holder -->
+    <nav id="sidebar" ui-view="sidemenu">
+    </nav>
+    <!-- Page Content Holder -->
+    <div id="content">
+        <nav class="navbar navbar-default bg-dark" ui-view="toolbar">
+            </nav>
+        <div ui-view="body"></div>
+    </div>
+</div>

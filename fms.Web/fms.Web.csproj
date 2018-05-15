@@ -44,6 +44,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -89,32 +95,210 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="components\account\account-ng-controller.js" />
+    <Content Include="components\account\login.html" />
+    <Content Include="components\base\base-ng-controller.js" />
+    <Content Include="components\base\base.html" />
+    <Content Include="components\funeral\add-funeral.html" />
+    <Content Include="components\funeral\edit-funeral.html" />
+    <Content Include="components\funeral\funeral-ng-controller.js" />
+    <Content Include="components\funeral\list-funeral.html" />
+    <Content Include="components\hospital\hospital-ng-controller.js" />
+    <Content Include="components\hospital\list-hospital.html" />
+    <Content Include="components\hospital\edit-hospital.html" />
+    <Content Include="components\hospital\modal\modal-list-hospital.html" />
+    <Content Include="components\hospital\modal\modal-add-hospital.html" />
+    <Content Include="components\hospital\add-hospital.html" />
+    <Content Include="components\member\add-member.html" />
+    <Content Include="components\member\edit-member.html" />
+    <Content Include="components\member\list-member.html" />
+    <Content Include="css\fms-login.css" />
+    <Content Include="css\fontastic.css" />
+    <Content Include="css\fonts.css" />
+    <Content Include="css\style.blue.css" />
+    <Content Include="css\style.default.css" />
+    <Content Include="css\style.green.css" />
+    <Content Include="css\style.pink.css" />
+    <Content Include="css\style.red.css" />
+    <Content Include="css\style.sea.css" />
+    <Content Include="css\style.violet.css" />
+    <Content Include="img\fms-icon.svg" />
+    <Content Include="components\member\member-ng-controller.js" />
+    <Content Include="components\sidemenu\sidemenu-ng-controller.js" />
+    <Content Include="components\sidemenu\sidemenu.html" />
+    <Content Include="components\toolbar\toolbar-ng-controller.js" />
+    <Content Include="components\toolbar\toolbar.html" />
     <Content Include="css\bootstrap.min.css" />
+    <Content Include="css\fms-sidebar.css" />
+    <Content Include="css\fms.css" />
     <Content Include="css\tempusdominus-bootstrap.min.css" />
     <Content Include="Global.asax" />
     <Content Include="index.html" />
+    <Content Include="js\angular-animate.min.js" />
+    <Content Include="js\angular-sanitize.min.js" />
     <Content Include="js\angular-ui-router.min.js" />
     <Content Include="js\angular-ui-uploader.min.js" />
+    <Content Include="js\angular.min.js" />
     <Content Include="js\bootstrap.min.js" />
+    <Content Include="js\custom\app-directive.js" />
+    <Content Include="js\custom\app-factory.js" />
+    <Content Include="js\custom\app-helper.js" />
+    <Content Include="js\custom\app-module.js" />
+    <Content Include="js\custom\app-router.js" />
+    <Content Include="js\custom\app-service.js" />
+    <Content Include="js\custom\front.js" />
+    <Content Include="js\jquery.cookie.js" />
     <Content Include="js\jquery.min.js" />
+    <Content Include="js\jquery.validate.min.js" />
     <Content Include="js\lodash.min.js" />
     <Content Include="js\popper.min.js" />
     <Content Include="js\tempusdominus-bootstrap.min.js" />
     <Content Include="js\ui.bootstrap.min.js" />
+    <Content Include="libs\bootstrap\css\bootstrap-grid.css" />
+    <Content Include="libs\bootstrap\css\bootstrap-grid.min.css" />
+    <Content Include="libs\bootstrap\css\bootstrap-reboot.css" />
+    <Content Include="libs\bootstrap\css\bootstrap-reboot.min.css" />
+    <Content Include="libs\bootstrap\css\bootstrap.css" />
+    <Content Include="libs\bootstrap\css\bootstrap.min.css" />
+    <Content Include="libs\bootstrap\js\bootstrap.bundle.js" />
+    <Content Include="libs\bootstrap\js\bootstrap.bundle.min.js" />
+    <Content Include="libs\bootstrap\js\bootstrap.js" />
+    <Content Include="libs\bootstrap\js\bootstrap.min.js" />
+    <Content Include="libs\chart.js\Chart.bundle.js" />
+    <Content Include="libs\chart.js\Chart.bundle.min.js" />
+    <Content Include="libs\chart.js\Chart.js" />
+    <Content Include="libs\chart.js\Chart.min.js" />
+    <Content Include="libs\date-time-picker-bootstrap\css\bootstrap-datetimepicker.css" />
+    <Content Include="libs\date-time-picker-bootstrap\css\bootstrap-datetimepicker.min.css" />
+    <Content Include="libs\date-time-picker-bootstrap\js\bootstrap-datetimepicker.min.js" />
+    <Content Include="libs\font-awesome\css\font-awesome.css" />
+    <Content Include="libs\font-awesome\css\font-awesome.min.css" />
+    <Content Include="libs\font-awesome\css\fontawesome-all.min.css" />
+    <Content Include="libs\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="libs\font-awesome\HELP-US-OUT.txt" />
+    <Content Include="libs\font-awesome\webfonts\fa-brands-400.svg" />
+    <Content Include="libs\font-awesome\webfonts\fa-regular-400.svg" />
+    <Content Include="libs\font-awesome\webfonts\fa-solid-900.svg" />
+    <Content Include="libs\jquery-validation\additional-methods.js" />
+    <Content Include="libs\jquery-validation\jquery.validate.js" />
+    <Content Include="libs\jquery-validation\jquery.validate.min.js" />
+    <Content Include="libs\jquery-validation\localization\messages_ar.js" />
+    <Content Include="libs\jquery-validation\localization\messages_az.js" />
+    <Content Include="libs\jquery-validation\localization\messages_bg.js" />
+    <Content Include="libs\jquery-validation\localization\messages_bn_BD.js" />
+    <Content Include="libs\jquery-validation\localization\messages_ca.js" />
+    <Content Include="libs\jquery-validation\localization\messages_cs.js" />
+    <Content Include="libs\jquery-validation\localization\messages_da.js" />
+    <Content Include="libs\jquery-validation\localization\messages_de.js" />
+    <Content Include="libs\jquery-validation\localization\messages_el.js" />
+    <Content Include="libs\jquery-validation\localization\messages_es.js" />
+    <Content Include="libs\jquery-validation\localization\messages_es_AR.js" />
+    <Content Include="libs\jquery-validation\localization\messages_es_PE.js" />
+    <Content Include="libs\jquery-validation\localization\messages_et.js" />
+    <Content Include="libs\jquery-validation\localization\messages_eu.js" />
+    <Content Include="libs\jquery-validation\localization\messages_fa.js" />
+    <Content Include="libs\jquery-validation\localization\messages_fi.js" />
+    <Content Include="libs\jquery-validation\localization\messages_fr.js" />
+    <Content Include="libs\jquery-validation\localization\messages_ge.js" />
+    <Content Include="libs\jquery-validation\localization\messages_gl.js" />
+    <Content Include="libs\jquery-validation\localization\messages_he.js" />
+    <Content Include="libs\jquery-validation\localization\messages_hr.js" />
+    <Content Include="libs\jquery-validation\localization\messages_hu.js" />
+    <Content Include="libs\jquery-validation\localization\messages_hy_AM.js" />
+    <Content Include="libs\jquery-validation\localization\messages_id.js" />
+    <Content Include="libs\jquery-validation\localization\messages_is.js" />
+    <Content Include="libs\jquery-validation\localization\messages_it.js" />
+    <Content Include="libs\jquery-validation\localization\messages_ja.js" />
+    <Content Include="libs\jquery-validation\localization\messages_ka.js" />
+    <Content Include="libs\jquery-validation\localization\messages_kk.js" />
+    <Content Include="libs\jquery-validation\localization\messages_ko.js" />
+    <Content Include="libs\jquery-validation\localization\messages_lt.js" />
+    <Content Include="libs\jquery-validation\localization\messages_lv.js" />
+    <Content Include="libs\jquery-validation\localization\messages_mk.js" />
+    <Content Include="libs\jquery-validation\localization\messages_my.js" />
+    <Content Include="libs\jquery-validation\localization\messages_nl.js" />
+    <Content Include="libs\jquery-validation\localization\messages_no.js" />
+    <Content Include="libs\jquery-validation\localization\messages_pl.js" />
+    <Content Include="libs\jquery-validation\localization\messages_pt_BR.js" />
+    <Content Include="libs\jquery-validation\localization\messages_pt_PT.js" />
+    <Content Include="libs\jquery-validation\localization\messages_ro.js" />
+    <Content Include="libs\jquery-validation\localization\messages_ru.js" />
+    <Content Include="libs\jquery-validation\localization\messages_sd.js" />
+    <Content Include="libs\jquery-validation\localization\messages_si.js" />
+    <Content Include="libs\jquery-validation\localization\messages_sk.js" />
+    <Content Include="libs\jquery-validation\localization\messages_sl.js" />
+    <Content Include="libs\jquery-validation\localization\messages_sr.js" />
+    <Content Include="libs\jquery-validation\localization\messages_sr_lat.js" />
+    <Content Include="libs\jquery-validation\localization\messages_sv.js" />
+    <Content Include="libs\jquery-validation\localization\messages_th.js" />
+    <Content Include="libs\jquery-validation\localization\messages_tj.js" />
+    <Content Include="libs\jquery-validation\localization\messages_tr.js" />
+    <Content Include="libs\jquery-validation\localization\messages_uk.js" />
+    <Content Include="libs\jquery-validation\localization\messages_ur.js" />
+    <Content Include="libs\jquery-validation\localization\messages_vi.js" />
+    <Content Include="libs\jquery-validation\localization\messages_zh.js" />
+    <Content Include="libs\jquery-validation\localization\messages_zh_TW.js" />
+    <Content Include="libs\jquery-validation\localization\methods_de.js" />
+    <Content Include="libs\jquery-validation\localization\methods_es_CL.js" />
+    <Content Include="libs\jquery-validation\localization\methods_fi.js" />
+    <Content Include="libs\jquery-validation\localization\methods_nl.js" />
+    <Content Include="libs\jquery-validation\localization\methods_pt.js" />
+    <Content Include="libs\jquery.cookie\jquery.cookie.js" />
+    <Content Include="libs\jquery.cookie\MIT-LICENSE.txt" />
+    <Content Include="libs\jquery\core.js" />
+    <Content Include="libs\jquery\jquery.js" />
+    <Content Include="libs\jquery\jquery.min.js" />
+    <Content Include="libs\jquery\jquery.slim.js" />
+    <Content Include="libs\jquery\jquery.slim.min.js" />
+    <Content Include="libs\momentjs\js\moment.min.js" />
+    <Content Include="libs\popper.js\esm\popper-utils.js" />
+    <Content Include="libs\popper.js\esm\popper-utils.min.js" />
+    <Content Include="libs\popper.js\esm\popper.js" />
+    <Content Include="libs\popper.js\esm\popper.min.js" />
+    <Content Include="libs\popper.js\popper-utils.js" />
+    <Content Include="libs\popper.js\popper-utils.min.js" />
+    <Content Include="libs\popper.js\popper.js" />
+    <Content Include="libs\popper.js\popper.min.js" />
+    <Content Include="libs\popper.js\umd\popper-utils.js" />
+    <Content Include="libs\popper.js\umd\popper-utils.min.js" />
+    <Content Include="libs\popper.js\umd\popper.js" />
+    <Content Include="libs\popper.js\umd\popper.min.js" />
+    <Content Include="libs\tempusdominus-bootstrap\css\tempusdominus-bootstrap-4.min.css" />
+    <Content Include="libs\tempusdominus-bootstrap\js\tempusdominus-bootstrap-4.min.js" />
     <Content Include="Views\web.config" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="assets\base\BaseController.cs" />
-    <Compile Include="assets\funeral\FuneralController.cs" />
-    <Compile Include="assets\member\MemberController.cs" />
+    <Compile Include="components\base\BaseController.cs" />
+    <Compile Include="components\funeral\FuneralController.cs" />
+    <Compile Include="components\hospital\HospitalController.cs" />
+    <Compile Include="components\member\MemberController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="libs\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="libs\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="libs\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="libs\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="libs\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="libs\jquery.cookie\component.json" />
+    <Content Include="libs\jquery.cookie\cookie.jquery.json" />
+    <Content Include="libs\font-awesome\webfonts\fa-brands-400.eot" />
+    <Content Include="libs\font-awesome\webfonts\fa-brands-400.ttf" />
+    <Content Include="libs\font-awesome\webfonts\fa-brands-400.woff" />
+    <Content Include="libs\font-awesome\webfonts\fa-brands-400.woff2" />
+    <Content Include="libs\font-awesome\webfonts\fa-regular-400.eot" />
+    <Content Include="libs\font-awesome\webfonts\fa-regular-400.ttf" />
+    <Content Include="libs\font-awesome\webfonts\fa-regular-400.woff" />
+    <Content Include="libs\font-awesome\webfonts\fa-regular-400.woff2" />
+    <Content Include="libs\font-awesome\webfonts\fa-solid-900.eot" />
+    <Content Include="libs\font-awesome\webfonts\fa-solid-900.ttf" />
+    <Content Include="libs\font-awesome\webfonts\fa-solid-900.woff" />
+    <Content Include="libs\font-awesome\webfonts\fa-solid-900.woff2" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -124,11 +308,27 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="assets\account\" />
-    <Folder Include="assets\home\" />
+    <Folder Include="components\home\" />
+    <Folder Include="libs\font-awesome\less\" />
+    <Folder Include="libs\font-awesome\scss\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Funeral\" />
+    <Folder Include="Views\Hospital\" />
     <Folder Include="Views\Member\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\fms.EF\fms.EF.csproj">
+      <Project>{4960284C-F6DB-4C20-AFC7-9C228E4AAEEF}</Project>
+      <Name>fms.EF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\fms.Model\fms.Model.csproj">
+      <Project>{1FBED848-9481-4086-9593-02DAB08ED938}</Project>
+      <Name>fms.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\fms.Service\fms.Service.csproj">
+      <Project>{E1F87A5C-AE74-49C1-A940-20BBAC7AFE90}</Project>
+      <Name>fms.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
