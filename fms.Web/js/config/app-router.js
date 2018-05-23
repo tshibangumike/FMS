@@ -11,6 +11,7 @@ angular.module("fmsApp")
                 fms.Routes.SetRoutes("account", "login"),
                 fms.Routes.SetRoutes("funeral", "list"),
                 fms.Routes.SetRoutes("funeral", "add"),
+                fms.Routes.SetRoutes("funeral", "edit"),
                 fms.Routes.SetRoutes("member", "list")
             ];
 

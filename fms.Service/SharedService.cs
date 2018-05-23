@@ -92,5 +92,38 @@ namespace fms.Service
             return null;
         }
 
+        private static Random random = new Random();
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        public static void UpdateAttributeToKeyValueObject(List<KeyValue> keyValue, string key, string value)
+        {
+            if (keyValue.Any(x => x.Key == key))
+            {
+                keyValue.FirstOrDefault(x => x.Key == key).Value = value;
+            }
+            else
+            {
+                keyValue.Add(new KeyValue()
+                {
+                    Key = key,
+                    Value = value
+                });
+            }
+        }
+
+        public static void AddAttributeToKeyValueObject(List<KeyValue> keyValue, string key, string value)
+        {
+            keyValue.Add(new KeyValue()
+            {
+                Key = key,
+                Value = value
+            });
+        }
+
     }
 }

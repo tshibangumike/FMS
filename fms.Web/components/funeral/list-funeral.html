@@ -10,7 +10,7 @@
                 <a class="nav-link active mr-1" ui-sref="addfuneral"><i class="fa fa-plus-square"></i> New</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active mr-1" href="#"><i class="fa fa-pen-square"></i> Edit</a>
+                <a class="nav-link active mr-1" ng-click="editRecord()"><i class="fa fa-pen-square"></i> Edit</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link active mr-1" href="#"><i class="fa fa-trash-alt"></i> Delete</a>
@@ -22,29 +22,36 @@
             <thead class="thead-light">
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="all" ng-model="all">
+                            <label class="custom-control-label" for="all"></label>
+                        </div>
+                    </th>
+                    <th scope="col">Funeral Number</th>
+                    <th scope="col">Deceased's Full Name</th>
+                    <th scope="col">Date of Death</th>
+                    <th scope="col">Informant's Full Name</th>
+                    <th scope="col">Next Of Kin's Full Name</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
+                <tr ng-repeat="record in records" ng-dblclick="editRecord(record)">
+                    <th scope="row">{{ $index + 1 }}</th>
+                    <td scope="row">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="{{ record.Id }}"
+                                   ng-model="record.Selected"
+                                   ng-change="selectRecord(record)"
+                                   ng-checked="all">
+                            <label class="custom-control-label" for="{{ record.Id }}"></label>
+                        </div>
+                    </td>
+                    <td>{{ record.FuneralNumber }}</td>
+                    <td>{{ record.DeceasedFullName }}</td>
+                    <td>{{ record.DateOfDeath | jsonDate :'yyyy-MM-dd'}}</td>
+                    <td>{{ record.InformantFullName }}</td>
+                    <td>{{ record.NextOfKinFullName }}</td>
                 </tr>
             </tbody>
         </table>

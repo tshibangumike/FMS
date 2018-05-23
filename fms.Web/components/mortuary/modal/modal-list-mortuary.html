@@ -1,0 +1,64 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Lookup for Mortuaries</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <input type="text" class="form-control" ng-model="searchText" />
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="record in records | filter : searchText">
+                <th scope="row">
+                    {{ $index + 1 }}
+                </th>
+                <td ng-style="{ 'width' : 15 }">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="{{ record.Id }}"
+                               ng-model="record.Selected"
+                               ng-change="selectRecord(record)" >
+                        <label class="custom-control-label" for="{{ record.Id }}"></label>
+                    </div>
+
+                </td>
+                <td>
+                    {{ record.Name }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="float-left">
+                <button type="button" class="btn btn-labeled btn-primary m-1" ng-click="addNewHospital()">
+                    <span class="btn-label">
+                        <i class="fa fa-check-circle"></i>
+                    </span>
+                    New Mortuary
+                </button>
+            </div>
+            <div class="float-right">
+                <button type="button" class="btn btn-labeled btn-success m-1" ng-click="save()">
+                    <span class="btn-label">
+                        <i class="fa fa-check-circle"></i>
+                    </span>
+                    Save
+                </button>
+                <button type="submit" class="btn btn-labeled btn-danger m-1" ng-click="cancel()">
+                    <span class="btn-label">
+                        <i class="fa fa-ban"></i>
+                    </span>
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+</div>

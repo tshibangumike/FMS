@@ -5,6 +5,23 @@
         function ($rootScope, $scope, $uibModal, $uibModalInstance, appService, records) {
 
             $scope.records = records.data;
+            $scope.selectedRecords = [];
+
+            $scope.selectRecord = function () {
+                if (_.isEqual(arguments.length, 0)) return null;
+                var _record = _.isNull(arguments[0], 0) ? null : arguments[0];
+                if (_.isNull(arguments[0])) return null;
+                if (_record.Selected) {
+                    //add id in array
+                    $scope.selectedRecords.push(_record);
+                }
+                else {
+                    //remove id from array
+                    _.remove($scope.selectedRecords, function (x) {
+                        return _.isEqual(x.Id, _record.Id);
+                    });
+                }
+            };
 
             $scope.addNewHospital = function () {
 
@@ -18,10 +35,16 @@
                 });
 
                 modalInstance.result.then(function (selectedRecord) {
-                    $scope.vehicle["VehicleDriverName"] = selectedRecord.Name;
-                    $scope.vehicle["VehicleDriverId"] = selectedRecord.Id;
+                    $scope.selectedRecords.push(selectedRecord);
+                    if (!_.isEqual($scope.selectedRecords.length, 1)) return;
+                    $uibModalInstance.close($scope.selectedRecords[0]);
                 });
 
+            };
+
+            $scope.save = function () {
+                if (!_.isEqual($scope.selectedRecords.length, 1)) return;
+                $uibModalInstance.close($scope.selectedRecords[0]);
             };
 
             $scope.cancel = function () {
@@ -48,14 +71,12 @@
                 if (!form.$valid) {
                     return null;
                 }
-                appService.PostForm("/Hospital/AddHospital", { hospital: $scope.hospital })
+                var keyValuesHospital = fms.Functions.SplitObjectIntoArray($scope.hospital);
+                appService.PostForm("/Hospital/AddHospital", { hospital: keyValuesHospital })
                     .then(function successCallback(response) {
-
                         $uibModalInstance.close(response.data.hospital);
-
                     }, function errorCallback(response) {
                     });
             };
-
         }
     ]);

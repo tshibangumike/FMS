@@ -8,29 +8,19 @@ namespace fms.Service
 {
     public class HospitalService
     {
-        public static List<Dictionary<string, object>> QueryHospitals()
+        public static List<Dictionary<string, object>> QueryActiveHospitals()
         {
-            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Hospital_queryhospitals]", null);
+            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Hospital_queryactivehospitals]", null);
             return records;
         }
-        public static Hospital QueryHospitalsById(Guid id)
+        public static Dictionary<string, object> QueryHospitalById(Guid hosptitalId)
         {
             var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Hospital_queryhospitalbyid]",
-                new List<SqlParameter> { new SqlParameter("@id", id) });
-            if (records != null && records.Count == 1)
-            {
-                var _id = (Guid)records[0].FirstOrDefault(x => x.Key == "Id").Value;
-                var _name = (string)records[0].FirstOrDefault(x => x.Key == "Name").Value;
-                var _addressId = string.IsNullOrEmpty(records[0].FirstOrDefault(x => x.Key == "AddressId").Value.ToString())
-                    ? Guid.Empty
-                    : (Guid)records[0].FirstOrDefault(x => x.Key == "AddressId").Value;
-                return new Hospital()
-                {
-                    Id = _id,
-                    Name = _name,
-                    AddressId = _addressId
-                };
-            }
+                 new List<SqlParameter>
+                    {
+                            new SqlParameter("@id", hosptitalId),
+                    });
+            if (records != null && records.Count == 1) return records[0];
             return null;
         }
         public static List<Dictionary<string, object>> QueryHospitalsByName(string searchText)
@@ -39,22 +29,27 @@ namespace fms.Service
                 new List<SqlParameter> { new SqlParameter("@searchText", searchText) });
             return records;
         }
-        public static ReturnObject InsertHospital(Hospital hospital)
+        public static ReturnObject InsertHospital(List<KeyValue> hospital)
         {
             try
             {
+                var id = hospital.FirstOrDefault(x => x.Key == "Id")?.Value;
+                var name = hospital.FirstOrDefault(x => x.Key == "Name")?.Value;
+                var addressId = hospital.FirstOrDefault(x => x.Key == "AddressId")?.Value;
+
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Hospital_create]",
                     new List<SqlParameter>
                     {
-                            new SqlParameter("@id", hospital.Id),
-                            new SqlParameter("@name", hospital.Name)
+                            new SqlParameter("@id", id),
+                            new SqlParameter("@name", name),
+                            new SqlParameter("@addressId", addressId)
 
                     });
                 if (returnValue == 1)
                 {
                     return new ReturnObject()
                     {
-                        Id = hospital.Id.ToString(),
+                        Id = id,
                         State = "success",
                         Message = "record was successfully created!"
                     };
@@ -62,7 +57,7 @@ namespace fms.Service
                 else
                     return new ReturnObject()
                     {
-                        Id = hospital.Id.ToString(),
+                        Id = "",
                         State = "error",
                         Message = "an error occured while creating this record!"
                     };
@@ -71,7 +66,7 @@ namespace fms.Service
             {
                 return new ReturnObject()
                 {
-                    Id = hospital.Id.ToString(),
+                    Id = "",
                     State = "error",
                     Message = ex.Message
                 };

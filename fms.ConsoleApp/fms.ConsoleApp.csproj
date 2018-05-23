@@ -57,10 +57,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\fms.EF\fms.EF.csproj">
-      <Project>{4960284c-f6db-4c20-afc7-9c228e4aaeef}</Project>
-      <Name>fms.EF</Name>
-    </ProjectReference>
     <ProjectReference Include="..\fms.Model\fms.Model.csproj">
       <Project>{1fbed848-9481-4086-9593-02dab08ed938}</Project>
       <Name>fms.Model</Name>

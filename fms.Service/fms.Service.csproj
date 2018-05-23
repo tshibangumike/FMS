@@ -41,7 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FuneralBoughtItemService.cs" />
+    <Compile Include="MortuaryService.cs" />
+    <Compile Include="DeceasedService.cs" />
+    <Compile Include="DoctorService.cs" />
+    <Compile Include="HomeAffairsOfficerService.cs" />
+    <Compile Include="CemeteryService.cs" />
     <Compile Include="HospitalService.cs" />
+    <Compile Include="InformantService.cs" />
+    <Compile Include="FuneralService.cs" />
+    <Compile Include="NextOfKinService.cs" />
+    <Compile Include="PersonService.cs" />
     <Compile Include="SharedService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

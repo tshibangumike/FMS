@@ -46,8 +46,11 @@
     <Compile Include="Deceased.cs" />
     <Compile Include="Funeral.cs" />
     <Compile Include="Gender.cs" />
+    <Compile Include="HomeAffairesOfficer.cs" />
     <Compile Include="Hospital.cs" />
+    <Compile Include="Doctor.cs" />
     <Compile Include="Informant.cs" />
+    <Compile Include="KeyValue.cs" />
     <Compile Include="NextOfKin.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -24,7 +24,8 @@ namespace fms.Model
         public Gender Gender { get; set; }
 
         public Guid AddressId { get; set; }
-        //public Address Address { get; set; }
+
+        public string ContactNumber { get; set; }
 
         public byte[] Photo { get; set; }
 

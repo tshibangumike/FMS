@@ -99,6 +99,10 @@
     <Content Include="components\account\login.html" />
     <Content Include="components\base\base-ng-controller.js" />
     <Content Include="components\base\base.html" />
+    <Content Include="components\cemetery\cemetery-ng-controller.js" />
+    <Content Include="components\cemetery\modal\modal-add-cemetery.html" />
+    <Content Include="components\cemetery\modal\modal-list-cemetery.html" />
+    <Content Include="components\funeralboughtitem\edit-funerlboughtitem.html" />
     <Content Include="components\funeral\add-funeral.html" />
     <Content Include="components\funeral\edit-funeral.html" />
     <Content Include="components\funeral\funeral-ng-controller.js" />
@@ -112,6 +116,9 @@
     <Content Include="components\member\add-member.html" />
     <Content Include="components\member\edit-member.html" />
     <Content Include="components\member\list-member.html" />
+    <Content Include="components\mortuary\mortuary-ng-controller.js" />
+    <Content Include="components\mortuary\modal\modal-add-mortuary.html" />
+    <Content Include="components\mortuary\modal\modal-list-mortuary.html" />
     <Content Include="css\fms-login.css" />
     <Content Include="css\fontastic.css" />
     <Content Include="css\fonts.css" />
@@ -134,26 +141,23 @@
     <Content Include="css\tempusdominus-bootstrap.min.css" />
     <Content Include="Global.asax" />
     <Content Include="index.html" />
-    <Content Include="js\angular-animate.min.js" />
-    <Content Include="js\angular-sanitize.min.js" />
-    <Content Include="js\angular-ui-router.min.js" />
-    <Content Include="js\angular-ui-uploader.min.js" />
-    <Content Include="js\angular.min.js" />
-    <Content Include="js\bootstrap.min.js" />
-    <Content Include="js\custom\app-directive.js" />
-    <Content Include="js\custom\app-factory.js" />
-    <Content Include="js\custom\app-helper.js" />
-    <Content Include="js\custom\app-module.js" />
-    <Content Include="js\custom\app-router.js" />
-    <Content Include="js\custom\app-service.js" />
-    <Content Include="js\custom\front.js" />
-    <Content Include="js\jquery.cookie.js" />
-    <Content Include="js\jquery.min.js" />
-    <Content Include="js\jquery.validate.min.js" />
-    <Content Include="js\lodash.min.js" />
-    <Content Include="js\popper.min.js" />
-    <Content Include="js\tempusdominus-bootstrap.min.js" />
-    <Content Include="js\ui.bootstrap.min.js" />
+    <Content Include="js\config\app-directive.js" />
+    <Content Include="js\config\app-factory.js" />
+    <Content Include="js\config\app-helper.js" />
+    <Content Include="js\config\app-module.js" />
+    <Content Include="js\config\app-router.js" />
+    <Content Include="js\config\app-service.js" />
+    <Content Include="js\config\front.js" />
+    <Content Include="libs\loadash\js\lodash.min.js" />
+    <Content Include="libs\bootstrap ui\js\ui.bootstrap.min.js" />
+    <Content Include="libs\angularjs\js\angular-animate.min.js" />
+    <Content Include="libs\angularjs\js\angular-aria.min.js" />
+    <Content Include="libs\angularjs\js\angular-messages.min.js" />
+    <Content Include="libs\angularjs\js\angular-sanitize.min.js" />
+    <Content Include="libs\angularjs\js\angular-ui-bootstrap.min.js" />
+    <Content Include="libs\angularjs\js\angular-ui-router.min.js" />
+    <Content Include="libs\angularjs\js\angular-uuid2.js" />
+    <Content Include="libs\angularjs\js\angular.min.js" />
     <Content Include="libs\bootstrap\css\bootstrap-grid.css" />
     <Content Include="libs\bootstrap\css\bootstrap-grid.min.css" />
     <Content Include="libs\bootstrap\css\bootstrap-reboot.css" />
@@ -271,9 +275,17 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="components\base\BaseController.cs" />
+    <Compile Include="components\cemetery\CemeteryController.cs" />
+    <Compile Include="components\deceased\DeceasedController.cs" />
+    <Compile Include="components\doctor\DoctorController.cs" />
+    <Compile Include="components\funeralboughtitem\FuneralBoughtItemController.cs" />
     <Compile Include="components\funeral\FuneralController.cs" />
+    <Compile Include="components\homeaffairsofficer\HomeAffairsOfficerController.cs" />
     <Compile Include="components\hospital\HospitalController.cs" />
+    <Compile Include="components\informant\InformantController.cs" />
     <Compile Include="components\member\MemberController.cs" />
+    <Compile Include="components\mortuary\MortuaryController.cs" />
+    <Compile Include="components\nextofkin\NextOfKinController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -312,15 +324,18 @@
     <Folder Include="libs\font-awesome\less\" />
     <Folder Include="libs\font-awesome\scss\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Cemetery\" />
+    <Folder Include="Views\Deceased\" />
+    <Folder Include="Views\Doctor\" />
+    <Folder Include="Views\FuneralBoughtItem\" />
     <Folder Include="Views\Funeral\" />
+    <Folder Include="Views\HomeAffairsOfficer\" />
     <Folder Include="Views\Hospital\" />
     <Folder Include="Views\Member\" />
+    <Folder Include="Views\Mortuary\" />
+    <Folder Include="Views\NextOfKin\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\fms.EF\fms.EF.csproj">
-      <Project>{4960284C-F6DB-4C20-AFC7-9C228E4AAEEF}</Project>
-      <Name>fms.EF</Name>
-    </ProjectReference>
     <ProjectReference Include="..\fms.Model\fms.Model.csproj">
       <Project>{1FBED848-9481-4086-9593-02DAB08ED938}</Project>
       <Name>fms.Model</Name>

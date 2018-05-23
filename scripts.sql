@@ -2,17 +2,14 @@
 (
 	Id uniqueidentifier not null primary key,
 	FuneralNumber varchar(6),
-	DateOfDeath datetime,
-	PlaceOfDeath varchar(1000),
-	WhereWasTheBodyRetrieved varchar(1000),
-	CauseOfDeath varchar(max),
 	GraveNumber varchar(50),
 	DeceasedId uniqueidentifier not null,
 	InformantId uniqueidentifier,
 	NextOfKinId uniqueidentifier,
 	DoctorId uniqueidentifier,
 	HomeAffairsOfficerId uniqueidentifier,
-	MortuaryId uniqueidentifier
+	MortuaryId uniqueidentifier,
+	CemeteryId uniqueidentifier
 );
 
 create table bbu.[Address]
@@ -50,10 +47,27 @@ create table bbu.Mortuary
 	AddressId uniqueidentifier
 );
 
+create table bbu.Person
+(
+	Id uniqueidentifier not null primary key,
+	FirstName varchar(150) not null,
+	LastName varchar(150) not null,
+	SAIdNumber varchar(13),
+	DateOfBirth datetime null,
+	GenderId int not null,
+	ContactNumber varchar(13),
+	EmailAddress varchar(100),
+	AddressId uniqueidentifier
+);
+
 create table bbu.Deceased
 (
-	PersonId uniqueidentifier not null primary key,
-	FuneralId uniqueidentifier
+	PersonId uniqueidentifier unique not null,
+	FuneralId uniqueidentifier,
+	DateOfDeath datetime,
+	PlaceOfDeath varchar(1000),
+	WhereWasTheBodyRetrieved varchar(1000),
+	CauseOfDeath varchar(max),
 );
 
 create table bbu.Gender
@@ -64,34 +78,23 @@ create table bbu.Gender
 
 create table bbu.Informant
 (
-	PersonId uniqueidentifier not null primary key,
+	PersonId uniqueidentifier unique not null,
 );
 
 create table bbu.NextOfKin
 (
-	PersonId uniqueidentifier not null primary key,
+	PersonId uniqueidentifier unique not null,
 );
 
 create table bbu.Doctor
 (
-	PersonId uniqueidentifier not null primary key,
+	PersonId uniqueidentifier unique not null,
 	HospitalId uniqueidentifier
 );
 
 create table bbu.HomeAffairsOfficer
 (
-	PersonId uniqueidentifier not null primary key
-);
-
-create table bbu.Person
-(
-	Id uniqueidentifier not null primary key,
-	FirstName varchar(150) not null,
-	LastName varchar(150) not null,
-	SAIdNumber varchar(13),
-	DateOfBirth datetime not null,
-	GenderId int not null,
-	AddressId uniqueidentifier
+	PersonId uniqueidentifier unique not null
 );
 
 alter table bbu.Funeral add foreign key (DeceasedId) references bbu.Deceased(PersonId);
@@ -100,6 +103,8 @@ alter table bbu.Funeral add foreign key (NextOfKinId) references bbu.NextOfKin(P
 alter table bbu.Funeral add foreign key (DoctorId) references bbu.Doctor(PersonId);
 alter table bbu.Funeral add foreign key (HomeAffairsOfficerId) references bbu.HomeAffairsOfficer(PersonId);
 alter table bbu.Funeral add foreign key (MortuaryId) references bbu.Mortuary(Id);
+alter table bbu.Funeral add foreign key (CemeteryId) references bbu.Cemetery(Id);
+alter table bbu.funeral add unique (funeralnumber);
 
 alter table bbu.Cemetery add foreign key (AddressId) references bbu.[Address](Id);
 
@@ -108,7 +113,17 @@ alter table bbu.Hospital add foreign key (AddressId) references bbu.[Address](Id
 alter table bbu.Mortuary add foreign key (AddressId) references bbu.[Address](Id);
 
 alter table bbu.Deceased add foreign key (FuneralId) references bbu.Funeral(Id);
+alter table bbu.Deceased add foreign key (PersonId) references bbu.Person(Id);
 
 alter table bbu.Doctor add foreign key (HospitalId) references bbu.Hospital(Id);
+alter table bbu.Doctor add foreign key (PersonId) references bbu.Person(Id);
+
+alter table bbu.Informant add foreign key (PersonId) references bbu.Person(Id);
+
+alter table bbu.HomeAffairsOfficer add foreign key (PersonId) references bbu.Person(Id);
+
+alter table bbu.NextOfKin add foreign key (PersonId) references bbu.Person(Id);
 
 alter table bbu.Person add foreign key (GenderId) references bbu.Gender(Id);
+
+
