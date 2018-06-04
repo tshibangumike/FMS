@@ -28,6 +28,11 @@ namespace fms.Service
             if (records != null && records.Count == 1) return records[0];
             return null;
         }
+        public static List<Dictionary<string, object>> QueryActiveHomeAffairsOfficers()
+        {
+            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Homeaffairsofficer_queryactivehomeaffairsofficers]", null);
+            return records;
+        }
         public static int QueryCountOfHomeAffairsOfficersByFuneralId(Guid funeralId)
         {
             var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Homeaffairsofficer_querycountofhomeaffairsofficersbyfuneralid]",
@@ -43,14 +48,14 @@ namespace fms.Service
             }
             return -1;
         }
-        public static ReturnObject InsertHomeAffairesOfficer(List<KeyValue> homeAffairesOfficer)
+        public static ReturnObject InsertHomeAffairesOfficer(List<KeyValue> homeAffairsOfficer)
         {
             try
             {
 
-                var personId = homeAffairesOfficer.FirstOrDefault(x => x.Key == "PersonId")?.Value;
+                var personId = homeAffairsOfficer.FirstOrDefault(x => x.Key == "PersonId")?.Value;
 
-                var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[HomeAffairesOfficerService_create]",
+                var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[HomeAffairsOfficer_create]",
                     new List<SqlParameter>
                     {
                             new SqlParameter("@personId", personId)

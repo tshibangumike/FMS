@@ -28,6 +28,11 @@ namespace fms.Service
             if (records != null && records.Count == 1) return records[0];
             return null;
         }
+        public static List<Dictionary<string, object>> QueryActiveInformants()
+        {
+            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Informant_queryactiveinformants]",null);
+            return records;
+        }
         public static int QueryCountOfInformantsByFuneralId(Guid funeralId)
         {
             var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Informant_querycountofinformantsbyfuneralid]",
@@ -89,7 +94,7 @@ namespace fms.Service
             try
             {
 
-                var personId = informant.FirstOrDefault(x => x.Key == "PersonId")?.Value;
+                var personId = informant.FirstOrDefault(x => x.Key == "Id")?.Value;
                 var relationshipToDeceased = informant.FirstOrDefault(x => x.Key == "RelationshipToDeceased")?.Value;
 
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Informant_update]",

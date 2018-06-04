@@ -126,4 +126,48 @@ alter table bbu.NextOfKin add foreign key (PersonId) references bbu.Person(Id);
 
 alter table bbu.Person add foreign key (GenderId) references bbu.Gender(Id);
 
+create table bbu.FuneralDocumentType
+(
+	Id int primary key,
+	Name varchar(50)
+);
+
+create table bbu.FuneralDocument
+(
+	Id uniqueidentifier primary key,
+	Name varchar(150),
+	DocumentTypeId int,
+	Description varchar(1000),
+	DocumentContent image,
+	FuneralId uniqueidentifier
+);
+
+alter table bbu.FuneralDocument add foreign key (DocumentTypeId) references bbu.FuneralDocumentType(Id);
+
+alter table bbu.FuneralDocument add foreign key (FuneralId) references bbu.Funeral(Id);
+
+create table bbu.AppUser
+(
+	Id uniqueidentifier not null primary key,
+	FirstName varchar(150),
+	LastName varchar(150)
+);
+
+create table bbu.[Credential]
+(
+	AppUserId uniqueidentifier unique not null,
+	[Password] varchar(max)
+);
+
+alter table bbu.[Credential] add foreign key (AppUserId) references bbu.AppUser(Id);
+
+create table bbu.HomeAffairsOffice
+(
+	Id uniqueidentifier,
+	Name varchar(150)
+);
+
+alter table bbu.HomeAffairsOfficer add HomeAffairsOfficeId uniqueidentifier;
+
+alter table bbu.HomeAffairsOfficer add foreign key (HomeAffairsOfficeId) references bbu.HomeAffairsOffice(Id); 
 

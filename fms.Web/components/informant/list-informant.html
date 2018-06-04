@@ -1,0 +1,63 @@
+﻿
+
+<div class="card bg-white">
+    <div class="card-header border-right-0 border-left-0">
+        <ul class="nav nav-pills card-header-pills float-left">
+            <li class="nav-item">
+                <a class="nav-link font-weight-bold text-uppercase" href="#">List of Informants</a>
+            </li>
+        </ul>
+        <ul class="nav nav-pills card-header-pills float-right">
+            <li class="nav-item">
+                <a class="nav-link active mr-1" ui-sref="addmember"><i class="fa fa-plus-square"></i> New</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active mr-1" href="#"><i class="fa fa-pen-square"></i> Edit</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active mr-1" href="#"><i class="fa fa-trash-alt"></i> Delete</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col"></th>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Contact Number</th>
+                    <th scope="col">Email Address</th>
+                    <th scope="col">Office</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="record in records">
+                    <th scope="row">
+                        {{ $index + 1 }}
+                    </th>
+                    <td ng-style="{ 'width' : 15 }">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="{{ record.Id }}"
+                                   ng-model="record.Selected"
+                                   ng-change="selectRecord(record)">
+                            <label class="custom-control-label" for="{{ record.Id }}"></label>
+                        </div>
+                    </td>
+                    <td>
+                        {{ record.FirstName }} {{ record.LastName }}
+                    </td>
+                    <td>
+                        {{ record.ContactNumber }}
+                    </td>
+                    <td>
+                        {{ record.EmailAddress }}
+                    </td>
+                    <td>
+                        {{  }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -9,10 +9,9 @@ namespace fms.Service
 {
     public class SharedService
     {
-
+        private static Random random = new Random();
         private static readonly string ConnectionString =
             ConfigurationManager.ConnectionStrings["fmsContext"].ConnectionString;
-
         public static int ExecutePostSqlStoredProcedure(string storedProcedureName,
             List<SqlParameter> listSqlParameter)
         {
@@ -52,7 +51,6 @@ namespace fms.Service
             }
             return -1;
         }
-
         public static List<Dictionary<string, object>> ExecuteGetSqlStoredProcedure(string sqlQuery,
             List<SqlParameter> listSqlParameter)
         {
@@ -91,15 +89,12 @@ namespace fms.Service
 
             return null;
         }
-
-        private static Random random = new Random();
         public static string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-
         public static void UpdateAttributeToKeyValueObject(List<KeyValue> keyValue, string key, string value)
         {
             if (keyValue.Any(x => x.Key == key))
@@ -115,7 +110,6 @@ namespace fms.Service
                 });
             }
         }
-
         public static void AddAttributeToKeyValueObject(List<KeyValue> keyValue, string key, string value)
         {
             keyValue.Add(new KeyValue()
@@ -124,6 +118,5 @@ namespace fms.Service
                 Value = value
             });
         }
-
     }
 }

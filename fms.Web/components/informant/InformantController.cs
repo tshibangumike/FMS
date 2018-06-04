@@ -10,6 +10,11 @@ namespace fms.Web.components.informant
 {
     public class InformantController : BaseController
     {
+        public ActionResult GetActiveInformants()
+        {
+            var record = InformantService.QueryActiveInformants();
+            return Json(record, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult GetInformantByFuneralId(Guid funeralId)
         {
             var record = InformantService.QueryInformantByFuneralId(funeralId);

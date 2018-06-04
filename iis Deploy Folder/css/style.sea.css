@@ -1,0 +1,363 @@
+/*
+==========================================================
+==========================================================
+
+Bootstrap 4 Admin Template
+
+https://bootstrapious.com/p/admin-template
+
+==========================================================
+==========================================================
+*/
+/*
+* ==========================================================
+*     GENERAL STYLES
+* ==========================================================
+*/
+body {
+  overflow-x: hidden;
+}
+
+a,
+i,
+span {
+  display: inline-block;
+  text-decoration: none;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+a:hover, a:focus,
+i:hover,
+i:focus,
+span:hover,
+span:focus {
+  text-decoration: none;
+}
+
+section {
+  padding: 50px 0;
+}
+
+canvas {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.container-fluid {
+  padding: 0 30px;
+}
+
+@media (max-width: 575px) {
+  .container-fluid {
+    padding: 0 15px;
+  }
+}
+
+header.page-header {
+  padding: 20px 0;
+}
+
+table {
+  font-size: 0.9em;
+  color: #666;
+}
+
+.card-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.card-close .dropdown-toggle {
+  color: #999;
+  background: none;
+  border: none;
+}
+
+.card-close .dropdown-toggle:after {
+  display: none;
+}
+
+.card-close .dropdown-menu {
+  border: none;
+  min-width: auto;
+  font-size: 0.9em;
+  border-radius: 0;
+  -webkit-box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1), -2px -2px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1), -2px -2px 3px rgba(0, 0, 0, 0.1);
+}
+
+.card-close .dropdown-menu a {
+  color: #999 !important;
+}
+
+.card-close .dropdown-menu a:hover {
+  background: #3c6382;
+  color: #fff !important;
+}
+
+.card-close .dropdown-menu a i {
+  margin-right: 10px;
+  -webkit-transition: none;
+  transition: none;
+}
+
+.content-inner {
+  position: relative;
+  width: calc(100% - 250px);
+  min-height: calc(100vh - 70px);
+  padding-bottom: 60px;
+}
+
+.content-inner.active {
+  width: calc(100% - 90px);
+}
+
+.page-header {
+  background: #fff;
+  padding: 20px;
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 8;
+}
+
+*[class*="icon-"] {
+  -webkit-transform: translateY(3px);
+  transform: translateY(3px);
+}
+
+button,
+input {
+  outline: none !important;
+}
+
+.card {
+  margin-bottom: 30px;
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1), -1px 0 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1), -1px 0 2px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.05);
+}
+
+.card-header h1,
+.card-header h2,
+.card-header h3,
+.card-header h4,
+.card-header h5,
+.card-header h6 {
+  margin-bottom: 0;
+}
+
+.breadcrumb-holder {
+  background: #fff;
+}
+
+.breadcrumb {
+  background: #fff;
+  position: relative;
+  z-index: 7;
+  border-radius: 0;
+  padding: 15px 0;
+  margin-bottom: 0;
+}
+
+.breadcrumb li.breadcrumb-item {
+  color: #aaa;
+  font-weight: 300;
+}
+
+/*=== Helpers ===*/
+.text-bold {
+  font-weight: 700;
+}
+
+.text-small {
+  font-size: 0.9rem;
+}
+
+.text-xsmall {
+  font-size: 0.8rem;
+}
+
+.bg-red {
+  background: #ff7676 !important;
+  color: #fff;
+}
+
+.bg-red:hover {
+  color: #fff;
+}
+
+.bg-blue {
+  background: #85b4f2 !important;
+  color: #fff;
+}
+
+.bg-blue:hover {
+  color: #fff;
+}
+
+.bg-darkblue {
+    background: #2c3e50 !important;
+    color: #fff;
+}
+
+.bg-darkblue:hover {
+    color: #fff;
+}
+
+.bg-yellow {
+  background: #eef157 !important;
+  color: #fff;
+}
+
+.bg-yellow:hover {
+  color: #fff;
+}
+
+.bg-green {
+  background: #54e69d !important;
+  color: #fff;
+}
+
+.bg-green:hover {
+  color: #fff;
+}
+
+.bg-orange {
+  background: #ffc36d !important;
+  color: #fff;
+}
+
+.bg-orange:hover {
+  color: #fff;
+}
+
+.bg-violet {
+  background: #796AEE !important;
+  color: #fff;
+}
+
+.bg-violet:hover {
+  color: #fff;
+}
+
+.bg-gray {
+  background: #ced4da !important;
+}
+
+.bg-white {
+  background: #fff !important;
+}
+
+.text-red {
+  color: #ff7676;
+}
+
+.text-red:hover {
+  color: #ff7676;
+}
+
+.text-yellow {
+  color: #eef157;
+}
+
+.text-yellow:hover {
+  color: #eef157;
+}
+
+.text-green {
+  color: #54e69d;
+}
+
+.text-green:hover {
+  color: #54e69d;
+}
+
+.text-orange {
+  color: #ffc36d;
+}
+
+.text-orange:hover {
+  color: #ffc36d;
+}
+
+.text-violet {
+  color: #796AEE;
+}
+
+.text-violet:hover {
+  color: #796AEE;
+}
+
+.text-blue {
+  color: #85b4f2;
+}
+
+.text-blue:hover {
+  color: #85b4f2;
+}
+
+.text-gray {
+  color: #ced4da;
+}
+
+.text-gray:hover {
+  color: #ced4da;
+}
+
+.page {
+  background: #EEF5F9;
+}
+
+.page .text-white {
+  color: #fff;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.no-padding-bottom {
+  padding-bottom: 0 !important;
+}
+
+.no-padding-top {
+  padding-top: 0 !important;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+.no-margin-bottom {
+  margin-bottom: 0 !important;
+}
+
+.no-margin-top {
+  margin-top: 0 !important;
+}
+
+.page {
+  overflow-x: hidden;
+}
+
+.has-shadow {
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1), -1px 0 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1), -1px 0 2px rgba(0, 0, 0, 0.05);
+}
+
+.badge {
+  font-weight: 400;
+}
+
+.badge-rounded {
+  border-radius: 50px;
+}

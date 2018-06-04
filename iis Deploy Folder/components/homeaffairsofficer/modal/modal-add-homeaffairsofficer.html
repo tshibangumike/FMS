@@ -1,0 +1,60 @@
+﻿<form name="form" ng-submit="processForm(form)">
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Quick Create New Home Affairs Officer Form</h3>
+    </div>
+    <div class="modal-body" id="modal-body">
+        <div class="form-row m-2">
+            <div class="form-group col-md-12">
+                <label class="">First name</label>
+                <input type="text" class="form-control" ng-model="homeAffairsOfficer.FirstName" ng-required="true">
+            </div>
+        </div>
+        <div class="form-row m-2">
+            <div class="form-group col-md-12">
+                <label class="">Last name</label>
+                <input type="text" class="form-control" ng-model="homeAffairsOfficer.LastName" ng-required="true">
+            </div>
+        </div>
+        <div class="form-row m-2">
+            <div class="form-group col-md-12">
+                <label class="">Gender</label>
+                <div class="custom-controls-stacked d-block">
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="doctorGenderMale" name="doctorGender" class="custom-control-input" value="1" ng-model="homeAffairsOfficer.GenderId">
+                        <label class="custom-control-label" for="doctorGenderMale">Male</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="doctorGenderFemale" name="doctorGender" class="custom-control-input" value="2" ng-model="homeAffairsOfficer.GenderId">
+                        <label class="custom-control-label" for="doctorGenderFemale">Female</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row m-2">
+            <div class="form-group col-md-12">
+                <label class="">Contact number</label>
+                <input type="text" class="form-control" ng-model="homeAffairsOfficer.ContactNumber">
+            </div>
+        </div>
+        <div class="form-row m-2">
+            <div class="form-group col-md-12">
+                <label class="">Email Address</label>
+                <input type="text" class="form-control" ng-model="homeAffairsOfficer.EmailAddress">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-labeled btn-success m-1" ng-click="save()">
+            <span class="btn-label">
+                <i class="fa fa-check-circle"></i>
+            </span>
+            Save
+        </button>
+        <button type="button" class="btn btn-labeled btn-danger m-1" ng-click="cancel()">
+            <span class="btn-label">
+                <i class="fa fa-ban"></i>
+            </span>
+            Cancel
+        </button>
+    </div>
+</form>

@@ -15,5 +15,10 @@ namespace fms.Web.components
             var record = DeceasedService.QueryDeceasedByFuneralId(funeralId);
             return Json(record, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult GetActiveDeceaseds()
+        {
+            var record = DeceasedService.QueryActiveDeceaseds();
+            return Json(record, JsonRequestBehavior.AllowGet);
+        }
     }
 }

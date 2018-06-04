@@ -1,0 +1,60 @@
+﻿<form name="form" ng-submit="processForm(form)">
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">QUICK VIEW OF DOCTOR'S FORM</h3>
+    </div>
+    <div class="modal-body" id="modal-body">
+        <div class="form-row m-2">
+            <div class="form-group col-md-12">
+                <label class="">First name</label>
+                <input type="text" class="form-control" ng-model="doctor.FirstName" ng-disabled="true">
+            </div>
+        </div>
+        <div class="form-row m-2">
+            <div class="form-group col-md-12">
+                <label class="">Last name</label>
+                <input type="text" class="form-control" ng-model="doctor.LastName" ng-disabled="true">
+            </div>
+        </div>
+        <div class="form-row m-2">
+            <div class="form-group col-md-12">
+                <label class="">Gender</label>
+                <div class="custom-controls-stacked d-block">
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="doctorGenderMale" name="doctorGender" class="custom-control-input" value="1" ng-model="doctor.GenderId" ng-disabled="true">
+                        <label class="custom-control-label" for="doctorGenderMale">Male</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="doctorGenderFemale" name="doctorGender" class="custom-control-input" value="2" ng-model="doctor.GenderId" ng-disabled="true">
+                        <label class="custom-control-label" for="doctorGenderFemale">Female</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row m-2">
+            <div class="form-group col-md-12">
+                <label class="">Contact number</label>
+                <input type="text" class="form-control" ng-model="doctor.ContactNumber" ng-disabled="true">
+            </div>
+        </div>
+        <div class="form-row m-2">
+            <div class="form-group col-md-12">
+                <label class="">Email Address</label>
+                <input type="text" class="form-control" ng-model="doctor.EmailAddress" ng-disabled="true">
+            </div>
+        </div>
+        <div class="form-row m-2">
+            <div class="form-group col-md-12">
+                <label for="inputCity" class="">Name of Hospital in Which Death Was Confirmed</label>
+                <input type="text" class="form-control" ng-model="doctor.HospitalName" ng-disabled="true">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-labeled btn-danger m-1" ng-click="close()">
+            <span class="btn-label">
+                <i class="fa fa-ban"></i>
+            </span>
+            Close
+        </button>
+    </div>
+</form>

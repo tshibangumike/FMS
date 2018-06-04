@@ -29,7 +29,6 @@ namespace fms.Service
             {
 
                 var Id = funeral.FirstOrDefault(x => x.Key == "Id")?.Value;
-
                 var funeralNumber = funeral.FirstOrDefault(x => x.Key == "FuneralNumber")?.Value;
                 var graveNumber = funeral.FirstOrDefault(x => x.Key == "GraveNumber")?.Value;
                 var deceasedId = funeral.FirstOrDefault(x => x.Key == "DeceasedId")?.Value;
@@ -39,6 +38,10 @@ namespace fms.Service
                 var homeAffairsOfficerId = funeral.FirstOrDefault(x => x.Key == "HomeAffairsOfficerId")?.Value;
                 var mortuaryId = funeral.FirstOrDefault(x => x.Key == "MortuaryId")?.Value;
                 var cemeteryId = funeral.FirstOrDefault(x => x.Key == "CemeteryId")?.Value;
+                var createdById = funeral.FirstOrDefault(x => x.Key == "CreatedById")?.Value;
+                var createdOn = funeral.FirstOrDefault(x => x.Key == "CreatedOn")?.Value;
+                var modifiedById = funeral.FirstOrDefault(x => x.Key == "ModifiedById")?.Value;
+                var modifiedOn = funeral.FirstOrDefault(x => x.Key == "ModifiedOn")?.Value;
 
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Funeral_create]",
                     new List<SqlParameter>
@@ -52,7 +55,11 @@ namespace fms.Service
                             new SqlParameter("@nextOfKinId", nextOfKinId),
                             new SqlParameter("@homeAffairsOfficerId", homeAffairsOfficerId),
                             new SqlParameter("@mortuaryId", mortuaryId),
-                            new SqlParameter("@cemeteryId", cemeteryId)
+                            new SqlParameter("@cemeteryId", cemeteryId),
+                            new SqlParameter("@createdById", createdById),
+                            new SqlParameter("@createdOn", createdOn),
+                            new SqlParameter("@modifiedById", modifiedById),
+                            new SqlParameter("@modifiedOn", modifiedOn)
                     });
                 if (returnValue == 1)
                 {
@@ -94,6 +101,7 @@ namespace fms.Service
                 var homeAffairsOfficerId = funeral.FirstOrDefault(x => x.Key == "HomeAffairsOfficerId")?.Value;
                 var mortuaryId = funeral.FirstOrDefault(x => x.Key == "MortuaryId")?.Value;
                 var cemeteryId = funeral.FirstOrDefault(x => x.Key == "CemeteryId")?.Value;
+                var modifiedById = funeral.FirstOrDefault(x => x.Key == "ModifiedById")?.Value;
 
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Funeral_update]",
                     new List<SqlParameter>
@@ -105,7 +113,8 @@ namespace fms.Service
                             new SqlParameter("@nextOfKinId", nextOfKinId),
                             new SqlParameter("@homeAffairsOfficerId", homeAffairsOfficerId),
                             new SqlParameter("@mortuaryId", mortuaryId),
-                            new SqlParameter("@cemeteryId", cemeteryId)
+                            new SqlParameter("@cemeteryId", cemeteryId),
+                            new SqlParameter("@modifiedById", modifiedById)
                     });
                 if (returnValue == 1)
                 {

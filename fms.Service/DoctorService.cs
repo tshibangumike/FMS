@@ -13,7 +13,7 @@ namespace fms.Service
             var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Doctor_querydoctorbyid]",
                  new List<SqlParameter>
                     {
-                            new SqlParameter("@funeralId", doctorId),
+                            new SqlParameter("@id", doctorId),
                     });
             if (records != null && records.Count == 1) return records[0];
             return null;
@@ -27,6 +27,11 @@ namespace fms.Service
                     });
             if (records != null && records.Count == 1) return records[0];
             return null;
+        }
+        public static List<Dictionary<string, object>> QueryActiveDoctors()
+        {
+            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Doctor_queryactivedoctors]", null);
+            return records;
         }
         public static int QueryCountOfDoctorsByFuneralId(Guid funeralId)
         {
@@ -89,7 +94,7 @@ namespace fms.Service
             try
             {
 
-                var personId = doctor.FirstOrDefault(x => x.Key == "PersonId")?.Value;
+                var personId = doctor.FirstOrDefault(x => x.Key == "Id")?.Value;
                 var hospitalId = doctor.FirstOrDefault(x => x.Key == "HospitalId")?.Value;
 
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Doctor_update]",

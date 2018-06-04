@@ -8,6 +8,11 @@ namespace fms.Service
 {
     public class DeceasedService
     {
+        public static List<Dictionary<string, object>> QueryActiveDeceaseds()
+        {
+            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Deceased_queryactivedeceaseds]", null);
+            return records;
+        }
         public static Dictionary<string, object> QueryDeceasedById(Guid deceasedId)
         {
             var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Deceased_querydeceasedbyid]",
@@ -47,7 +52,7 @@ namespace fms.Service
                             new SqlParameter("@dateOfDeath", parsedDateOfDeath),
                             new SqlParameter("@placeOfDeath", placeOfDeath),
                             new SqlParameter("@whereWasTheBodyRetrieved", whereWasTheBodyRetrieved),
-                            new SqlParameter("@causeOfDeath", causeOfDeath),
+                            new SqlParameter("@causeOfDeath", causeOfDeath)
                     });
                 if (returnValue == 1)
                 {
@@ -80,7 +85,7 @@ namespace fms.Service
         {
             try
             {
-                var personId = deceased.FirstOrDefault(x => x.Key == "PersonId")?.Value;
+                var personId = deceased.FirstOrDefault(x => x.Key == "Id")?.Value;
                 var dateOfDeath = deceased.FirstOrDefault(x => x.Key == "DateOfDeath")?.Value;
                 var placeOfDeath = deceased.FirstOrDefault(x => x.Key == "PlaceOfDeath")?.Value;
                 var whereWasTheBodyRetrieved = deceased.FirstOrDefault(x => x.Key == "WhereWasTheBodyRetrieved")?.Value;

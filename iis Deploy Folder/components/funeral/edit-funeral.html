@@ -1,0 +1,661 @@
+﻿<form name="form" ng-submit="processForm(form)" novalidate>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white">
+            <div class="float-left p-4">
+                <h3 class="text-muted font-weight-bold">VIEW/EDIT FUNERAL FORM: {{ funeral.FuneralNumber}}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1">
+            <div class="float-left">
+                <div ng-include="'/components/shared/editview-topbar-buttons.html'"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1" ng-click="collapseExpand('BeforeMortuary')">
+            <div class="card-header">
+                <a class="text-muted font-weight-bold">
+                    <div class="btn btn-light">
+                        <i class="fas fa-angle-up" ng-show="getTabByName('BeforeMortuary').Show"></i>
+                        <i class="fas fa-angle-down" ng-show="!getTabByName('BeforeMortuary').Show"></i>
+                    </div>
+                    1. BEFORE MORTUARY
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1" ng-show="getTabByName('BeforeMortuary').Show">
+        <div class="col-md-12 bg-white p-1">
+            <div class="card border-light">
+                <div class="card-header bg-white" ng-click="collapseExpand('Deceased')">
+                    <div class="float-left">
+                        <a class="text-muted font-weight-bold">
+                            <div class="btn btn-light">
+                                <i class="fas fa-angle-up" ng-show="getTabByName('Deceased').Show"></i>
+                                <i class="fas fa-angle-down" ng-show="!getTabByName('Deceased').Show"></i>
+                            </div>
+                            Deceased
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body" ng-show="getTabByName('Deceased').Show">
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>Deceased Last name</label>
+                            <input type="text" class="form-control" ng-model="deceased.LastName">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Deceased First name</label>
+                            <input type="text" class="form-control" ng-model="deceased.FirstName">
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>ID Number </label>
+                            <input type="text" class="form-control" ng-model="deceased.SAIdNumber">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputCity">Birthday</label>
+                            <div class="input-group mb-3" id="datetimepicker4" data-target-input="nearest">
+                                <input type="text" id="DateOfBirth" class="form-control datetimepicker-input" data-target="#datetimepicker4" ng-model="deceased.DateOfBirth" />
+                                <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="fa fa-calendar"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>Gender</label>
+                            <div class="custom-controls-stacked d-block">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="deceasedGenderMale" name="deceasedGender" class="custom-control-input" value="1" ng-model="deceased.GenderId">
+                                    <label class="custom-control-label" for="deceasedGenderMale">Male</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="deceasedGenderFemale" name="deceasedGender" class="custom-control-input" value="2" ng-model="deceased.GenderId">
+                                    <label class="custom-control-label" for="deceasedGenderFemale">Female</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>The body of the deceased was retrieved from</label>
+                            <div class="custom-controls-stacked d-block">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="hospital" name="placeOfDeath" class="custom-control-input" value="Hospital" ng-model="deceased.WhereWasTheBodyRetrieved">
+                                    <label class="custom-control-label" for="hospital">Hospital</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="mortuary" name="placeOfDeath" class="custom-control-input" value="Home" ng-model="deceased.WhereWasTheBodyRetrieved">
+                                    <label class="custom-control-label" for="mortuary">Home</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="other" name="placeOfDeath" class="custom-control-input" value="Other" ng-model="deceased.WhereWasTheBodyRetrieved">
+                                    <label class="custom-control-label" for="other">Other</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label for="inputCity">Date of death</label>
+                            <div class="input-group mb-3" id="datetimepicker1" data-target-input="nearest">
+                                <input type="text" id="DateOfDeath" class="form-control datetimepicker-input" data-target="#datetimepicker1" ng-model="deceased.DateOfDeath" />
+                                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="fa fa-calendar"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-12">
+                            <label for="inputCity">Address of Deceased</label>
+                            <input type="text" class="form-control" ng-model="deceased.FullAddress">
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-12">
+                            <label for="inputCity">Place of Death</label>
+                            <input type="text" class="form-control" ng-model="deceased.PlaceOfDeath">
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-12">
+                            <label for="inputCity">Cause of Death</label>
+                            <textarea class="form-control" ng-model="deceased.CauseOfDeath"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1" ng-show="getTabByName('BeforeMortuary').Show">
+        <div class="col-md-12 bg-white p-1">
+            <div class="card border-light">
+                <div class="card-header bg-white" ng-click="collapseExpand('Informant')">
+                    <div class="float-left">
+                        <a class="text-muted font-weight-bold">
+                            <div class="btn btn-light">
+                                <i class="fas fa-angle-up" ng-show="getTabByName('Informant').Show"></i>
+                                <i class="fas fa-angle-down" ng-show="!getTabByName('Informant').Show"></i>
+                            </div>
+                            Informant
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body" ng-show="getTabByName('Informant').Show">
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>First name</label>
+                            <input type="text" class="form-control" ng-model="informant.FirstName">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Last name</label>
+                            <input type="text" class="form-control" ng-model="informant.LastName">
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>Gender</label>
+                            <div class="custom-controls-stacked d-block">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="informantGenderMale" name="informantGender" class="custom-control-input" value="1" ng-model="informant.GenderId">
+                                    <label class="custom-control-label" for="informantGenderMale">Male</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="informantGenderFemale" name="informantGender" class="custom-control-input" value="2" ng-model="informant.GenderId">
+                                    <label class="custom-control-label" for="informantGenderFemale">Female</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>ID Number</label>
+                            <input type="text" class="form-control" ng-model="informant.SAIdNumber">
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>Email Address</label>
+                            <input type="text" class="form-control" ng-model="informant.EmailAddress">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Contact number</label>
+                            <input type="text" class="form-control" ng-model="informant.ContactNumber">
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>Relationshipt to deceased</label>
+                            <input type="text" class="form-control" ng-model="informant.RelationshipToDeceased">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1" ng-show="getTabByName('BeforeMortuary').Show">
+        <div class="col-md-12 bg-white p-1">
+            <div class="card border-light">
+                <div class="card-header bg-white" ng-click="collapseExpand('NextOfKin')">
+                    <div class="float-left">
+                        <a class="text-muted font-weight-bold">
+                            <div class="btn btn-light">
+                                <i class="fas fa-angle-up" ng-show="getTabByName('NextOfKin').Show"></i>
+                                <i class="fas fa-angle-down" ng-show="!getTabByName('NextOfKin').Show"></i>
+                            </div>
+                            Next of Kin
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body" ng-show="getTabByName('NextOfKin').Show">
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>First name</label>
+                            <input type="text" class="form-control" ng-model="nextOfKin.FirstName">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Last name</label>
+                            <input type="text" class="form-control" ng-model="nextOfKin.LastName">
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>Gender</label>
+                            <div class="custom-controls-stacked d-block">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="nextOfKinGenderMale" name="nextOfKinGender" class="custom-control-input" value="1" ng-model="nextOfKin.GenderId">
+                                    <label class="custom-control-label" for="nextOfKinGenderMale">Male</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="nextOfKinGenderFemale" name="nextOfKinGender" class="custom-control-input" value="2" ng-model="nextOfKin.GenderId">
+                                    <label class="custom-control-label" for="nextOfKinGenderFemale">Female</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>ID Number</label>
+                            <input type="text" class="form-control" ng-model="nextOfKin.SAIdNumber">
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>Email Address</label>
+                            <input type="text" class="form-control" ng-model="nextOfKin.EmailAddress">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Contact number</label>
+                            <input type="text" class="form-control" ng-model="nextOfKin.ContactNumber">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Relationshipt to deceased</label>
+                            <input type="text" class="form-control" ng-model="nextOfKin.RelationshipToDeceased">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1" ng-show="getTabByName('BeforeMortuary').Show">
+        <div class="col-md-12 bg-white p-1">
+            <div class="card border-light">
+                <div class="card-header bg-white" ng-click="collapseExpand('Doctor')">
+                    <div class="float-left">
+                        <a class="text-muted font-weight-bold">
+                            <div class="btn btn-light">
+                                <i class="fas fa-angle-up" ng-show="getTabByName('Doctor').Show"></i>
+                                <i class="fas fa-angle-down" ng-show="!getTabByName('Doctor').Show"></i>
+                            </div>
+                            Doctor Verifying Death
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body" ng-show="getTabByName('Doctor').Show">
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>Doctor's Full name</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" value="{{ doctor.FirstName}} {{ doctor.LastName }}" ng-disabled="true">
+                                <input type="hidden" ng-model="funeral.DoctorId" />
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" ng-click="clearLookupInput('doctor')">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary" type="button" ng-click="getDoctor()">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary" type="button" ng-click="getDoctors()">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1" ng-show="getTabByName('BeforeMortuary').Show">
+        <div class="col-md-12 bg-white p-1">
+            <div class="card border-light">
+                <div class="card-header bg-white" ng-click="collapseExpand('HomeAffairsOfficer')">
+                    <div class="float-left">
+                        <a class="text-muted font-weight-bold">
+                            <div class="btn btn-light">
+                                <i class="fas fa-angle-up" ng-show="getTabByName('HomeAffairsOfficer').Show"></i>
+                                <i class="fas fa-angle-down" ng-show="!getTabByName('HomeAffairsOfficer').Show"></i>
+                            </div>
+                            Home Affairs Officer
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body" ng-show="getTabByName('HomeAffairsOfficer').Show">
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>Home Affairs Officer's Full name</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" value="{{ homeAffairsOfficer.FirstName}} {{ homeAffairsOfficer.LastName }}" ng-disabled="true">
+                                <input type="hidden" ng-model="funeral.HomeAffairsOfficerId" />
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" ng-click="clearLookupInput('homeAffairsOfficer')">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary" type="button" ng-click="getHomeAffairsOfficer()">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary" type="button" ng-click="getHomeAffairsOfficers()">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1" ng-click="collapseExpand('DuringMortuary')">
+            <div class="card-header">
+                <a class="text-muted font-weight-bold">
+                    <div class="btn btn-light">
+                        <i class="fas fa-angle-up" ng-show="getTabByName('DuringMortuary').Show"></i>
+                        <i class="fas fa-angle-down" ng-show="!getTabByName('DuringMortuary').Show"></i>
+                    </div>
+                    2. DURING MORTUARY
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1" ng-show="getTabByName('DuringMortuary').Show">
+        <div class="col-md-12 bg-white p-1">
+            <div class="card border-light">
+                <div class="card-header bg-white" ng-click="collapseExpand('OtherInformation')">
+                    <div class="float-left">
+                        <a class="text-muted font-weight-bold">
+                            <div class="btn btn-light">
+                                <i class="fas fa-angle-up" ng-show="getTabByName('OtherInformation').Show"></i>
+                                <i class="fas fa-angle-down" ng-show="!getTabByName('OtherInformation').Show"></i>
+                            </div>
+                            Other Information
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body" ng-show="getTabByName('OtherInformation').Show">
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>Mortuary</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" ng-model="funeral.MortuaryName" ng-disabled="true">
+                                <input type="hidden" ng-model="funeral.MortuaryId" />
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" ng-click="clearLookupInput('mortuary')">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary" type="button" ng-click="getMortuaries()">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <input type="hidden" ng-model="doctor.HospitalId" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Cemetery</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" ng-model="funeral.CemeteryName" ng-disabled="true">
+                                <input type="hidden" ng-model="funeral.CemeteryId" />
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" ng-click="clearLookupInput('cemetery')">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary" type="button" ng-click="getCemeteries()">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>Grave Number</label>
+                            <input type="text" class="form-control" ng-model="funeral.GraveNumber">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1" ng-click="collapseExpand('AfterMortuary')">
+            <div class="card-header">
+                <a class="text-muted font-weight-bold">
+                    <div class="btn btn-light">
+                        <i class="fas fa-angle-up" ng-show="getTabByName('AfterMortuary').Show"></i>
+                        <i class="fas fa-angle-down" ng-show="!getTabByName('AfterMortuary').Show"></i>
+                    </div>
+                    3. AFTER MORTUARY
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1" ng-show="getTabByName('AfterMortuary').Show">
+        <div class="col-md-12 bg-white p-1">
+            <div class="card border-light">
+                <div class="card-header bg-white" ng-click="collapseExpand('PurchasedItems')">
+                    <div class="float-left">
+                        <a class="text-muted font-weight-bold">
+                            <div class="btn btn-light">
+                                <i class="fas fa-angle-up" ng-show="getTabByName('PurchasedItems').Show"></i>
+                                <i class="fas fa-angle-down" ng-show="!getTabByName('PurchasedItems').Show"></i>
+                            </div>
+                            Purchased Items
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" ng-show="getTabByName('PurchasedItems').Show">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th colspan="6">
+                                    <div class="float-right">
+                                        <button type="button" class="btn btn-primary btn-sm" ng-disabled="disableEditFuneralBoughtItemButton()">
+                                            <i class="fas fa-edit"></i>
+                                            Edit
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" ng-disabled="disableDeleteFuneralBoughtItemButton()">
+                                            <i class="fas fa-trash-alt"></i>
+                                            Delete
+                                        </button>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col"></th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Supplier</th>
+                                <th scope="col">Price</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="funeralBoughtItem in funeralBoughtItems">
+                                <th scope="row">{{ $index + 1 }}</th>
+                                <td scope="row">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="{{ funeralBoughtItem.Id }}"
+                                               ng-model="funeralBoughtItem.Selected"
+                                               ng-change="selectFuneralBoughtItemRecord(funeralBoughtItem)"
+                                               ng-checked="all">
+                                        <label class="custom-control-label" for="{{ funeralBoughtItem.Id }}"></label>
+                                    </div>
+                                </td>
+                                <td>{{ funeralBoughtItem.Name }}</td>
+                                <td>{{ funeralBoughtItem.Quantity }}</td>
+                                <td>{{ funeralBoughtItem.SupplierName }}</td>
+                                <td>{{ funeralBoughtItem.Amount | currency : "R" }}</td>
+                                <td></td>
+                            </tr>
+                            <tr ng-if="funeralBoughtItems.lenght > 0">
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <strong>Total</strong>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <strong>{{ funeralBoughtItems | total : 'Amount' | currency : "R" }}</strong>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <input type="text" class="form-control" ng-model="newFuneralBoughtItem.Name" />
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" min="0" ng-model="newFuneralBoughtItem.Quantity" />
+                                </td>
+                                <td>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" value="{{ newFuneralBoughtItem.SupplierName}}" ng-disabled="true">
+                                        <input type="hidden" ng-model="newFuneralBoughtItem.SupplierId" />
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button" ng-click="clearLookupInput('newFuneralBoughtItem.supplier')">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                            <button class="btn btn-outline-secondary" type="button" ng-click="getSupplier()">
+                                                <i class="fas fa-external-link-alt"></i>
+                                            </button>
+                                            <button class="btn btn-outline-secondary" type="button" ng-click="getSuppliers()">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroupPrepend3">R</span>
+                                        </div>
+                                        <input type="number" class="form-control" min="0" ng-model="newFuneralBoughtItem.Amount" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" ng-click="addFuneralBoughtItem()" ng-disabled="disableAddFuneralBoughtItemButton()">
+                                        <i class="fas fa-plus-square"></i>
+                                        Add
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1" ng-click="collapseExpand('Documents')">
+            <div class="card-header">
+                <a class="text-muted font-weight-bold">
+                    <div class="btn btn-light">
+                        <i class="fas fa-angle-up" ng-show="getTabByName('Documents').Show"></i>
+                        <i class="fas fa-angle-down" ng-show="!getTabByName('Documents').Show"></i>
+                    </div>
+                    4. DOCUMENTS
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1" ng-show="getTabByName('Documents').Show">
+        <div class="col-md-12 bg-white p-1">
+            <div class="card border-light">
+                <div class="card-header bg-white" ng-click="collapseExpand('PurchasedItems')">
+                    <div class="float-left">
+                        <a class="text-muted font-weight-bold">
+                            <div class="btn btn-light">
+                                <i class="fas fa-angle-up" ng-show="getTabByName('UploadedItems').Show"></i>
+                                <i class="fas fa-angle-down" ng-show="!getTabByName('UploadedItems').Show"></i>
+                            </div>
+                            Uploaded Items
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" ng-show="getTabByName('UploadedItems').Show">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th colspan="6">
+                                    <div class="float-right">
+                                        <button type="button" class="btn btn-danger btn-sm" ng-disabled="disableDeleteFuneralBoughtItemButton()">
+                                            Delete <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col"></th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Description</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="showFechDocumentsLoadingIcon">
+                                <td colspan="5">
+                                    <span>
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr ng-repeat="funeralDocument in funeralDocuments">
+                                <th scope="row">{{ $index + 1 }}</th>
+                                <td scope="row">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="{{ funeralDocument.Id }}"
+                                               ng-model="funeralDocument.Selected"
+                                               ng-change="selectFuneralBoughtItemRecord(funeralDocument)">
+                                        <label class="custom-control-label" for="{{ funeralDocument.Id }}"></label>
+                                    </div>
+                                </td>
+                                <td>{{ funeralDocument.Name }}</td>
+                                <td>{{ funeralDocument.DocumentTypeName }}</td>
+                                <td>{{ funeralDocument.Description }}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="funeralDocument"
+                                               onchange="angular.element(this).scope().OnChange_FileInput(this)">
+                                        <label class="custom-file-label" for="funeralDocument">Choose file...</label>
+                                        <div class="invalid-feedback">Example invalid custom file feedback</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <select class="form-control" ng-model="newFuneralDocument.DocumentTypeId" convert-to-number>
+                                        <option value="1">Death Certificate</option>
+                                        <option value="2">bi1663 Form</option>
+                                        <option value="3">Confirmation Letter</option>
+                                        <option value="4">Other</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" ng-model="newFuneralDocument.Description" />
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-dark" ng-click="uploadFuneralDocument()">
+                                        <i class="fas fa-upload"></i>
+                                        Upload
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1">
+            <div class="float-left">
+                <div ng-include="'/components/shared/createview-topbar-buttons.html'"></div>
+            </div>
+        </div>
+    </div>
+</form>

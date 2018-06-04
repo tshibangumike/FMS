@@ -1,0 +1,57 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">LOOKUP FOR HOME AFFAIRS OFFICERS</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="m-3">
+        <input type="text" class="form-control" ng-model="searchText" />
+    </div>
+    <table class="table table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col"></th>
+                <th scope="col">Full Name</th>
+                <th scope="col">Office</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="record in records | filter : searchText">
+                <th scope="row">
+                    {{ $index + 1 }}
+                </th>
+                <td ng-style="{ 'width' : 15 }">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="{{ record.Id }}"
+                               ng-model="record.Selected"
+                               ng-change="selectRecord(record)">
+                        <label class="custom-control-label" for="{{ record.Id }}"></label>
+                    </div>
+                </td>
+                <td>
+                    {{ record.FirstName }} {{ record.LastName }}
+                </td>
+                <td>
+                    {{ record.HospitalName }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer d-flex justify-content-between align-items-center">
+    <div class="">
+        <button type="button" class="btn btn-primary m-1" ng-click="addNewHomeAffairsOfficer()">
+            <i class="fa fa-plus-square"></i>
+            New Home Affairs Officer
+        </button>
+    </div>
+    <div class="">
+        <button type="button" class="btn btn-success m-1" ng-click="save()">
+            <i class="fa fa-check-circle"></i>
+            Ok
+        </button>
+        <button type="submit" class="btn btn-danger m-1" ng-click="cancel()">
+            <i class="fa fa-ban"></i>
+            Cancel
+        </button>
+    </div>
+</div>

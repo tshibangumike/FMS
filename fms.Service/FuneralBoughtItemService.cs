@@ -27,6 +27,7 @@ namespace fms.Service
                 var amount = funeralBoughtItem.FirstOrDefault(x => x.Key == "Amount")?.Value;
                 var quantity = funeralBoughtItem.FirstOrDefault(x => x.Key == "Quantity")?.Value;
                 var funeralId = funeralBoughtItem.FirstOrDefault(x => x.Key == "FuneralId")?.Value;
+                var supplierId = funeralBoughtItem.FirstOrDefault(x => x.Key == "SupplierId")?.Value;
 
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Funeralboughtitem_create]",
                     new List<SqlParameter>
@@ -35,7 +36,8 @@ namespace fms.Service
                             new SqlParameter("@name", name),
                             new SqlParameter("@amount", amount),
                             new SqlParameter("@quantity", quantity),
-                            new SqlParameter("@funeralId", funeralId)
+                            new SqlParameter("@funeralId", funeralId),
+                            new SqlParameter("@supplierId", supplierId)
                     });
                 if (returnValue == 1)
                 {

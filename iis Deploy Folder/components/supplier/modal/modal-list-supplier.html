@@ -1,0 +1,60 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">LOOKUP FOR SUPPLIERS</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="m-3">
+        <input type="text" class="form-control" ng-model="searchText" />
+    </div>
+    <table class="table table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="record in records | filter : searchText">
+                <th scope="row">
+                    {{ $index + 1 }}
+                </th>
+                <td ng-style="{ 'width' : 15 }">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="{{ record.Id }}"
+                               ng-model="record.Selected"
+                               ng-change="selectRecord(record)">
+                        <label class="custom-control-label" for="{{ record.Id }}"></label>
+                    </div>
+
+                </td>
+                <td>
+                    {{ record.Name }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer d-flex justify-content-between align-items-center">
+    <div class="">
+        <button type="button" class="btn btn-labeled btn-primary m-1" ng-click="addNewSupplier()">
+            <span class="btn-label">
+                <i class="fa fa-plus-square"></i>
+            </span>
+            New Supplier
+        </button>
+    </div>
+    <div class="">
+        <button type="button" class="btn btn-labeled btn-success m-1" ng-click="save()">
+            <span class="btn-label">
+                <i class="fa fa-check-circle"></i>
+            </span>
+            Ok
+        </button>
+        <button type="submit" class="btn btn-labeled btn-danger m-1" ng-click="cancel()">
+            <span class="btn-label">
+                <i class="fa fa-ban"></i>
+            </span>
+            Cancel
+        </button>
+    </div>
+</div>

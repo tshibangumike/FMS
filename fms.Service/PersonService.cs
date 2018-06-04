@@ -21,6 +21,10 @@ namespace fms.Service
                 var contactNumber = person.FirstOrDefault(x => x.Key == "ContactNumber")?.Value;
                 var emailAddress = person.FirstOrDefault(x => x.Key == "EmailAddress")?.Value;
                 var addressId = person.FirstOrDefault(x => x.Key == "AddressId")?.Value;
+                var createdById = person.FirstOrDefault(x => x.Key == "CreatedById")?.Value;
+                var createdOn = person.FirstOrDefault(x => x.Key == "CreatedOn")?.Value;
+                var modifiedById = person.FirstOrDefault(x => x.Key == "ModifiedById")?.Value;
+                var modifiedOn = person.FirstOrDefault(x => x.Key == "ModifiedOn")?.Value;
 
                 var parsedDateOfBirth = dateOfBirth == null? dateOfBirth : DateTime.Parse(dateOfBirth).ToString();
 
@@ -35,7 +39,11 @@ namespace fms.Service
                             new SqlParameter("@genderId", genderId),
                             new SqlParameter("@contactNumber", contactNumber),
                             new SqlParameter("@emailAddress", emailAddress),
-                            new SqlParameter("@addressId", addressId)
+                            new SqlParameter("@addressId", addressId),
+                            new SqlParameter("@createdById", createdById),
+                            new SqlParameter("@createdOn", createdOn),
+                            new SqlParameter("@modifiedById", modifiedById),
+                            new SqlParameter("@modifiedOn", modifiedOn)
                     });
                 if (returnValue == 1)
                 {
@@ -47,12 +55,14 @@ namespace fms.Service
                     };
                 }
                 else
+                {
                     return new ReturnObject()
                     {
                         Id = id,
                         State = "error",
                         Message = "an error occured while creating this record!"
                     };
+                }
             }
             catch (Exception ex)
             {
@@ -68,7 +78,7 @@ namespace fms.Service
         {
             try
             {
-                var id = person.FirstOrDefault(x => x.Key == "PersonId")?.Value;
+                var id = person.FirstOrDefault(x => x.Key == "Id")?.Value;
                 var firstName = person.FirstOrDefault(x => x.Key == "FirstName")?.Value;
                 var lastName = person.FirstOrDefault(x => x.Key == "LastName")?.Value;
                 var saIdNumber = person.FirstOrDefault(x => x.Key == "SAIdNumber")?.Value;
@@ -77,6 +87,7 @@ namespace fms.Service
                 var contactNumber = person.FirstOrDefault(x => x.Key == "ContactNumber")?.Value;
                 var emailAddress = person.FirstOrDefault(x => x.Key == "EmailAddress")?.Value;
                 var addressId = person.FirstOrDefault(x => x.Key == "AddressId")?.Value;
+                var modifiedById = person.FirstOrDefault(x => x.Key == "ModifiedById")?.Value;
 
                 var parsedDateOfBirth = dateOfBirth == null ? dateOfBirth : DateTime.Parse(dateOfBirth).ToString();
 
@@ -91,7 +102,8 @@ namespace fms.Service
                             new SqlParameter("@genderId", genderId),
                             new SqlParameter("@contactNumber", contactNumber),
                             new SqlParameter("@emailAddress", emailAddress),
-                            new SqlParameter("@addressId", addressId)
+                            new SqlParameter("@addressId", addressId),
+                            new SqlParameter("@modifiedById", modifiedById)
                     });
                 if (returnValue == 1)
                 {
@@ -103,12 +115,14 @@ namespace fms.Service
                     };
                 }
                 else
+                {
                     return new ReturnObject()
                     {
                         Id = id,
                         State = "error",
                         Message = "an error occured while updating this record!"
                     };
+                }
             }
             catch (Exception ex)
             {

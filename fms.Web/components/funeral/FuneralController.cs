@@ -26,151 +26,133 @@ namespace fms.Web.assets.funeral
             {
                 funeral = new List<KeyValue>();
             }
+
             if (deceased != null && deceased.Count > 0)
             {
-                var deceasedPersonId = Guid.NewGuid().ToString();
-                deceased.Add(new KeyValue()
+                var deceasedAddress = KeyValueService.GetAttributeValue(deceased, "FullAddress");
+                if (deceasedAddress != null)
                 {
-                    Key = "Id",
-                    Value = deceasedPersonId
-                });
+                    var address = new List<KeyValue>();
+                    KeyValueService.AddAttribute(address, "Id", Guid.NewGuid().ToString());
+                    KeyValueService.AddAttribute(address, "FullAddress", deceasedAddress);
+                    var addressReturnObject = AddressService.InsertAddress(address);
+                    if(addressReturnObject.State == "success")
+                    {
+                        KeyValueService.AddAttribute(deceased, "AddressId", addressReturnObject.Id);
+                    }
+                }
+                var deceasedPersonId = Guid.NewGuid().ToString();
+                KeyValueService.AddAttribute(deceased, "Id", deceasedPersonId);
+                GenericModelService.AddAuditAttributeForCreateEvent(deceased, GetCurrentUserId());
                 var deceasedPersonReturnObject = PersonService.InsertPerson(deceased);
                 if(deceasedPersonReturnObject.State == "success")
                 {
-                    deceased.Add(new KeyValue()
-                    {
-                        Key = "PersonId",
-                        Value = deceasedPersonId
-                    });
+                    KeyValueService.AddAttribute(deceased, "PersonId", deceasedPersonId);
                     var deceasedReturnObject = DeceasedService.InsertDeceased(deceased);
-                    funeral.Add(new KeyValue()
+                    if(deceasedReturnObject.State == "success")
                     {
-                        Key = "DeceasedId",
-                        Value = deceasedReturnObject.Id
-                    });
+                        KeyValueService.AddAttribute(funeral, "DeceasedId", deceasedReturnObject.Id);                        
+                    }
                 }
             }
 
             if (informant != null && informant.Count > 0)
             {
                 var informantPersonId = Guid.NewGuid().ToString();
-                informant.Add(new KeyValue()
-                {
-                    Key = "Id",
-                    Value = informantPersonId
-                });
+                KeyValueService.AddAttribute(informant, "Id", informantPersonId);
+                GenericModelService.AddAuditAttributeForCreateEvent(informant, GetCurrentUserId());
                 var informantPersonReturnObject = PersonService.InsertPerson(informant);
                 if(informantPersonReturnObject.State == "success")
                 {
-                    informant.Add(new KeyValue()
-                    {
-                        Key = "PersonId",
-                        Value = informantPersonId
-                    });
+                    KeyValueService.AddAttribute(informant, "PersonId", informantPersonId);
                     var informantReturnObject = InformantService.InsertInformant(informant);
-                    funeral.Add(new KeyValue()
+                    if(informantReturnObject.State == "success")
                     {
-                        Key = "InformantId",
-                        Value = informantReturnObject.Id
-                    });
+                        KeyValueService.AddAttribute(funeral, "InformantId", informantReturnObject.Id);
+                    }
                 }
             }
 
             if (nextOfKin != null && nextOfKin.Count > 0)
             {
                 var nextOfKinPersonId = Guid.NewGuid().ToString();
-                nextOfKin.Add(new KeyValue()
-                {
-                    Key = "Id",
-                    Value = nextOfKinPersonId
-                });
+                KeyValueService.AddAttribute(nextOfKin, "Id", nextOfKinPersonId);
+                GenericModelService.AddAuditAttributeForCreateEvent(nextOfKin, GetCurrentUserId());
                 var nextOfKinPersonReturnObject = PersonService.InsertPerson(nextOfKin);
                 if(nextOfKinPersonReturnObject.State == "success")
                 {
-                    nextOfKin.Add(new KeyValue()
-                    {
-                        Key = "PersonId",
-                        Value = nextOfKinPersonId
-                    });
+                    KeyValueService.AddAttribute(nextOfKin, "PersonId", nextOfKinPersonId);
                     var nextOfKinReturnObject = NextOfKinService.InsertNextOfKin(nextOfKin);
-                    funeral.Add(new KeyValue()
+                    if (nextOfKinReturnObject.State == "success")
                     {
-                        Key = "NextOfKinId",
-                        Value = nextOfKinReturnObject.Id
-                    });
+                        KeyValueService.AddAttribute(funeral, "NextOfKinId", nextOfKinReturnObject.Id);
+                    }
                 }
             }
 
             if (doctor != null && doctor.Count > 0)
             {
-                var doctorPersonId = Guid.NewGuid().ToString();
-                doctor.Add(new KeyValue()
+                if(KeyValueService.AttributeContainsValue(doctor, "Id"))
                 {
-                    Key = "Id",
-                    Value = doctorPersonId
-                });
-                var nextOfKinPersonReturnObject = PersonService.InsertPerson(doctor);
-                if(nextOfKinPersonReturnObject.State == "success")
+                    var doctorPersonId = KeyValueService.GetAttributeValue(doctor, "Id");
+                    KeyValueService.AddAttribute(funeral, "DoctorId", doctorPersonId);
+                }
+                else
                 {
-                    doctor.Add(new KeyValue()
+                    var doctorPersonId = Guid.NewGuid().ToString();
+                    KeyValueService.AddAttribute(doctor, "Id", doctorPersonId);
+                    GenericModelService.AddAuditAttributeForCreateEvent(doctor, GetCurrentUserId());
+                    var nextOfKinPersonReturnObject = PersonService.InsertPerson(doctor);
+                    if (nextOfKinPersonReturnObject.State == "success")
                     {
-                        Key = "PersonId",
-                        Value = doctorPersonId
-                    });
-                    var doctorReturnObject = DoctorService.InsertDoctor(doctor);
-                    funeral.Add(new KeyValue()
-                    {
-                        Key = "DoctorId",
-                        Value = doctorReturnObject.Id
-                    });
+                        KeyValueService.AddAttribute(doctor, "PersonId", doctorPersonId);
+                        var doctorReturnObject = DoctorService.InsertDoctor(doctor);
+                        if (doctorReturnObject.State == "success")
+                        {
+                            KeyValueService.AddAttribute(funeral, "DoctorId", doctorReturnObject.Id);
+                        }
+                    }
                 }
             }
 
             if (homeAffairsOfficer != null && homeAffairsOfficer.Count > 0)
             {
-                var homeAffairsOfficerPersonId = Guid.NewGuid().ToString();
-                homeAffairsOfficer.Add(new KeyValue()
+                if(KeyValueService.AttributeContainsValue(homeAffairsOfficer, "Id"))
                 {
-                    Key = "Id",
-                    Value = homeAffairsOfficerPersonId
-                });
-                var homeAffairsOfficerPersonReturnObject = PersonService.InsertPerson(homeAffairsOfficer);
-                if(homeAffairsOfficerPersonReturnObject.State == "success")
+                    var homeAffairsOfficerPersonId = KeyValueService.GetAttributeValue(homeAffairsOfficer, "Id");
+                    KeyValueService.AddAttribute(funeral, "HomeAffairsOfficerId", homeAffairsOfficerPersonId);
+                }
+                else
                 {
-                    homeAffairsOfficer.Add(new KeyValue()
+                    var homeAffairsOfficerPersonId = Guid.NewGuid().ToString();
+                    KeyValueService.AddAttribute(homeAffairsOfficer, "Id", homeAffairsOfficerPersonId);
+                    GenericModelService.AddAuditAttributeForCreateEvent(homeAffairsOfficer, GetCurrentUserId());
+                    var homeAffairsOfficerPersonReturnObject = PersonService.InsertPerson(homeAffairsOfficer);
+                    if (homeAffairsOfficerPersonReturnObject.State == "success")
                     {
-                        Key = "PersonId",
-                        Value = Guid.NewGuid().ToString()
-                    });
-                    var homeAffairsOfficerReturnObject = HomeAffairsOfficerService.InsertHomeAffairesOfficer(homeAffairsOfficer);
-                    funeral.Add(new KeyValue()
-                    {
-                        Key = "HomeAffairsOfficerId",
-                        Value = homeAffairsOfficerReturnObject.Id
-                    });
+                        KeyValueService.AddAttribute(homeAffairsOfficer, "PersonId", homeAffairsOfficerPersonReturnObject.Id);
+                        var homeAffairsOfficerReturnObject = HomeAffairsOfficerService.InsertHomeAffairesOfficer(homeAffairsOfficer);
+                        if (homeAffairsOfficerReturnObject.State == "success")
+                        {
+                            KeyValueService.AddAttribute(funeral, "HomeAffairsOfficerId", homeAffairsOfficerReturnObject.Id);
+                        }
+                    }
                 }
             }
 
             if (funeral != null && funeral.Count > 0)
             {
-                var funeralReturnObjectId = Guid.NewGuid().ToString();
-                funeral.Add(new KeyValue()
-                {
-                    Key = "Id",
-                    Value = funeralReturnObjectId
-                });
+                var funeralId = Guid.NewGuid().ToString();
+                KeyValueService.AddAttribute(funeral, "Id", funeralId);
                 var funeralNumber = SharedService.RandomString(8);
-                funeral.Add(new KeyValue()
-                {
-                    Key = "FuneralNumber",
-                    Value = funeralNumber
-                });
+                KeyValueService.AddAttribute(funeral, "FuneralNumber", funeralNumber);
+                GenericModelService.AddAuditAttributeForCreateEvent(funeral, GetCurrentUserId());
                 var funeralReturnObject = FuneralService.InsertFuneral(funeral);
                 if(funeralReturnObject.State == "success")
                 {
                     return Json(new { state = "success", funeralId = funeralReturnObject.Id }, JsonRequestBehavior.AllowGet);
                 }
-                return Json(new { state = "error", hospital = "" }, JsonRequestBehavior.AllowGet);
+                return Json(new { state = "error", message = "" }, JsonRequestBehavior.AllowGet);
             }
 
             return Json(new { state = "error", message = "" }, JsonRequestBehavior.AllowGet);
@@ -189,7 +171,8 @@ namespace fms.Web.assets.funeral
             }
 
             if (deceased != null && deceased.Count > 0)
-            {                
+            {
+                KeyValueService.AddAttribute(deceased, "ModifiedById", GetCurrentUserId());
                 var deceasedPersonReturnObject = PersonService.UpdatePerson(deceased);
                 if (deceasedPersonReturnObject.State == "success")
                 {
@@ -202,6 +185,7 @@ namespace fms.Web.assets.funeral
                 var existingInformantCount = InformantService.QueryCountOfInformantsByFuneralId(funeralId);
                 if(existingInformantCount > 0)
                 {
+                    KeyValueService.AddAttribute(informant, "ModifiedById", GetCurrentUserId());
                     var informantPersonReturnObject = PersonService.UpdatePerson(informant);
                     if (informantPersonReturnObject.State == "success")
                     {
@@ -211,15 +195,16 @@ namespace fms.Web.assets.funeral
                 else
                 {
                     var informantPersonId = Guid.NewGuid().ToString();
-                    SharedService.AddAttributeToKeyValueObject(informant, "Id", informantPersonId);
+                    KeyValueService.AddAttribute(informant, "Id", informantPersonId);
+                    GenericModelService.AddAuditAttributeForCreateEvent(informant, GetCurrentUserId());
                     var informantPersonReturnObject = PersonService.InsertPerson(informant);
                     if (informantPersonReturnObject.State == "success")
                     {
-                        SharedService.AddAttributeToKeyValueObject(informant, "PersonId", informantPersonId);
+                        KeyValueService.AddAttribute(informant, "PersonId", informantPersonId);
                         var informantReturnObject = InformantService.InsertInformant(informant);
                         if (informantReturnObject.State == "success")
                         {
-                            SharedService.UpdateAttributeToKeyValueObject(funeral, "InformantId", informantReturnObject.Id);
+                            KeyValueService.SetOrAddAttribute(funeral, "InformantId", informantReturnObject.Id);
                         }
                     }
                 }
@@ -231,6 +216,7 @@ namespace fms.Web.assets.funeral
                 var existingNextOfKinCount = NextOfKinService.QueryCountOfNextOsKinssByFuneralId(funeralId);
                 if (existingNextOfKinCount > 0)
                 {
+                    KeyValueService.AddAttribute(nextOfKin, "ModifiedById", GetCurrentUserId());
                     var nextOfKinPersonReturnObject = PersonService.UpdatePerson(nextOfKin);
                     if (nextOfKinPersonReturnObject.State == "success")
                     {
@@ -240,15 +226,16 @@ namespace fms.Web.assets.funeral
                 else
                 {
                     var nextOfKinPersonId = Guid.NewGuid().ToString();
-                    SharedService.AddAttributeToKeyValueObject(nextOfKin, "Id", nextOfKinPersonId);
+                    KeyValueService.AddAttribute(nextOfKin, "Id", nextOfKinPersonId);
+                    GenericModelService.AddAuditAttributeForCreateEvent(nextOfKin, GetCurrentUserId());
                     var nextOfKinPersonReturnObject = PersonService.InsertPerson(nextOfKin);
                     if (nextOfKinPersonReturnObject.State == "success")
                     {
-                        SharedService.AddAttributeToKeyValueObject(nextOfKin, "PersonId", nextOfKinPersonId);
+                        KeyValueService.AddAttribute(nextOfKin, "PersonId", nextOfKinPersonId);
                         var nextOfKinReturnObject = NextOfKinService.InsertNextOfKin(nextOfKin);
                         if (nextOfKinReturnObject.State == "success")
                         {
-                            SharedService.UpdateAttributeToKeyValueObject(funeral, "NextOfKinId", nextOfKinReturnObject.Id);
+                            KeyValueService.SetOrAddAttribute(funeral, "NextOfKinId", nextOfKinReturnObject.Id);
                         }
                     }
                 }
@@ -259,6 +246,7 @@ namespace fms.Web.assets.funeral
                 var existingDoctorCount = DoctorService.QueryCountOfDoctorsByFuneralId(funeralId);
                 if (existingDoctorCount > 0)
                 {
+                    KeyValueService.AddAttribute(doctor, "ModifiedById", GetCurrentUserId());
                     var nextOfKinPersonReturnObject = PersonService.UpdatePerson(doctor);
                     if (nextOfKinPersonReturnObject.State == "success")
                     {
@@ -268,13 +256,14 @@ namespace fms.Web.assets.funeral
                 else
                 {
                     var doctorPersonId = Guid.NewGuid().ToString();
-                    SharedService.AddAttributeToKeyValueObject(doctor, "Id", doctorPersonId);
+                    KeyValueService.AddAttribute(doctor, "Id", doctorPersonId);
+                    GenericModelService.AddAuditAttributeForCreateEvent(doctor, GetCurrentUserId());
                     var nextOfKinPersonReturnObject = PersonService.InsertPerson(doctor);
                     if (nextOfKinPersonReturnObject.State == "success")
                     {
-                        SharedService.AddAttributeToKeyValueObject(doctor, "PersonId", doctorPersonId);
+                        KeyValueService.AddAttribute(doctor, "PersonId", doctorPersonId);
                         var doctorReturnObject = DoctorService.InsertDoctor(doctor);
-                        SharedService.UpdateAttributeToKeyValueObject(funeral, "DoctorId", doctorReturnObject.Id);
+                        KeyValueService.SetOrAddAttribute(funeral, "DoctorId", doctorReturnObject.Id);
                     }
                 }
             }
@@ -284,20 +273,22 @@ namespace fms.Web.assets.funeral
                 var existingHomeAffairsOfficerCount = HomeAffairsOfficerService.QueryCountOfHomeAffairsOfficersByFuneralId(funeralId);
                 if(existingHomeAffairsOfficerCount > 0)
                 {
+                    KeyValueService.AddAttribute(homeAffairsOfficer, "ModifiedById", GetCurrentUserId());
                     var homeAffairsOfficerPersonReturnObject = PersonService.UpdatePerson(homeAffairsOfficer);
                 }
                 else
                 {
                     var homeAffairsOfficerPersonId = Guid.NewGuid().ToString();
-                    SharedService.AddAttributeToKeyValueObject(homeAffairsOfficer, "Id", homeAffairsOfficerPersonId);
+                    KeyValueService.AddAttribute(homeAffairsOfficer, "Id", homeAffairsOfficerPersonId);
+                    GenericModelService.AddAuditAttributeForCreateEvent(homeAffairsOfficer, GetCurrentUserId());
                     var homeAffairsOfficerPersonReturnObject = PersonService.InsertPerson(homeAffairsOfficer);
                     if (homeAffairsOfficerPersonReturnObject.State == "success")
                     {
-                        SharedService.AddAttributeToKeyValueObject(homeAffairsOfficer, "PersonId", Guid.NewGuid().ToString());
+                        KeyValueService.AddAttribute(homeAffairsOfficer, "PersonId", Guid.NewGuid().ToString());
                         var homeAffairsOfficerReturnObject = HomeAffairsOfficerService.InsertHomeAffairesOfficer(homeAffairsOfficer);
                         if(homeAffairsOfficerReturnObject.State == "success")
                         {
-                            SharedService.UpdateAttributeToKeyValueObject(funeral, "HomeAffairsOfficerId", homeAffairsOfficerReturnObject.Id);
+                            KeyValueService.SetOrAddAttribute(funeral, "HomeAffairsOfficerId", homeAffairsOfficerReturnObject.Id);
                         }
                     }
                 }
@@ -306,6 +297,7 @@ namespace fms.Web.assets.funeral
 
             if (funeral != null && funeral.Count > 0)
             {
+                KeyValueService.AddAttribute(funeral, "ModifiedById", GetCurrentUserId());
                 var funeralReturnObject = FuneralService.UpdateFuneral(funeral);
                 if (funeralReturnObject.State == "success")
                 {
@@ -314,7 +306,6 @@ namespace fms.Web.assets.funeral
             }
 
             return Json("error", JsonRequestBehavior.AllowGet);
-
         }
     }
 }
