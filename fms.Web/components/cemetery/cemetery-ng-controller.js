@@ -1,82 +1,84 @@
-﻿angular.module("fmsApp")
+﻿
+angular.module("fmsApp")
     .controller("ModalListCemeteryController",
-    [
-        "$scope", "$uibModal", "$uibModalInstance", "appService", "records",
-        function ($scope, $uibModal, $uibModalInstance, appService, records) {
+        [
+            "$scope", "$uibModal", "$uibModalInstance", "appService", "records",
+            function($scope, $uibModal, $uibModalInstance, appService, records) {
 
-            $scope.records = records.data;
-            $scope.selectedRecords = [];
+                $scope.records = records.data;
+                $scope.selectedRecords = [];
 
-            $scope.selectRecord = function () {
-                if (_.isEqual(arguments.length, 0)) return null;
-                var _record = _.isNull(arguments[0], 0) ? null : arguments[0];
-                if (_.isNull(arguments[0])) return null;
-                if (_record.Selected) {
-                    //add id in array
-                    $scope.selectedRecords.push(_record);
-                }
-                else {
-                    //remove id from array
-                    _.remove($scope.selectedRecords, function (x) {
-                        return _.isEqual(x.Id, _record.Id);
-                    });
-                }
-            };
+                $scope.selectRecord = function(record) {
+                    fms.Functions.AddToOrRemoveFromArray($scope.selectedRecords, record);
+                };
 
-            $scope.addNewCemetery = function () {
+                $scope.getActiveCemeteries = function() {
+                    appService.GetData(fms.Entity.Cemetery.Urls.GetActiveCemeteries)
+                        .then(function(response) {
+                                $scope.records = response.data;
+                            },
+                            function(response) {
+                            });
+                };
 
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    ariaLabelledBy: "modal-title",
-                    ariaDescribedBy: "modal-body",
-                    templateUrl: "/components/cemetery/modal/modal-add-cemetery.html",
-                    controller: "AddCemeteryController",
-                    size: "lg",
-                });
+                $scope.addNewCemetery = function() {
+                    fms.Routes.SetAddLookup(
+                        $uibModal,
+                        "/components/cemetery/modal/modal-add-cemetery.html",
+                        "ModalAddCemeteryController",
+                        $scope.getActiveCemeteries
+                    );
+                };
 
-                modalInstance.result.then(function (selectedRecord) {
-                    $scope.selectedRecords.push(selectedRecord);
+                $scope.save = function() {
                     if (!_.isEqual($scope.selectedRecords.length, 1)) return;
                     $uibModalInstance.close($scope.selectedRecords[0]);
-                });
+                };
 
-            };
+                $scope.cancel = function() {
+                    $uibModalInstance.dismiss("cancel");
+                };
 
-            $scope.save = function () {
-                if (!_.isEqual($scope.selectedRecords.length, 1)) return;
-                $uibModalInstance.close($scope.selectedRecords[0]);
-            };
-
-            $scope.cancel = function () {
-                $uibModalInstance.dismiss("cancel");
-            };
-
-        }
-    ])
+            }
+        ])
     .controller("ModalAddCemeteryController",
-    [
-        "$scope", "$uibModalInstance", "appService",
-        function ($scope, $uibModalInstance, appService) {
+        [
+            "$scope", "$uibModalInstance", "appService",
+            function($scope, $uibModalInstance, appService) {
 
-            $scope.formHasBeenSubmitted = true;
-            $scope.cemetery = {};
+                $scope.formHasBeenSubmitted = true;
+                $scope.cemetery = {};
 
-            $scope.cancel = function () {
-                $uibModalInstance.dismiss("cancel");
-            };
+                $scope.cancel = function() {
+                    $uibModalInstance.dismiss("cancel");
+                };
 
-            $scope.processForm = function () {
-                if (arguments.length === 0) return null;
-                var form = arguments[0] == null ? null : arguments[0];
-                if (!form.$valid) {
-                    return null;
-                }
-                var keyValuesCemetery = fms.Functions.SplitObjectIntoArray($scope.cemetery);
-                appService.PostForm("/Cemetery/AddCemetery", { cemetery: keyValuesCemetery })
-                    .then(function successCallback(response) {
-                        $uibModalInstance.close(response.data.cemetery);
-                    }, function errorCallback(response) {
-                    });
-            };
-        }
-    ]);
+                $scope.processForm = function() {
+                    if (arguments.length === 0) return null;
+                    var form = arguments[0] == null ? null : arguments[0];
+                    if (!form.$valid) {
+                        return null;
+                    }
+                    var keyValuesCemetery = fms.Functions.SplitObjectIntoArray($scope.cemetery);
+                    appService.PostForm("/Cemetery/AddCemetery", { cemetery: keyValuesCemetery })
+                        .then(function successCallback(response) {
+                                $uibModalInstance.close(response.data.cemetery);
+                            },
+                            function errorCallback(response) {
+                            });
+                };
+            }
+        ])
+    .controller("ModalEditCemteryController",
+        [
+            "$scope", "$uibModalInstance", "record",
+            function($scope, $uibModalInstance, record) {
+
+                $scope.cemetery = record.data;
+
+                $scope.cancel = function() {
+                    $uibModalInstance.dismiss("cancel");
+                };
+
+            }
+        ]);

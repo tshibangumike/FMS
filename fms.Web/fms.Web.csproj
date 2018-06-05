@@ -100,6 +100,7 @@
     <Content Include="components\base\base-ng-controller.js" />
     <Content Include="components\base\base.html" />
     <Content Include="components\cemetery\cemetery-ng-controller.js" />
+    <Content Include="components\cemetery\modal\modal-view-cemetery.html" />
     <Content Include="components\cemetery\modal\modal-add-cemetery.html" />
     <Content Include="components\cemetery\modal\modal-list-cemetery.html" />
     <Content Include="components\deceased\deceased-ng-controller.js" />
@@ -107,6 +108,7 @@
     <Content Include="components\doctor\doctor-ng-controller.js" />
     <Content Include="components\doctor\list-doctor.html" />
     <Content Include="components\doctor\modal\modal-add-doctor.html" />
+    <Content Include="components\doctor\modal\modal-view-doctor.html" />
     <Content Include="components\doctor\modal\modal-edit-doctor.html" />
     <Content Include="components\doctor\modal\modal-list-doctor.html" />
     <Content Include="components\funeralboughtitem\edit-funerlboughtitem.html" />
@@ -115,6 +117,7 @@
     <Content Include="components\funeral\funeral-ng-controller.js" />
     <Content Include="components\funeral\list-funeral.html" />
     <Content Include="components\homeaffairsofficer\list-homeaffairsofficer.html" />
+    <Content Include="components\homeaffairsofficer\modal\modal-view-homeaffairsofficer.html" />
     <Content Include="components\homeaffairsofficer\modal\modal-add-homeaffairsofficer.html" />
     <Content Include="components\homeaffairsofficer\modal\modal-edit-homeaffairsofficer.html" />
     <Content Include="components\homeaffairsofficer\modal\modal-list-homeaffairsofficer.html" />
@@ -122,6 +125,7 @@
     <Content Include="components\hospital\hospital-ng-controller.js" />
     <Content Include="components\hospital\list-hospital.html" />
     <Content Include="components\hospital\edit-hospital.html" />
+    <Content Include="components\hospital\modal\modal-view-hospital.html" />
     <Content Include="components\hospital\modal\modal-list-hospital.html" />
     <Content Include="components\hospital\modal\modal-add-hospital.html" />
     <Content Include="components\hospital\add-hospital.html" />
@@ -130,6 +134,7 @@
     <Content Include="components\member\add-member.html" />
     <Content Include="components\member\edit-member.html" />
     <Content Include="components\member\list-member.html" />
+    <Content Include="components\mortuary\modal\modal-view-mortuary.html" />
     <Content Include="components\mortuary\mortuary-ng-controller.js" />
     <Content Include="components\mortuary\modal\modal-add-mortuary.html" />
     <Content Include="components\mortuary\modal\modal-list-mortuary.html" />
@@ -139,6 +144,7 @@
     <Content Include="components\shared\createview-topbar-buttons.html" />
     <Content Include="components\shared\listview-topbar-buttons.html" />
     <Content Include="components\shared\lookup-list-template.html" />
+    <Content Include="components\supplier\modal\modal-view-supplier.html" />
     <Content Include="components\supplier\modal\modal-add-supplier.html" />
     <Content Include="components\supplier\modal\modal-list-supplier.html" />
     <Content Include="components\supplier\supplier-ng-controller.js" />

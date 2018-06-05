@@ -1,82 +1,86 @@
 ﻿angular.module("fmsApp")
-    .controller("ListMortuaryController",
-    [
-        "$rootScope", "$scope", "$uibModal", "$uibModalInstance", "appService", "records",
-        function ($rootScope, $scope, $uibModal, $uibModalInstance, appService, records) {
+    .controller("ModalListMortuaryController",
+        [
+            "$rootScope", "$scope", "$uibModal", "$uibModalInstance", "appService", "records",
+            function($rootScope, $scope, $uibModal, $uibModalInstance, appService, records) {
 
-            $scope.records = records.data;
-            $scope.selectedRecords = [];
+                $scope.records = records.data;
+                $scope.selectedRecords = [];
 
-            $scope.selectRecord = function () {
-                if (_.isEqual(arguments.length, 0)) return null;
-                var _record = _.isNull(arguments[0], 0) ? null : arguments[0];
-                if (_.isNull(arguments[0])) return null;
-                if (_record.Selected) {
-                    //add id in array
-                    $scope.selectedRecords.push(_record);
-                }
-                else {
-                    //remove id from array
-                    _.remove($scope.selectedRecords, function (x) {
-                        return _.isEqual(x.Id, _record.Id);
-                    });
-                }
-            };
+                $scope.selectRecord = function (record) {
+                    fms.Functions.AddToOrRemoveFromArray($scope.selectedRecords, record);
+                };
 
-            $scope.addNewHospital = function () {
+                $scope.getActiveMortuaries = function () {
 
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    ariaLabelledBy: "modal-title",
-                    ariaDescribedBy: "modal-body",
-                    templateUrl: "/components/mortuary/modal/modal-add-mortuary.html",
-                    controller: "AddMortuaryController",
-                    size: "lg",
-                });
+                    appService.GetData(fms.Entity.Mortuary.Urls.GetActiveMortuaries)
+                        .then(function successCallback(response) {
 
-                modalInstance.result.then(function (selectedRecord) {
-                    $scope.selectedRecords.push(selectedRecord);
+                            $scope.records = response.data;
+
+                        }, function errorCallback(response) {
+                        });
+
+                };
+
+                $scope.addNewMortuary = function() {
+                    fms.Routes.SetAddLookup(
+                        $uibModal,
+                        "/components/mortuary/modal/modal-add-mortuary.html",
+                        "ModalAddMortuaryController",
+                        $scope.getActiveMortuaries
+                    );
+                };
+
+                $scope.save = function() {
                     if (!_.isEqual($scope.selectedRecords.length, 1)) return;
                     $uibModalInstance.close($scope.selectedRecords[0]);
-                });
+                };
 
-            };
+                $scope.cancel = function() {
+                    $uibModalInstance.dismiss("cancel");
+                };
 
-            $scope.save = function () {
-                if (!_.isEqual($scope.selectedRecords.length, 1)) return;
-                $uibModalInstance.close($scope.selectedRecords[0]);
-            };
+            }
+        ])
+    .controller("ModalAddMortuaryController",
+        [
+            "$scope", "$uibModalInstance", "appService",
+            function($scope, $uibModalInstance, appService) {
 
-            $scope.cancel = function () {
-                $uibModalInstance.dismiss("cancel");
-            };
+                $scope.formHasBeenSubmitted = true;
+                $scope.mortuary = {};
 
-        }
-    ])
-    .controller("AddMortuaryController",
-    [
-        "$scope", "$uibModalInstance", "appService",
-        function ($scope, $uibModalInstance, appService) {
+                $scope.cancel = function() {
+                    $uibModalInstance.dismiss("cancel");
+                };
 
-            $scope.formHasBeenSubmitted = true;
-            $scope.mortuary = {};
+                $scope.processForm = function() {
+                    if (arguments.length === 0) return null;
+                    var form = arguments[0] == null ? null : arguments[0];
+                    if (!form.$valid) {
+                        return null;
+                    }
+                    var keyValuesMortuary = fms.Functions.SplitObjectIntoArray($scope.mortuary);
+                    appService.PostForm("/Mortuary/AddMortuary", { mortuary: keyValuesMortuary })
+                        .then(function successCallback(response) {
+                                $uibModalInstance.close(response.data.mortuary);
+                            },
+                            function errorCallback(response) {
+                            });
+                };
+            }
+        ])
+    .controller("ModalEditMortuaryController",
+        [
+            "$scope", "$uibModalInstance", "record",
+            function($scope, $uibModalInstance, record) {
 
-            $scope.cancel = function () {
-                $uibModalInstance.dismiss("cancel");
-            };
+                $scope.mortuary = record.data;
 
-            $scope.processForm = function () {
-                if (arguments.length === 0) return null;
-                var form = arguments[0] == null ? null : arguments[0];
-                if (!form.$valid) {
-                    return null;
-                }
-                var keyValuesMortuary = fms.Functions.SplitObjectIntoArray($scope.mortuary);
-                appService.PostForm("/Mortuary/AddMortuary", { mortuary: keyValuesMortuary })
-                    .then(function successCallback(response) {
-                        $uibModalInstance.close(response.data.mortuary);
-                    }, function errorCallback(response) {
-                    });
-            };
-        }
-    ]);
+                $scope.cancel = function() {
+                    $uibModalInstance.dismiss("cancel");
+                };
+
+            }
+        ]);

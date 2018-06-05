@@ -15,23 +15,45 @@ namespace fms.Web.components.funeraldocument
             var records = FuneralDocumentService.QueryFuneralDocumentsByFuneralId(funeralId);
             return Json(records, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult AddFuneralDocument(HttpPostedFileBase document, int documentTypeId, string description, string funeralId)
+
+        public ActionResult AddFuneralDocument(HttpPostedFileBase document, int documentTypeId, string description,
+            string funeralId)
         {
             var funeralDocument = new List<KeyValue>();
             KeyValueService.AddAttribute(funeralDocument, "Id", Guid.NewGuid().ToString());
             KeyValueService.AddAttribute(funeralDocument, "Name", document.FileName);
+            KeyValueService.AddAttribute(funeralDocument, "MimeType", document.ContentType);
+            KeyValueService.AddAttribute(funeralDocument, "DocumentSize", document.ContentLength.ToString());
             KeyValueService.AddAttribute(funeralDocument, "DocumentTypeId", documentTypeId.ToString());
             KeyValueService.AddAttribute(funeralDocument, "Description", description);
             KeyValueService.AddAttribute(funeralDocument, "FuneralId", funeralId);
             var stream = document.InputStream;
             var binaryReader = new BinaryReader(stream);
-            var bytes = binaryReader.ReadBytes((Int32)stream.Length);
+            var bytes = binaryReader.ReadBytes((int) stream.Length);
+            GenericModelService.AddAuditAttributeForCreateEvent(funeralDocument, GetCurrentUserId());
             var funeralDocumentReturnObject = FuneralDocumentService.InsertFuneralDocument(funeralDocument, bytes);
-            if(funeralDocumentReturnObject.State == "success")
+            return funeralDocumentReturnObject.State == "success"
+                ? Json(new {state = "success", funeralDocumentId = funeralDocumentReturnObject.Id},
+                    JsonRequestBehavior.AllowGet)
+                : Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DownloadFuneralDocument(Guid funeralDocumentId)
+        {
+            try
             {
-                return Json(new { state = "success", funeralDocumentId = funeralDocumentReturnObject.Id }, JsonRequestBehavior.AllowGet);
+                var record = FuneralDocumentService.QueryFuneralDocumentById(funeralDocumentId);
+                var documentContent = (byte[]) GenericModelService.GetAttributeValue(record, "DocumentContent");
+                var fileName = GenericModelService.GetAttributeValue(record, "Name").ToString();
+                var fileType = GenericModelService.GetAttributeValue(record, "DocumentTypeName").ToString();
+                var mimeType = GenericModelService.GetAttributeValue(record, "MimeType").ToString();
+                var fileExtension = Path.GetExtension(fileName);
+                return File(documentContent, mimeType, fileType + fileExtension);
             }
-            return Json("", JsonRequestBehavior.AllowGet);
+            catch (Exception ex)
+            {
+                return Json(new {state = "error", message = ex.Message}, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

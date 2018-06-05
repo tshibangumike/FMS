@@ -148,11 +148,8 @@
             $scope.records = records.data;
             $scope.selectedRecords = [];
 
-            $scope.selectRecord = function () {
-                if (_.isEqual(arguments.length, 0)) return null;
-                var _record = _.isNull(arguments[0], 0) ? null : arguments[0];
-                if (_.isNull(arguments[0])) return null;
-                fms.Functions.AddToOrRemoveFromArray($scope.selectedRecords, _record);
+            $scope.selectRecord = function (record) {
+                fms.Functions.AddToOrRemoveFromArray($scope.selectedRecords, record);
             };
 
             $scope.getActiveDoctors = function () {
@@ -168,15 +165,12 @@
             };
 
             $scope.addNewDoctor = function () {
-
                 fms.Routes.SetAddLookup(
                     $uibModal,
-                    appService,
                     "/components/doctor/modal/modal-add-doctor.html",
                     "ModalAddDoctorController",
                     $scope.getActiveDoctors
                 );
-
             };
 
             $scope.save = function () {
@@ -245,11 +239,11 @@
     ])
     .controller("ModalEditDoctorController",
     [
-        "$scope", "$uibModal", "$uibModalInstance", "appService", "doctor",
-        function ($scope, $uibModal, $uibModalInstance, appService, doctor) {
+        "$scope", "$uibModal", "$uibModalInstance", "appService", "record",
+        function ($scope, $uibModal, $uibModalInstance, appService, record) {
 
             $scope.formHasBeenSubmitted = true;
-            $scope.doctor = doctor.data;
+            $scope.doctor = record.data;
 
             $scope.getHospitals = function () {
 

@@ -262,8 +262,8 @@
     ])
     .controller("EditFuneralController",
     [
-        "$scope", "$uibModal", "appService", "funeral", "deceased", "informant", "nextOfKin", "doctor", "homeAffairsOfficer", "funeralBoughtItems",
-        function ($scope, $uibModal, appService, funeral, deceased, informant, nextOfKin, doctor, homeAffairsOfficer, funeralBoughtItems) {
+        "$scope", "$uibModal", "appService", "funeral", "deceased", "informant", "nextOfKin", "doctor", "homeAffairsOfficer", "funeralBoughtItems", "funeralDocuments",
+        function ($scope, $uibModal, appService, funeral, deceased, informant, nextOfKin, doctor, homeAffairsOfficer, funeralBoughtItems, funeralDocuments) {
 
             $scope.funeral = funeral.data;
             $scope.deceased = deceased.data;
@@ -272,8 +272,8 @@
             $scope.doctor = doctor.data;
             $scope.homeAffairsOfficer = homeAffairsOfficer.data;
             $scope.funeralBoughtItems = funeralBoughtItems.data;
-            $scope.funeralDocuments = [];
-            $scope.newFuneralBoughtItem = { Quantity: 1, Description: null };
+            $scope.funeralDocuments = funeralDocuments.data;
+            $scope.newFuneralBoughtItem = { Quantity: 1, Description: "" };
             $scope.selectedFuneralBoughtItemIds = [];
             $scope.newFuneralDocument = null;
             $scope.Tabs = [
@@ -317,44 +317,13 @@
             };
 
             /*---Doctor Lookup - START*/
-            $scope.getDoctor = function () {
-
-                if (_.isNull($scope.funeral.DoctorId)) return null;
-
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    ariaLabelledBy: "modal-title",
-                    ariaDescribedBy: "modal-body",
-                    templateUrl: "/components/doctor/modal/modal-edit-doctor.html",
-                    controller: "ModalEditDoctorController",
-                    size: "lg",
-                    resolve: {
-                        doctor: [
-                            "appService", function (appService) {
-                                return appService.GetData(fms.Entity.Doctor.Urls.GetDoctorById, { doctorId: $scope.funeral.DoctorId });
-                            }
-                        ]
-                    }
-                });
-
-                modalInstance.result.then(function (selectedRecord) {
-                    $scope.doctor = selectedRecord;
-                    $scope.funeral["DoctorId"] = selectedRecord.Id;
-                });
-
-            };
-            $scope.setSelectedDoctor = function () {
-                if (arguments.length === 0) return false;
-                var selectedRecord = arguments[0] == null ? null : arguments[0];
+            $scope.setSelectedDoctor = function (selectedRecord) {
                 $scope.doctor = selectedRecord;
                 $scope.funeral["DoctorId"] = selectedRecord["Id"];
-                return true;
             };
             $scope.getDoctors = function () {
-
                 fms.Routes.SetListLookup(
                     $uibModal,
-                    appService,
                     "/components/doctor/modal/modal-list-doctor.html",
                     "ModalListDoctorController",
                     {
@@ -366,69 +335,70 @@
                     },
                     $scope.setSelectedDoctor
                 );
-
+            };
+            $scope.getDoctor = function (doctorId) {
+                fms.Routes.SetEntityViewLookup(
+                    $uibModal,
+                    "/components/doctor/modal/modal-view-doctor.html",
+                    "ModalEditDoctorController",
+                    {
+                        record: [
+                            "appService", function (appService) {
+                                return appService.GetData(fms.Entity.Doctor.Urls.GetDoctorById,
+                                    { doctorId: doctorId });
+                            }
+                        ]
+                    }
+                );
             };
             /*---Doctor Lookup - END*/
 
             /*---Home Affairs Officer Lookup - START*/
-            $scope.getHomeAffairsOfficer = function () {
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    ariaLabelledBy: "modal-title",
-                    ariaDescribedBy: "modal-body",
-                    templateUrl: "/components/homeaffairsofficer/modal/modal-edit-homeaffairsofficer.html",
-                    controller: "ModalEditHomeAffairsOfficerController",
-                    size: "lg",
-                    resolve: {
-                        homeAffairsOfficer: [
-                            "appService", function (appService) {
-                                return appService.GetData(fms.Entity.HomeAffairsOfficer.Urls.GetHomeAffairsOfficerById, { homeaffairsofficerId: $scope.homeAffairsOfficer.Id });
-                            }
-                        ]
-                    }
-                });
-                modalInstance.result.then(function (selectedRecord) {
-                    $scope.doctor["HospitalName"] = selectedRecord.Name;
-                    $scope.doctor["HospitalId"] = selectedRecord.Id;
-                });
-            };
-            $scope.setSelectedHomeAffairsOfficer = function () {
-                if (arguments.length === 0) return false;
-                var selectedRecord = arguments[0] == null ? null : arguments[0];
+            $scope.setSelectedHomeAffairsOfficer = function (selectedRecord) {
                 $scope.homeAffairsOfficer = selectedRecord;
                 $scope.funeral["HomeAffairsOfficerId"] = selectedRecord["Id"];
-                return true;
             };
-            $scope.getHomeAffairsOfficers = function () {
+            $scope.getHomeAffairsOfficers = function() {
                 fms.Routes.SetListLookup(
                     $uibModal,
-                    appService,
                     "/components/homeaffairsofficer/modal/modal-list-homeaffairsofficer.html",
                     "ModalListHomeAffairsOfficerController",
                     {
                         records: [
-                            "appService", function (appService) {
-                                return appService.GetData(fms.Entity.HomeAffairsOfficer.Urls.GetActiveHomeAffairsOfficers);
+                            "appService", function(appService) {
+                                return appService.GetData(fms.Entity.HomeAffairsOfficer.Urls
+                                    .GetActiveHomeAffairsOfficers);
                             }
                         ]
                     },
                     $scope.setSelectedHomeAffairsOfficer
                 );
             };
+            $scope.getHomeAffairsOfficer = function (homeAffairsOfficerId) {
+                fms.Routes.SetEntityViewLookup(
+                    $uibModal,
+                    "/components/homeaffairsofficer/modal/modal-view-homeaffairsofficer.html",
+                    "ModalEditHomeAffairsOfficerController",
+                    {
+                        record: [
+                            "appService", function(appService) {
+                                return appService.GetData(fms.Entity.HomeAffairsOfficer.Urls.GetHomeAffairsOfficerById,
+                                    { homeAffairsOfficerId: homeAffairsOfficerId });
+                            }
+                        ]
+                    }
+                );
+            };
             /*---Doctor Lookup - END*/
 
             /*---Cemetery Lookup - START*/
-            $scope.setSelectedCemetery = function () {
-                if (arguments.length === 0) return false;
-                var selectedRecord = arguments[0] == null ? null : arguments[0];
+            $scope.setSelectedCemetery = function (selectedRecord) {
                 $scope.cemetery = selectedRecord;
                 $scope.funeral["CemeteryId"] = selectedRecord["Id"];
-                return true;
             };
             $scope.getCemeteries = function () {
                 fms.Routes.SetListLookup(
                     $uibModal,
-                    appService,
                     "/components/cemetery/modal/modal-list-cemetery.html",
                     "ModalListCemeteryController",
                     {
@@ -441,30 +411,56 @@
                     $scope.setSelectedCemetery
                 );
             };
+            $scope.getCemetery = function(cemeteryId) {
+                fms.Routes.SetEntityViewLookup(
+                    $uibModal,
+                    "/components/cemetery/modal/modal-view-cemetery.html",
+                    "ModalEditCemteryController",
+                    {
+                        record: [
+                            "appService", function(appService) {
+                                return appService.GetData(fms.Entity.Cemetery.Urls.GetCemeteryById,
+                                    { cemeteryId: cemeteryId });
+                            }
+                        ]
+                    }
+                );
+            };
             /*---Cemetery Lookup - END*/
 
             /*---Mortuary Lookup - START*/
-            $scope.setSelectedMortuary = function () {
-                if (arguments.length === 0) return false;
-                var selectedRecord = arguments[0] == null ? null : arguments[0];
+            $scope.setSelectedMortuary = function (selectedRecord) {
                 $scope.mortuary = selectedRecord;
                 $scope.funeral["MortuaryId"] = selectedRecord["Id"];
-                return true;
             };
             $scope.getMortuaries = function () {
                 fms.Routes.SetListLookup(
                     $uibModal,
-                    appService,
                     "/components/mortuary/modal/modal-list-mortuary.html",
                     "ModalListMortuaryController",
                     {
                         records: [
                             "appService", function (appService) {
-                                return appService.GetData(fms.Entity.Cemetery.Urls.GetActiveCemeteries);
+                                return appService.GetData(fms.Entity.Mortuary.Urls.GetActiveMortuaries);
                             }
                         ]
                     },
                     $scope.setSelectedMortuary
+                );
+            };
+            $scope.getMortuary = function (mortuaryId) {
+                fms.Routes.SetEntityViewLookup(
+                    $uibModal,
+                    "/components/mortuary/modal/modal-view-mortuary.html",
+                    "ModalEditMortuaryController",
+                    {
+                        record: [
+                            "appService", function (appService) {
+                                return appService.GetData(fms.Entity.Mortuary.Urls.GetMortuaryById,
+                                    { mortuaryId: mortuaryId });
+                            }
+                        ]
+                    }
                 );
             };
             /*---Mortuary Lookup - END*/
@@ -480,7 +476,6 @@
             $scope.getSuppliers = function() {
                 fms.Routes.SetListLookup(
                     $uibModal,
-                    appService,
                     "/components/supplier/modal/modal-list-supplier.html",
                     "ModalListSupplierController",
                     {
@@ -491,6 +486,21 @@
                         ]
                     },
                     $scope.setSelectedSupplier
+                );
+            };
+            $scope.getSupplier = function (supplierId) {
+                fms.Routes.SetEntityViewLookup(
+                    $uibModal,
+                    "/components/supplier/modal/modal-view-supplier.html",
+                    "ModalEditSupplierController",
+                    {
+                        record: [
+                            "appService", function (appService) {
+                                return appService.GetData(fms.Entity.Supplier.Urls.GetSupplierById,
+                                    { supplierId: supplierId });
+                            }
+                        ]
+                    }
                 );
             };
             /*---Supplier Lookup - END*/
@@ -575,19 +585,6 @@
                 return $scope.selectedFuneralBoughtItemIds.length !== 1;
             };
 
-            $scope.getFuneralDocuments = function () {
-
-                if ($scope.funeralDocuments.length !== 0) return;
-                $scope.showFechDocumentsLoadingIcon = true;
-                appService.GetData("/FuneralDocument/GetFuneralDocumentsByFuneralId", { funeralId: $scope.funeral.Id })
-                    .then(function successCallback(response) {
-                        $scope.showFechDocumentsLoadingIcon = false;
-                        $scope.funeralDocuments = response.data;
-
-                    }, function errorCallback(response) {
-                    });
-
-            };
             $scope.OnChange_FileInput = function (e) {
 
                 if (arguments.length === 0) return null;

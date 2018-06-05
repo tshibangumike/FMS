@@ -235,6 +235,10 @@ a.article, a.article:hover {
     overflow-y: auto;
 }
 
+.modal {
+    border-radius: 0;
+}
+
 .required:after {
     content: "*";
     font-weight: bold;

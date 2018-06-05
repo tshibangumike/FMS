@@ -17,6 +17,15 @@ namespace fms.Service
                     });
             return records;
         }
+        public static Dictionary<string, object> QueryFuneralDocumentById(Guid funeralDocumentId)
+        {
+            var record = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Funeraldocument_queryfuneraldocumentbyid]",
+                new List<SqlParameter>
+                {
+                    new SqlParameter("@id", funeralDocumentId),
+                });
+            return record[0];
+        }
         public static ReturnObject InsertFuneralDocument(List<KeyValue> funeralDocument, byte [] image)
         {
             try
@@ -25,7 +34,13 @@ namespace fms.Service
                 var name = funeralDocument.FirstOrDefault(x => x.Key == "Name")?.Value;
                 var documentTypeId = funeralDocument.FirstOrDefault(x => x.Key == "DocumentTypeId")?.Value;
                 var description = funeralDocument.FirstOrDefault(x => x.Key == "Description")?.Value;
+                var documentSize = funeralDocument.FirstOrDefault(x => x.Key == "DocumentSize")?.Value;
+                var mimeType = funeralDocument.FirstOrDefault(x => x.Key == "MimeType")?.Value;
                 var funeralId = funeralDocument.FirstOrDefault(x => x.Key == "FuneralId")?.Value;
+                var createdById = funeralDocument.FirstOrDefault(x => x.Key == "CreatedById")?.Value;
+                var createdOn = funeralDocument.FirstOrDefault(x => x.Key == "CreatedOn")?.Value;
+                var modifiedById = funeralDocument.FirstOrDefault(x => x.Key == "ModifiedById")?.Value;
+                var modifiedOn = funeralDocument.FirstOrDefault(x => x.Key == "ModifiedOn")?.Value;
 
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Funeraldocument_create]",
                     new List<SqlParameter>
@@ -35,8 +50,13 @@ namespace fms.Service
                             new SqlParameter("@documentTypeId", documentTypeId),
                             new SqlParameter("@description", description),
                             new SqlParameter("@documentContent", image),
-                            new SqlParameter("@funeralId", funeralId)
-
+                            new SqlParameter("@documentSize", documentSize),
+                            new SqlParameter("@mimeType", mimeType),
+                            new SqlParameter("@funeralId", funeralId),
+                            new SqlParameter("@createdById", createdById),
+                            new SqlParameter("@createdOn", createdOn),
+                            new SqlParameter("@modifiedById", modifiedById),
+                            new SqlParameter("@modifiedOn", modifiedOn)
                     });
                 if (returnValue == 1)
                 {

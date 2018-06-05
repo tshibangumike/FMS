@@ -23,7 +23,6 @@
                                ng-change="selectRecord(record)" >
                         <label class="custom-control-label" for="{{ record.Id }}"></label>
                     </div>
-
                 </td>
                 <td>
                     {{ record.Name }}
@@ -32,33 +31,21 @@
         </tbody>
     </table>
 </div>
-<div class="modal-footer">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="float-left">
-                <button type="button" class="btn btn-labeled btn-primary m-1" ng-click="addNewHospital()">
-                    <span class="btn-label">
-                        <i class="fa fa-check-circle"></i>
-                    </span>
-                    New Mortuary
-                </button>
-            </div>
-            <div class="float-right">
-                <button type="button" class="btn btn-labeled btn-success m-1" ng-click="save()">
-                    <span class="btn-label">
-                        <i class="fa fa-check-circle"></i>
-                    </span>
-                    Save
-                </button>
-                <button type="submit" class="btn btn-labeled btn-danger m-1" ng-click="cancel()">
-                    <span class="btn-label">
-                        <i class="fa fa-ban"></i>
-                    </span>
-                    Cancel
-                </button>
-            </div>
-        </div>
+<div class="modal-footer d-flex justify-content-between align-items-center">
+    <div class="">
+        <button type="button" class="btn btn-primary m-1" ng-click="addNewMortuary()">
+            <i class="fa fa-plus-square"></i>
+            New Mortuary
+        </button>
     </div>
-
-
+    <div class="">
+        <button type="button" class="btn btn-success m-1" ng-click="save()">
+            <i class="fa fa-check-circle"></i>
+            Ok
+        </button>
+        <button type="submit" class="btn btn-danger m-1" ng-click="cancel()">
+            <i class="fa fa-ban"></i>
+            Cancel
+        </button>
+    </div>
 </div>

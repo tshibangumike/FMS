@@ -133,9 +133,14 @@ fms.Routes = {
                                         ],
                                         funeralBoughtItems: [
                                             "$stateParams", "appService", function ($stateParams, appService) {
-                                                return appService.GetData("/" + fms.Entity.FuneralBoughtItem.EntityName + "/GetFuneralBoughtItemsByFuneralId", { funeralId: $stateParams.funeralid });
+                                                return appService.GetData(fms.Entity.FuneralBoughtItem.Urls.GetFuneralBoughtItemsByFuneralId, { funeralId: $stateParams.funeralid });
                                             }
                                         ],
+                                        funeralDocuments: [
+                                            "$stateParams", "appService", function ($stateParams, appService) {
+                                                return appService.GetData(fms.Entity.FuneralDocument.Urls.GetFuneralDocumentsByFuneralId, { funeralId: $stateParams.funeralid });
+                                            }
+                                        ]
                                     }
                                 }
                             }
@@ -302,18 +307,36 @@ fms.Routes = {
                 return null;
         }
     },
-    SetListLookup: function () {
-
-        if (arguments.length === 0) return null;
-
-        var uibModal = arguments[0] == null ? null : arguments[0];
-        var appService = arguments[1] == null ? null : arguments[1];
-        var templateUrl = arguments[2] == null ? null : arguments[2];
-        var controllerName = arguments[3] == null ? null : arguments[3];
-        var resolve = arguments[4] == null ? null : arguments[4];
-        var setSelectedObject = arguments[5] == null ? null : arguments[5];
-
-        var modalInstance = uibModal.open({
+    SetListLookup: function(uibModal, templateUrl, controllerName, resolve, setSelectedObject) {
+        uibModal.open({
+                animation: true,
+                ariaLabelledBy: "modal-title",
+                ariaDescribedBy: "modal-body",
+                templateUrl: templateUrl,
+                controller: controllerName,
+                size: "lg",
+                resolve: resolve
+            })
+            .result.then(function(selectedRecord) {
+                setSelectedObject(selectedRecord);
+            });
+    },
+    SetAddLookup: function(uibModal, templateUrl, controllerName, getRecords) {
+        uibModal
+            .open({
+                animation: true,
+                ariaLabelledBy: "modal-title",
+                ariaDescribedBy: "modal-body",
+                templateUrl: templateUrl,
+                controller: controllerName,
+                size: "lg"
+            })
+            .result.then(function() {
+                getRecords();
+            });
+    },
+    SetEntityViewLookup: function (uibModal, templateUrl, controllerName, resolve) {
+         uibModal.open({
             animation: true,
             ariaLabelledBy: "modal-title",
             ariaDescribedBy: "modal-body",
@@ -322,37 +345,6 @@ fms.Routes = {
             size: "lg",
             resolve: resolve
         });
-
-        modalInstance.result.then(function (selectedRecord) {
-            setSelectedObject(selectedRecord);
-        });
-
-        return null;
-
-    },
-    SetAddLookup: function () {
-
-        if (arguments.length === 0) return null;
-
-        var uibModal = arguments[0] == null ? null : arguments[0];
-        var appService = arguments[1] == null ? null : arguments[1];
-        var templateUrl = arguments[2] == null ? null : arguments[2];
-        var controllerName = arguments[3] == null ? null : arguments[3];
-        var getRecords = arguments[4] == null ? null : arguments[4];
-
-        var modalInstance = uibModal.open({
-            animation: true,
-            ariaLabelledBy: "modal-title",
-            ariaDescribedBy: "modal-body",
-            templateUrl: templateUrl,
-            controller: controllerName,
-            size: "lg"
-        });
-
-        modalInstance.result.then(function () {
-            getRecords();
-        });
-
     },
 };
 
@@ -469,7 +461,8 @@ fms.Entity = {
         Urls: {
             GetActiveFunerals: "/Funeral/GetActiveFunerals",
             GetFuneralById: "/Funeral/GetFuneralById"
-        }},
+        }
+    },
     HomeAffairsOfficer: {
         EntityName: "HomeAffairsOfficer",
         Urls: {
@@ -495,7 +488,7 @@ fms.Entity = {
     Cemetery: {
         EntityName: "Cemetery",
         Urls: {
-            GetActiveCemeteries: "/Cemetery/GetActiveCemteries",
+            GetActiveCemeteries: "/Cemetery/GetActiveCemeteries",
             GetCemeteryById: "/Cemetery/GetCemeteryById"
         }
     },
@@ -512,14 +505,26 @@ fms.Entity = {
             GetActiveNextOfKins: "/NextOfKin/GetActiveNextOfKins"
         }
     },
-    FuneralBoughtItem: { EntityName: "FuneralBoughtItem" },
+    FuneralBoughtItem: {
+        EntityName: "FuneralBoughtItem",
+        Urls: {
+            GetFuneralBoughtItemsByFuneralId: "/FuneralBoughtItem/GetFuneralBoughtItemsByFuneralId"
+        }
+    },
+    FuneralDocument: {
+        EntityName: "FuneralDocument",
+        Urls: {
+            GetFuneralDocumentsByFuneralId: "/FuneralDocument/GetFuneralDocumentsByFuneralId"
+        }
+    },
     Supplier: {
         EntityName: "Supplier",
         Urls: {
             GetActiveSuppliers: "/Supplier/GetActiveSuppliers",
             GetSupplierById: "Supplier/GetSupplierById",
             AddSupplier: "/Supplier/AddSupplier"
-        }}
+        }
+    }
 };
 
 fms.Notifications = {

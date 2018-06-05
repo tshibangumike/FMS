@@ -286,7 +286,7 @@
                                     <button class="btn btn-outline-secondary" type="button" ng-click="clearLookupInput('doctor')">
                                         <i class="fas fa-times"></i>
                                     </button>
-                                    <button class="btn btn-outline-secondary" type="button" ng-click="getDoctor()">
+                                    <button class="btn btn-outline-secondary" type="button" ng-click="getDoctor(doctor.Id)">
                                         <i class="fas fa-external-link-alt"></i>
                                     </button>
                                     <button class="btn btn-outline-secondary" type="button" ng-click="getDoctors()">
@@ -325,7 +325,7 @@
                                     <button class="btn btn-outline-secondary" type="button" ng-click="clearLookupInput('homeAffairsOfficer')">
                                         <i class="fas fa-times"></i>
                                     </button>
-                                    <button class="btn btn-outline-secondary" type="button" ng-click="getHomeAffairsOfficer()">
+                                    <button class="btn btn-outline-secondary" type="button" ng-click="getHomeAffairsOfficer(homeAffairsOfficer.Id)">
                                         <i class="fas fa-external-link-alt"></i>
                                     </button>
                                     <button class="btn btn-outline-secondary" type="button" ng-click="getHomeAffairsOfficers()">
@@ -371,11 +371,14 @@
                         <div class="form-group col-md-6">
                             <label>Mortuary</label>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" ng-model="funeral.MortuaryName" ng-disabled="true">
+                                <input type="text" class="form-control" ng-model="mortuary.Name" ng-disabled="true">
                                 <input type="hidden" ng-model="funeral.MortuaryId" />
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" type="button" ng-click="clearLookupInput('mortuary')">
                                         <i class="fas fa-times"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary" type="button" ng-click="getMortuary(mortuary.Id)">
+                                        <i class="fas fa-external-link-alt"></i>
                                     </button>
                                     <button class="btn btn-outline-secondary" type="button" ng-click="getMortuaries()">
                                         <i class="fas fa-search"></i>
@@ -387,11 +390,14 @@
                         <div class="form-group col-md-6">
                             <label>Cemetery</label>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" ng-model="funeral.CemeteryName" ng-disabled="true">
+                                <input type="text" class="form-control" ng-model="cemetery.Name" ng-disabled="true">
                                 <input type="hidden" ng-model="funeral.CemeteryId" />
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" type="button" ng-click="clearLookupInput('cemetery')">
                                         <i class="fas fa-times"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary" type="button" ng-click="getCemetery(cemetery.Id)">
+                                        <i class="fas fa-external-link-alt"></i>
                                     </button>
                                     <button class="btn btn-outline-secondary" type="button" ng-click="getCemeteries()">
                                         <i class="fas fa-search"></i>
@@ -615,7 +621,14 @@
                                 <td>{{ funeralDocument.Name }}</td>
                                 <td>{{ funeralDocument.DocumentTypeName }}</td>
                                 <td>{{ funeralDocument.Description }}</td>
-                                <td></td>
+                                <td>
+                                    <a href="/FuneralDocument/DownloadFuneralDocument?funeralDocumentId={{ funeralDocument.Id }}" 
+                                       class="btn btn-primary btn-sm"
+                                       target="_blank">
+                                        <i class="fas fa-download"></i>
+                                        Download 
+                                    </a>
+                                </td>
                             </tr>
                             <tr>
                                 <td></td>

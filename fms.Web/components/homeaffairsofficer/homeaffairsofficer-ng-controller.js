@@ -134,15 +134,12 @@
             };
 
             $scope.addNewHomeAffairsOfficer = function () {
-
                 fms.Routes.SetAddLookup(
                     $uibModal,
-                    appService,
                     "/components/homeaffairsofficer/modal/modal-add-homeaffairsofficer.html",
                     "ModalAddHomeAffairsOfficerController",
                     $scope.getActiveHomeAffairsOfficers
                 );
-
             };
 
             $scope.getActiveHomeAffairsOfficers = function () {
@@ -196,11 +193,11 @@
     ])
     .controller("ModalEditHomeAffairsOfficerController",
     [
-        "$scope", "$uibModal", "$uibModalInstance", "appService", "homeAffairsOfficer",
-        function ($scope, $uibModal, $uibModalInstance, appService, homeAffairsOfficer) {
+        "$scope", "$uibModal", "$uibModalInstance", "appService", "record",
+        function ($scope, $uibModal, $uibModalInstance, appService, record) {
 
             $scope.formHasBeenSubmitted = true;
-            $scope.homeAffairsOfficer = homeAffairsOfficer.data;
+            $scope.homeAffairsOfficer = record.data;
 
             $scope.getHospitals = function () {
 
@@ -228,7 +225,7 @@
 
             };
 
-            $scope.close = function () {
+            $scope.cancel = function () {
                 $uibModalInstance.dismiss();
             };
 

@@ -18,9 +18,9 @@ namespace fms.Web.components.homeaffairsofficer
             var records = HomeAffairsOfficerService.QueryActiveHomeAffairsOfficers();
             return Json(records, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult GetHomeAffairsOfficerById(Guid homeaffairsofficerId)
+        public ActionResult GetHomeAffairsOfficerById(Guid homeAffairsOfficerId)
         {
-            var record = HomeAffairsOfficerService.QueryHomeAffairsOfficerById(homeaffairsofficerId);
+            var record = HomeAffairsOfficerService.QueryHomeAffairsOfficerById(homeAffairsOfficerId);
             return Json(record, JsonRequestBehavior.AllowGet);
         }
         public ActionResult AddHomeAffairsOfficer(List<KeyValue> homeAffairsOfficer)
