@@ -11,7 +11,7 @@
                 if (_.isEqual(arguments.length, 0)) return null;
                 var _record = _.isNull(arguments[0], 0) ? null : arguments[0];
                 if (_.isNull(arguments[0])) return null;
-                fms.Functions.AddToOrRemoveFromArray($scope.selectedRecords, _record);
+                fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, _record);
             };
 
             $scope.getActiveHospitals = function () {

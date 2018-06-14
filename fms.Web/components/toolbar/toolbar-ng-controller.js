@@ -1,8 +1,10 @@
 ﻿angular.module("fmsApp")
     .controller("ToolbarController",
     [
-        "$rootScope", "$scope", "appService",
-        function ($rootScope, $scope, appService) {
+        "$rootScope", "$scope", "appService", "currentUser",
+        function ($rootScope, $scope, appService, currentUser) {
+
+            $scope.currentUser = currentUser.data.appUser;
 
         }
     ]);

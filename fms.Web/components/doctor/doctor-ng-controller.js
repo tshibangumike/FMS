@@ -7,49 +7,20 @@
             $scope.records = doctors.data;
             $scope.selectedRecords = [];
 
-            $scope.selectRecord = function () {
-                if (_.isEqual(arguments.length, 0)) return null;
-                var record = _.isNull(arguments[0], 0) ? null : arguments[0];
-                if (_.isNull(arguments[0])) return null;
-                if (record.Selected) {
-                    //add id in array
-                    $scope.selectedRecords.push(record);
-                }
-                else {
-                    //remove id from array
-                    _.remove($scope.selectedRecords, function (x) {
-                        return _.isEqual(x.Id, record.Id);
-                    });
-                }
+            $scope.selectRecord = function (record) {
+                fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, record);
             };
 
-            $scope.addNewDoctor = function () {
-
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    ariaLabelledBy: "modal-title",
-                    ariaDescribedBy: "modal-body",
-                    templateUrl: "/components/doctor/modal/modal-add-doctor.html",
-                    controller: "ModalAddDoctorController",
-                    size: "lg",
-                    backdrop: false,
-                });
-
-                modalInstance.result.then(function (selectedRecord) {
-                    $scope.selectedRecords.push(selectedRecord);
-                    if (!_.isEqual($scope.selectedRecords.length, 1)) return;
-                    $uibModalInstance.close($scope.selectedRecords[0]);
-                });
-
+            $scope.toggleSelection = function (record) {
+                record.Selected = !record.Selected;
             };
 
-            $scope.save = function () {
-                if (!_.isEqual($scope.selectedRecords.length, 1)) return;
-                $uibModalInstance.close($scope.selectedRecords[0]);
-            };
+            $scope.edit = function (record) {
+                if (_.isNull(record))
+                    appService.NavigateTo("editdoctor", { doctorid: $scope.selectedRecordIds[0] });
+                else
+                    appService.NavigateTo("editdoctor", { doctorid: record["Id"] });
 
-            $scope.cancel = function () {
-                $uibModalInstance.dismiss("cancel");
             };
 
         }
@@ -99,36 +70,30 @@
     ])
     .controller("EditDoctorController",
     [
-        "$scope", "$uibModal", "$uibModalInstance", "appService", "doctor",
-        function ($scope, $uibModal, $uibModalInstance, appService, doctor) {
+        "$scope", "$uibModal", "appService", "record",
+        function ($scope, $uibModal, appService, record) {
 
             $scope.formHasBeenSubmitted = true;
-            $scope.doctor = doctor.data;
+            $scope.record = record.data;
 
+            $scope.setSelectedHospital = function (selectedRecord) {
+                $scope.hospital = selectedRecord;
+                $scope.doctor["HospitalId"] = selectedRecord["Id"];
+            };
             $scope.getHospitals = function () {
-
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    ariaLabelledBy: "modal-title",
-                    ariaDescribedBy: "modal-body",
-                    templateUrl: "/components/hospital/modal/modal-list-hospital.html",
-                    controller: "ListHospitalController",
-                    size: "lg",
-                    backdrop: false,
-                    resolve: {
+                fms.Routes.SetListLookup(
+                    $uibModal,
+                    "/components/hospital/modal/modal-list-hospital.html",
+                    "ModalListHospitalController",
+                    {
                         records: [
                             "appService", function (appService) {
-                                return appService.GetData("/Hospital/GetActiveHospitals");
+                                return appService.GetData(fms.Entity.Hospital.Urls.GetActiveHospitals);
                             }
                         ]
-                    }
-                });
-
-                modalInstance.result.then(function (selectedRecord) {
-                    $scope.doctor["HospitalName"] = selectedRecord.Name;
-                    $scope.doctor["HospitalId"] = selectedRecord.Id;
-                });
-
+                    },
+                    $scope.setSelectedHospital
+                );
             };
 
             $scope.cancel = function () {
@@ -149,7 +114,7 @@
             $scope.selectedRecords = [];
 
             $scope.selectRecord = function (record) {
-                fms.Functions.AddToOrRemoveFromArray($scope.selectedRecords, record);
+                fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, record);
             };
 
             $scope.getActiveDoctors = function () {
@@ -199,11 +164,9 @@
                 $scope.doctor["HospitalName"] = selectedRecord["Name"];
                 return true;
             };
-
             $scope.getHospitals = function () {
                 fms.Routes.SetListLookup(
                     $uibModal,
-                    appService,
                     "/components/hospital/modal/modal-list-hospital.html",
                     "ModalListHospitalController",
                     {
@@ -221,12 +184,10 @@
                 $uibModalInstance.dismiss("cancel");
             };
 
-            $scope.processForm = function () {
-                if (arguments.length === 0) return null;
-                var form = arguments[0] == null ? null : arguments[0];
+            $scope.processForm = function (form) {
                 $scope.formHasBeenSubmitted = true;
                 if (!form.$valid) {
-                    return null;
+                    return;
                 }
                 var keyValue = fms.Functions.SplitObjectIntoArray($scope.doctor);
                 appService.PostForm(fms.Entity.Doctor.Urls.AddDoctor, { doctor: keyValue })

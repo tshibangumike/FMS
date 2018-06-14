@@ -50,10 +50,32 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ReportViewer.Common, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -63,6 +85,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -104,8 +127,10 @@
     <Content Include="components\cemetery\modal\modal-add-cemetery.html" />
     <Content Include="components\cemetery\modal\modal-list-cemetery.html" />
     <Content Include="components\deceased\deceased-ng-controller.js" />
+    <Content Include="components\deceased\edit-deceased.html" />
     <Content Include="components\deceased\list-deceased.html" />
     <Content Include="components\doctor\doctor-ng-controller.js" />
+    <Content Include="components\doctor\edit-doctor.html" />
     <Content Include="components\doctor\list-doctor.html" />
     <Content Include="components\doctor\modal\modal-add-doctor.html" />
     <Content Include="components\doctor\modal\modal-view-doctor.html" />
@@ -116,6 +141,7 @@
     <Content Include="components\funeral\edit-funeral.html" />
     <Content Include="components\funeral\funeral-ng-controller.js" />
     <Content Include="components\funeral\list-funeral.html" />
+    <Content Include="components\homeaffairsofficer\edit-homeaffairsofficer.html" />
     <Content Include="components\homeaffairsofficer\list-homeaffairsofficer.html" />
     <Content Include="components\homeaffairsofficer\modal\modal-view-homeaffairsofficer.html" />
     <Content Include="components\homeaffairsofficer\modal\modal-add-homeaffairsofficer.html" />
@@ -129,6 +155,7 @@
     <Content Include="components\hospital\modal\modal-list-hospital.html" />
     <Content Include="components\hospital\modal\modal-add-hospital.html" />
     <Content Include="components\hospital\add-hospital.html" />
+    <Content Include="components\informant\edit-informant.html" />
     <Content Include="components\informant\informant-ng-controller.js" />
     <Content Include="components\informant\list-informant.html" />
     <Content Include="components\member\add-member.html" />
@@ -138,8 +165,13 @@
     <Content Include="components\mortuary\mortuary-ng-controller.js" />
     <Content Include="components\mortuary\modal\modal-add-mortuary.html" />
     <Content Include="components\mortuary\modal\modal-list-mortuary.html" />
+    <Content Include="components\nextofkin\edit-nextofkin.html" />
     <Content Include="components\nextofkin\list-nextofkin.html" />
     <Content Include="components\nextofkin\nextofkin-ng-controller.js" />
+    <Content Include="components\payment\list-payment.html" />
+    <Content Include="components\payment\add-payment.html" />
+    <Content Include="components\payment\edit-payment.html" />
+    <Content Include="components\payment\paymennt-ng-controller.js" />
     <Content Include="components\shared\editview-topbar-buttons.html" />
     <Content Include="components\shared\createview-topbar-buttons.html" />
     <Content Include="components\shared\listview-topbar-buttons.html" />
@@ -177,6 +209,7 @@
     <Content Include="js\config\app-router.js" />
     <Content Include="js\config\app-service.js" />
     <Content Include="js\config\front.js" />
+    <Content Include="js\config\model.js" />
     <Content Include="libs\jquery-loading\css\jquery.mloading.min.css" />
     <Content Include="libs\jquery-loading\js\jquery.mloading.min.js" />
     <Content Include="libs\loadash\js\lodash.min.js" />
@@ -302,16 +335,35 @@
     <Content Include="libs\tempusdominus-bootstrap\js\tempusdominus-bootstrap-4.min.js" />
     <Content Include="libs\toastr\css\toastr.min.css" />
     <Content Include="libs\toastr\js\toastr.min.js" />
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Views\web.config" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="BBU_DEVDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BBU_DEVDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="components\account\AccountController.cs" />
     <Compile Include="components\base\BaseController.cs" />
     <Compile Include="components\cemetery\CemeteryController.cs" />
     <Compile Include="components\deceased\DeceasedController.cs" />
     <Compile Include="components\doctor\DoctorController.cs" />
+    <Compile Include="components\DocumentController.cs" />
     <Compile Include="components\funeralboughtitem\FuneralBoughtItemController.cs" />
     <Compile Include="components\funeraldocument\FuneralDocumentController.cs" />
     <Compile Include="components\funeral\FuneralController.cs" />
@@ -320,13 +372,17 @@
     <Compile Include="components\hospital\HospitalController.cs" />
     <Compile Include="components\informant\InformantController.cs" />
     <Compile Include="components\member\MemberController.cs" />
+    <Compile Include="components\paymentperiod\PaymentPeriodController.cs" />
     <Compile Include="components\mortuary\MortuaryController.cs" />
     <Compile Include="components\nextofkin\NextOfKinController.cs" />
+    <Compile Include="components\payment\PaymentController.cs" />
+    <Compile Include="components\report\ReportController.cs" />
     <Compile Include="components\supplier\SupplierController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="libs\font-awesome\fonts\fontawesome-webfont.eot" />
@@ -348,6 +404,17 @@
     <Content Include="libs\font-awesome\webfonts\fa-solid-900.ttf" />
     <Content Include="libs\font-awesome\webfonts\fa-solid-900.woff" />
     <Content Include="libs\font-awesome\webfonts\fa-solid-900.woff2" />
+    <Content Include="BBU_DEVDataSet.xsc">
+      <DependentUpon>BBU_DEVDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="BBU_DEVDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>BBU_DEVDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="BBU_DEVDataSet.xss">
+      <DependentUpon>BBU_DEVDataSet.xsd</DependentUpon>
+    </Content>
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Web.Debug.config">
@@ -366,6 +433,7 @@
     <Folder Include="Views\Cemetery\" />
     <Folder Include="Views\Deceased\" />
     <Folder Include="Views\Doctor\" />
+    <Folder Include="Views\Document\" />
     <Folder Include="Views\FuneralBoughtItem\" />
     <Folder Include="Views\FuneralDocument\" />
     <Folder Include="Views\Funeral\" />
@@ -373,8 +441,11 @@
     <Folder Include="Views\HomeAffairsOffice\" />
     <Folder Include="Views\Hospital\" />
     <Folder Include="Views\Member\" />
+    <Folder Include="Views\Month\" />
     <Folder Include="Views\Mortuary\" />
     <Folder Include="Views\NextOfKin\" />
+    <Folder Include="Views\Payment\" />
+    <Folder Include="Views\Report\" />
     <Folder Include="Views\Supplier\" />
   </ItemGroup>
   <ItemGroup>
@@ -386,6 +457,10 @@
       <Project>{E1F87A5C-AE74-49C1-A940-20BBAC7AFE90}</Project>
       <Name>fms.Service</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="components\report\ConfirmationLetter.rdlc" />
+    <EmbeddedResource Include="components\report\Invoice.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

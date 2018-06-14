@@ -8,7 +8,7 @@
                 $scope.selectedRecords = [];
 
                 $scope.selectRecord = function (record) {
-                    fms.Functions.AddToOrRemoveFromArray($scope.selectedRecords, record);
+                    fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, record);
                 };
 
                 $scope.getActiveMortuaries = function () {

@@ -9,7 +9,22 @@
     <div class="row m-1">
         <div class="col-md-12 bg-white p-1">
             <div class="float-left">
-                <div ng-include="'/components/shared/editview-topbar-buttons.html'"></div>
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i>
+                    Save
+                </button>
+                <button type="button" class="btn btn-primary" ng-click="goToCreateView()">
+                    <i class="fas fa-plus-square"></i>
+                    New Funeral
+                </button>
+                <button type="button" class="btn btn-primary" ng-click="GenerateConfirmationLetter()">
+                    <i class="fas fa-clipboard-check"></i>
+                    Generate Confirmation Letter
+                </button>
+                <button type="button" class="btn btn-primary" ng-click="GenerateInvoice()">
+                    <i class="fas fa-file-alt"></i>
+                    Generate Invoice
+                </button>
             </div>
         </div>
     </div>
@@ -57,15 +72,21 @@
                             <input type="text" class="form-control" ng-model="deceased.SAIdNumber">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="inputCity">Birthday</label>
+                            <label>Birthday</label>
                             <div class="input-group mb-3" id="datetimepicker4" data-target-input="nearest">
-                                <input type="text" id="DateOfBirth" class="form-control datetimepicker-input" data-target="#datetimepicker4" ng-model="deceased.DateOfBirth" />
+                                <input type="text" id="DateOfBirth" class="form-control" data-target="#datetimepicker4" ng-model="deceased.DateOfBirth" />
                                 <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
                                     <button class="btn btn-outline-secondary" type="button">
                                         <i class="fa fa-calendar"></i>
                                     </button>
                                 </div>
                             </div>
+                            <script type="text/javascript">
+                                $('.datepicker').datepicker({
+                                    weekStart: 1,
+                                    color: 'red'
+                                });
+                            </script>
                         </div>
                     </div>
                     <div class="form-row m-2">
@@ -411,6 +432,29 @@
                             <label>Grave Number</label>
                             <input type="text" class="form-control" ng-model="funeral.GraveNumber">
                         </div>
+                        <div class="form-group col-md-6">
+                            <label>Burial Date</label>
+                            <div class="input-group" id="dtpBurialDate" data-target-input="nearest">
+                                <input type="text"
+                                       id="BurialDate"
+                                       name="funeral_BurialDate"
+                                       class="form-control datetimepicker-input"
+                                       data-target="#dtpBurialDate"
+                                       ng-model="funeral.BurialDate" />
+                                <script>
+                                    $(function () {
+                                        $("#dtpBurialDate").datetimepicker({
+                                            format: "DD/MM/YYYY"
+                                        });
+                                    });
+                                </script>
+                                <div class="input-group-append" data-target="#dtpBurialDate" data-toggle="datetimepicker">
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="fa fa-calendar"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -622,11 +666,11 @@
                                 <td>{{ funeralDocument.DocumentTypeName }}</td>
                                 <td>{{ funeralDocument.Description }}</td>
                                 <td>
-                                    <a href="/FuneralDocument/DownloadFuneralDocument?funeralDocumentId={{ funeralDocument.Id }}" 
+                                    <a href="/FuneralDocument/DownloadFuneralDocument?funeralDocumentId={{ funeralDocument.Id }}"
                                        class="btn btn-primary btn-sm"
                                        target="_blank">
                                         <i class="fas fa-download"></i>
-                                        Download 
+                                        Download
                                     </a>
                                 </td>
                             </tr>
@@ -673,3 +717,4 @@
         </div>
     </div>
 </form>
+

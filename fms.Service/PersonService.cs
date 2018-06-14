@@ -2,12 +2,24 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 
 namespace fms.Service
 {
     public class PersonService
     {
+        public static Dictionary<string, object> QueryPersonById(Guid personId)
+        {
+            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Person_querypersonbyid]",
+                new List<SqlParameter>
+                {
+                    new SqlParameter("@id", personId),
+                });
+            if (records != null && records.Count == 1) return records[0];
+            return null;
+        }
+
         public static ReturnObject InsertPerson(List<KeyValue> person)
         {
             try
@@ -26,24 +38,32 @@ namespace fms.Service
                 var modifiedById = person.FirstOrDefault(x => x.Key == "ModifiedById")?.Value;
                 var modifiedOn = person.FirstOrDefault(x => x.Key == "ModifiedOn")?.Value;
 
-                var parsedDateOfBirth = dateOfBirth == null? dateOfBirth : DateTime.Parse(dateOfBirth).ToString();
+                var parsedDateOfBirth = dateOfBirth == null
+                    ? dateOfBirth
+                    : DateTime.Parse(dateOfBirth).ToString(CultureInfo.InvariantCulture);
+                var parsedCreatedOn = createdOn == null
+                    ? createdOn
+                    : DateTime.Parse(createdOn).ToString(CultureInfo.InvariantCulture);
+                var parsedModifiedOn = modifiedOn == null
+                    ? modifiedOn
+                    : DateTime.Parse(modifiedOn).ToString(CultureInfo.InvariantCulture);
 
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Person_create]",
                     new List<SqlParameter>
                     {
-                            new SqlParameter("@id", id),
-                            new SqlParameter("@firstName", firstName),
-                            new SqlParameter("@lastName", lastName),
-                            new SqlParameter("@saIdNumber", saIdNumber),
-                            new SqlParameter("@dateOfBirth", parsedDateOfBirth),
-                            new SqlParameter("@genderId", genderId),
-                            new SqlParameter("@contactNumber", contactNumber),
-                            new SqlParameter("@emailAddress", emailAddress),
-                            new SqlParameter("@addressId", addressId),
-                            new SqlParameter("@createdById", createdById),
-                            new SqlParameter("@createdOn", createdOn),
-                            new SqlParameter("@modifiedById", modifiedById),
-                            new SqlParameter("@modifiedOn", modifiedOn)
+                        new SqlParameter("@id", id),
+                        new SqlParameter("@firstName", firstName),
+                        new SqlParameter("@lastName", lastName),
+                        new SqlParameter("@saIdNumber", saIdNumber),
+                        new SqlParameter("@dateOfBirth", parsedDateOfBirth),
+                        new SqlParameter("@genderId", genderId),
+                        new SqlParameter("@contactNumber", contactNumber),
+                        new SqlParameter("@emailAddress", emailAddress),
+                        new SqlParameter("@addressId", addressId),
+                        new SqlParameter("@createdById", createdById),
+                        new SqlParameter("@createdOn", parsedCreatedOn),
+                        new SqlParameter("@modifiedById", modifiedById),
+                        new SqlParameter("@modifiedOn", parsedModifiedOn)
                     });
                 if (returnValue == 1)
                 {
@@ -74,6 +94,7 @@ namespace fms.Service
                 };
             }
         }
+
         public static ReturnObject UpdatePerson(List<KeyValue> person)
         {
             try
@@ -94,16 +115,16 @@ namespace fms.Service
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Person_update]",
                     new List<SqlParameter>
                     {
-                            new SqlParameter("@id", id),
-                            new SqlParameter("@firstName", firstName),
-                            new SqlParameter("@lastName", lastName),
-                            new SqlParameter("@saIdNumber", saIdNumber),
-                            new SqlParameter("@dateOfBirth", parsedDateOfBirth),
-                            new SqlParameter("@genderId", genderId),
-                            new SqlParameter("@contactNumber", contactNumber),
-                            new SqlParameter("@emailAddress", emailAddress),
-                            new SqlParameter("@addressId", addressId),
-                            new SqlParameter("@modifiedById", modifiedById)
+                        new SqlParameter("@id", id),
+                        new SqlParameter("@firstName", firstName),
+                        new SqlParameter("@lastName", lastName),
+                        new SqlParameter("@saIdNumber", saIdNumber),
+                        new SqlParameter("@dateOfBirth", parsedDateOfBirth),
+                        new SqlParameter("@genderId", genderId),
+                        new SqlParameter("@contactNumber", contactNumber),
+                        new SqlParameter("@emailAddress", emailAddress),
+                        new SqlParameter("@addressId", addressId),
+                        new SqlParameter("@modifiedById", modifiedById)
                     });
                 if (returnValue == 1)
                 {

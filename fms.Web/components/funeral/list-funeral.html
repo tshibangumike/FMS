@@ -1,7 +1,7 @@
 ﻿<div class="row m-1">
-    <div class="col-md-12 bg-white p-1">
+    <div class="col-md-12 bg-white p-3">
         <div class="float-left">
-            <h5 class="text-muted font-weight-bold">List of Funerals</h5>
+            <h3 class="text-muted font-weight-bold">LIST OF FUNERALS</h3>
         </div>
         <div class="float-right">
             <div ng-include="'/components/shared/listview-topbar-buttons.html'"></div>
@@ -26,7 +26,7 @@
                                 <th scope="col">#</th>
                                 <th scope="col">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="all" ng-model="all">
+                                        <input type="checkbox" class="custom-control-input" id="all" ng-model="all" ng-change="selectAll(all)">
                                         <label class="custom-control-label" for="all"></label>
                                     </div>
                                 </th>
@@ -39,14 +39,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="record in records" ng-dblclick="edit(record)">
+                        <tr ng-repeat="record in records" 
+                            ng-click="toggleSelection(record)" 
+                            ng-dblclick="edit(record)"
+                            ng-class="{ 'table-primary' : record.Selected }">
                                 <th scope="row">{{ $index + 1 }}</th>
                                 <td scope="row">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="{{ record.Id }}"
                                                ng-model="record.Selected"
-                                               ng-change="selectRecord(record)"
-                                               ng-checked="all">
+                                               ng-change="selectRecord(record)">
                                         <label class="custom-control-label" for="{{ record.Id }}"></label>
                                     </div>
                                 </td>

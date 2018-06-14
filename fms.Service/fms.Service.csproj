@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -47,11 +50,15 @@
     <Compile Include="AddressService.cs" />
     <Compile Include="AppUserService.cs" />
     <Compile Include="CredentialService.cs" />
+    <Compile Include="DocumentService.cs" />
     <Compile Include="FuneralBoughtItemService.cs" />
     <Compile Include="FuneralDocumentService.cs" />
     <Compile Include="GenericModelService.cs" />
     <Compile Include="HomeAffairsOfficeService.cs" />
     <Compile Include="KeyValueService.cs" />
+    <Compile Include="Log4NetService.cs" />
+    <Compile Include="MemberService.cs" />
+    <Compile Include="PaymentPeriodService.cs" />
     <Compile Include="MortuaryService.cs" />
     <Compile Include="DeceasedService.cs" />
     <Compile Include="DoctorService.cs" />
@@ -61,7 +68,9 @@
     <Compile Include="InformantService.cs" />
     <Compile Include="FuneralService.cs" />
     <Compile Include="NextOfKinService.cs" />
+    <Compile Include="PaymentService.cs" />
     <Compile Include="PersonService.cs" />
+    <Compile Include="ReportService.cs" />
     <Compile Include="SharedService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupplierService.cs" />
@@ -71,6 +80,9 @@
       <Project>{1FBED848-9481-4086-9593-02DAB08ED938}</Project>
       <Name>fms.Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

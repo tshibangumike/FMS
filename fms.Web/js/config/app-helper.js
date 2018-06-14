@@ -13,6 +13,13 @@ fms.Routes = {
         return {
             templateUrl: "/components/toolbar/toolbar.html",
             controller: "ToolbarController",
+            resolve: {
+                currentUser: [
+                    "appService", function (appService) {
+                        return appService.GetData("Account/GetCurrentUser");
+                    }
+                ]
+            }
         };
     },
     GetBaseRouteView: function () {
@@ -159,7 +166,14 @@ fms.Routes = {
                                 "sidemenu@listmember": fms.Routes.GetSideMenuRouteView(),
                                 "body@listmember": {
                                     templateUrl: "/components/member/list-member.html",
-                                    controller: "ListMemberController"
+                                    controller: "ListMemberController",
+                                    resolve: {
+                                        records: [
+                                            "appService", function (appService) {
+                                                return appService.GetData(fms.Entity.Member.Urls.GetActiveMembers);
+                                            }
+                                        ]
+                                    }
                                 }
                             }
                         };
@@ -173,7 +187,38 @@ fms.Routes = {
                                 "sidemenu@addmember": fms.Routes.GetSideMenuRouteView(),
                                 "body@addmember": {
                                     templateUrl: "/components/member/add-member.html",
-                                    controller: "ListMemberController"
+                                    controller: "AddMemberController"
+                                }
+                            }
+                        };
+                    case "edit":
+                        return {
+                            name: "editmember",
+                            url: "/editmember?memberid",
+                            views: {
+                                "": fms.Routes.GetBaseRouteView(),
+                                "toolbar@editmember": fms.Routes.GetToolbarRouteView(),
+                                "sidemenu@editmember": fms.Routes.GetSideMenuRouteView(),
+                                "body@editmember": {
+                                    templateUrl: "/components/member/edit-member.html",
+                                    controller: "EditMemberController",
+                                    resolve: {
+                                        record: [
+                                            "$stateParams", "appService", function ($stateParams, appService) {
+                                                return appService.GetData(fms.Entity.Member.Urls.GetMemberById, { memberId: $stateParams.memberid });
+                                            }
+                                        ],
+                                        payments: [
+                                            "$stateParams", "appService", function ($stateParams, appService) {
+                                                return appService.GetData(fms.Entity.Payment.Urls.GetPaymentsByMemberId, { memberId: $stateParams.memberid });
+                                            }
+                                        ],
+                                        paymentPeriods: [
+                                            "appService", function (appService) {
+                                                return appService.GetData("/PaymentPeriod/GetActivePaymentPeriods");
+                                            }
+                                        ]
+                                    }
                                 }
                             }
                         };
@@ -196,6 +241,27 @@ fms.Routes = {
                                         deceaseds: [
                                             "appService", function (appService) {
                                                 return appService.GetData(fms.Entity.Deceased.Urls.GetActiveDeceaseds);
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        };
+                    case "edit":
+                        return {
+                            name: "editdeceased",
+                            url: "/editdeceased?deceasedid",
+                            views: {
+                                "": fms.Routes.GetBaseRouteView(),
+                                "toolbar@editdeceased": fms.Routes.GetToolbarRouteView(),
+                                "sidemenu@editdeceased": fms.Routes.GetSideMenuRouteView(),
+                                "body@editdeceased": {
+                                    templateUrl: "/components/deceased/edit-deceased.html",
+                                    controller: "EditDeceasedController",
+                                    resolve: {
+                                        record: [
+                                            "$stateParams", "appService", function ($stateParams, appService) {
+                                                return appService.GetData(fms.Entity.Deceased.Urls.GetDeceasedById, { deceasedId: $stateParams.deceasedid });
                                             }
                                         ]
                                     }
@@ -227,6 +293,27 @@ fms.Routes = {
                                 }
                             }
                         };
+                    case "edit":
+                        return {
+                            name: "editinformant",
+                            url: "/editinformant?informantid",
+                            views: {
+                                "": fms.Routes.GetBaseRouteView(),
+                                "toolbar@editinformant": fms.Routes.GetToolbarRouteView(),
+                                "sidemenu@editinformant": fms.Routes.GetSideMenuRouteView(),
+                                "body@editinformant": {
+                                    templateUrl: "/components/informant/edit-informant.html",
+                                    controller: "EditInformantController",
+                                    resolve: {
+                                        record: [
+                                            "$stateParams", "appService", function ($stateParams, appService) {
+                                                return appService.GetData(fms.Entity.Informant.Urls.GetInformantById, { informantId: $stateParams.informantid });
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        };
                     default:
                 }
             case "nextofkin":
@@ -246,6 +333,27 @@ fms.Routes = {
                                         nextOfKins: [
                                             "appService", function (appService) {
                                                 return appService.GetData(fms.Entity.NextOfKin.Urls.GetActiveNextOfKins);
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        };
+                    case "edit":
+                        return {
+                            name: "editnextofkin",
+                            url: "/editnextofkin?nextofkinid",
+                            views: {
+                                "": fms.Routes.GetBaseRouteView(),
+                                "toolbar@editnextofkin": fms.Routes.GetToolbarRouteView(),
+                                "sidemenu@editnextofkin": fms.Routes.GetSideMenuRouteView(),
+                                "body@editnextofkin": {
+                                    templateUrl: "/components/nextofkin/edit-nextofkin.html",
+                                    controller: "EditNextOfKinController",
+                                    resolve: {
+                                        record: [
+                                            "$stateParams", "appService", function ($stateParams, appService) {
+                                                return appService.GetData(fms.Entity.NextOfKin.Urls.GetNextOfKinById, { nextOfKinId: $stateParams.nextofkinid });
                                             }
                                         ]
                                     }
@@ -277,6 +385,27 @@ fms.Routes = {
                                 }
                             }
                         };
+                    case "edit":
+                        return {
+                            name: "editdoctor",
+                            url: "/editdoctor?doctorid",
+                            views: {
+                                "": fms.Routes.GetBaseRouteView(),
+                                "toolbar@editdoctor": fms.Routes.GetToolbarRouteView(),
+                                "sidemenu@editdoctor": fms.Routes.GetSideMenuRouteView(),
+                                "body@editdoctor": {
+                                    templateUrl: "/components/doctor/edit-doctor.html",
+                                    controller: "EditDoctorController",
+                                    resolve: {
+                                        record: [
+                                            "$stateParams", "appService", function ($stateParams, appService) {
+                                                return appService.GetData(fms.Entity.Doctor.Urls.GetDoctorById, { doctorId: $stateParams.doctorid });
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        };
                     default:
                 }
             case "homeaffairsofficer":
@@ -296,6 +425,27 @@ fms.Routes = {
                                         homeAffairsOfficers: [
                                             "appService", function (appService) {
                                                 return appService.GetData(fms.Entity.HomeAffairsOfficer.Urls.GetActiveHomeAffairsOfficers);
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        };
+                    case "edit":
+                        return {
+                            name: "edithomeaffairsofficer",
+                            url: "/edithomeaffairsofficer?homeaffairsofficerid",
+                            views: {
+                                "": fms.Routes.GetBaseRouteView(),
+                                "toolbar@edithomeaffairsofficer": fms.Routes.GetToolbarRouteView(),
+                                "sidemenu@edithomeaffairsofficer": fms.Routes.GetSideMenuRouteView(),
+                                "body@edithomeaffairsofficer": {
+                                    templateUrl: "/components/homeaffairsofficer/edit-homeaffairsofficer.html",
+                                    controller: "EditHomeAffairsOfficerController",
+                                    resolve: {
+                                        record: [
+                                            "$stateParams", "appService", function ($stateParams, appService) {
+                                                return appService.GetData(fms.Entity.HomeAffairsOfficer.Urls.GetHomeAffairsOfficerById, { homeAffairsOfficerId: $stateParams.homeaffairsofficerid });
                                             }
                                         ]
                                     }
@@ -354,35 +504,38 @@ fms.Functions = {
         var record = arguments[0] == null ? null : arguments[0];
         var keyValues = [];
         _.forEach(record, function (value, key) {
-            if (key.indexOf("Time") > 0 || key.indexOf("Date") > 0 || key.indexOf("Day") > 0) {
-                if (!_.isNull(value)) {
-                    var values = value.split("/");
-                    var day = values[0];
-                    var month = values[1];
-                    var yeartime = values[2].split(" ");
-                    var year = yeartime[0];
-                    var time = yeartime[1];
-                    value = year + "-" + month + "-" + day + " " + time;
-                    keyValues.push({ Key: key, Value: value });
-                }
-            } else {
-                keyValues.push({ Key: key, Value: value });
-            }
+            //if (key.indexOf("Time") > 0 || key.indexOf("Date") > 0 || key.indexOf("Day") > 0) {
+            //    if (!_.isNull(value)) {
+            //        var values = value.split("/");
+            //        var day = values[0];
+            //        var month = values[1];
+            //        var yeartime = values[2].split(" ");
+            //        var year = yeartime[0];
+            //        var time = yeartime[1];
+            //        value = year + "-" + month + "-" + day + " " + time;
+            //        keyValues.push({ Key: key, Value: value });
+            //    }
+            //} else {
+            //    keyValues.push({ Key: key, Value: value });
+            //}
+            keyValues.push({ Key: key, Value: value });
         });
         return keyValues;
     },
-    AddToOrRemoveFromArray: function () {
-        if (_.isEqual(arguments.length, 0)) return null;
-        var _idArray = _.isNull(arguments[0], 0) ? null : arguments[0];
-        var _record = _.isNull(arguments[1], 1) ? null : arguments[1];
-        if (_record.Selected) {
-            _idArray.push(_record);
+    AddToOrRemoveFromArrayAnItemBasedOnId: function (array, arrayItem) {
+        if (arrayItem["Selected"]) {
+            array.push(arrayItem);
         }
         else {
-            _.remove(_idArray, function (x) {
-                return _.isEqual(x.Id, _record.Id);
+            _.remove(array, function (x) {
+                return _.isEqual(x["Id"], arrayItem["Id"]);
             });
         }
+    },
+    SelectAllRecords: function(isSelected,array) {
+        _.forEach(array, function (value) {
+            value.Selected = isSelected;
+        });
     },
     generateLuhnDigit: function () {
         if (arguments.length === 0) return null;
@@ -437,6 +590,23 @@ fms.Functions = {
         result.citizen = getCitizenship(idNumber);
         return result;
     },
+    IsLeapYear: function (year) {
+        return (year % 400) ? ((year % 100) ? ((year % 4) ? false : true) : false) : true;
+    },
+    GetMonthLastDay: function (year, month) {
+        var monthNumbersWith31Days = [1, 3, 5, 7, 8, 10, 12];
+        var monthNumbersWith30Days = [4, 6, 9, 11];
+        if (_.findIndex(monthNumbersWith31Days, function (o) { return o === month; }) !== -1)
+            return 31;
+        else if (_.findIndex(monthNumbersWith30Days, function (o) { return o === month; }) !== -1)
+            return 30;
+        else if (month === 2) {
+            if (fms.Functions.IsLeapYear(year))
+                return 29;
+            return 28;
+        }
+        return null;
+    }
 };
 
 fms.Entity = {
@@ -445,7 +615,8 @@ fms.Entity = {
         Urls: {
             GetActiveDeceaseds: "/Deceased/GetActiveDeceaseds",
             GetDeceasedById: "/Deceased/GetDeceasedById",
-            GetDeceasedByFuneralId: "/Deceased/GetDeceasedByFuneralId"
+            GetDeceasedByFuneralId: "/Deceased/GetDeceasedByFuneralId",
+            UpdateDeceased: "/Deceased/UpdateDeceased"
         }
     },
     Doctor: {
@@ -453,7 +624,8 @@ fms.Entity = {
         Urls: {
             GetActiveDoctors: "/Doctor/GetActiveDoctors",
             GetDoctorById: "/Doctor/GetDoctorById",
-            AddDoctor: "/Doctor/AddDoctor"
+            AddDoctor: "/Doctor/AddDoctor",
+            UpdateDoctor: "/Doctor/UpdateDoctor"
         }
     },
     Funeral: {
@@ -482,7 +654,9 @@ fms.Entity = {
     Informant: {
         EntityName: "Informant",
         Urls: {
-            GetActiveInformants: "/Informant/GetActiveInformants"
+            GetActiveInformants: "/Informant/GetActiveInformants",
+            GetInformantById: "/Informant/GetInformantById",
+            UpdateInformant: "/Informant/UpdateInformant"
         }
     },
     Cemetery: {
@@ -499,10 +673,21 @@ fms.Entity = {
             GetMortuaryById: "/Mortuary/GetMortuaryById"
         }
     },
+    Member: {
+        EntityName: "Member",
+        Urls: {
+            GetActiveMembers: "/Member/GetActiveMembers",
+            GetMemberById: "/Member/GetMemberById",
+            AddMember: "/Member/AddMember",
+            UpdateMember: "/Member/UpdateMember"
+        }
+    },
     NextOfKin: {
         EntityName: "NextOfKin",
         Urls: {
-            GetActiveNextOfKins: "/NextOfKin/GetActiveNextOfKins"
+            GetActiveNextOfKins: "/NextOfKin/GetActiveNextOfKins",
+            GetNextOfKinById: "/NextOfKin/GetNextOfKinById",
+            UpdateNextOfKin: "/NextOfKin/UpdateNextOfKin"
         }
     },
     FuneralBoughtItem: {
@@ -523,6 +708,13 @@ fms.Entity = {
             GetActiveSuppliers: "/Supplier/GetActiveSuppliers",
             GetSupplierById: "Supplier/GetSupplierById",
             AddSupplier: "/Supplier/AddSupplier"
+        }
+    },
+    Payment: {
+        EntityName: "Payment",
+        Urls: {
+            GetPaymentsByMemberId: "/Payment/GetPaymentsByMemberId",
+            AddPayment: "/Payment/AddPayment"
         }
     }
 };

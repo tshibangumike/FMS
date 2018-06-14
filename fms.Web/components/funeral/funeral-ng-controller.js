@@ -1,519 +1,176 @@
 ﻿angular.module("fmsApp")
     .controller("ListFuneralController",
-    [
-        "$scope", "appService", "funerals",
-        function ($scope, appService, funerals) {
+        [
+            "$scope", "appService", "funerals",
+            function($scope, appService, funerals) {
 
-            $scope.records = funerals.data;
-            $scope.selectedRecordIds = [];
+                $scope.records = funerals.data;
+                $scope.selectedRecordIds = [];
 
-            $scope.selectRecord = function () {
+                $scope.selectAll = function(isSelected) {
+                    fms.Functions.SelectAllRecords(isSelected, $scope.records);
+                };
 
-                if (arguments.length === 0) return null;
-                var _record = arguments[0] == null ? null : arguments[0];
+                $scope.selectRecord = function(record) {
+                    fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, record);
+                };
 
-                if (_record.Selected) {
-                    //add id in array
-                    $scope.selectedRecordIds.push(_record.Id);
-                }
-                else {
-                    //remove id from array
-                    var evens = _.remove($scope.selectedRecordIds, function (x) {
-                        return _.isEqual(x, _record.Id);
-                    });
-                }
+                $scope.toggleSelection = function(record) {
+                    record.Selected = !record.Selected;
+                };
 
-            };
+                $scope.create = function() {
 
-            $scope.create = function () {
+                    appService.NavigateTo("addfuneral");
 
-                appService.NavigateTo("addfuneral");
+                };
 
-            };
+                $scope.edit = function() {
 
-            $scope.edit = function () {
+                    var _record = null;
 
-                var _record = null;
+                    if (arguments.length === 1)
+                        _record = _.isEqual(arguments.length, 1) ? arguments[0] : null;
 
-                if (arguments.length === 1)
-                    _record = _.isEqual(arguments.length, 1) ? arguments[0] : null;
+                    if (_.isNull(_record))
+                        appService.NavigateTo("editfuneral", { funeralid: $scope.selectedRecordIds[0] });
+                    else
+                        appService.NavigateTo("editfuneral", { funeralid: _record.Id });
 
-                if (_.isNull(_record))
-                    appService.NavigateTo("editfuneral", { funeralid: $scope.selectedRecordIds[0] });
-                else
-                    appService.NavigateTo("editfuneral", { funeralid: _record.Id });
+                };
 
-            };
-
-        }
-    ])
-    .controller("AddFuneralController",
-    [
-        "$rootScope", "$scope", "$uibModal", "appService",
-        function ($rootScope, $scope, $uibModal, appService) {
-
-            $scope.funeral = {};
-            $scope.deceased = {};
-            $scope.informant = {};
-            $scope.nextOfKin = {};
-            $scope.doctor = {};
-            $scope.homeAffairsOfficer = {};
-            $scope.Tabs = [
-                { Name: "BeforeMortuary", Show: true },
-                { Name: "Documents", Show: false },
-                { Name: "Deceased", Show: true },
-                { Name: "Informant", Show: true },
-                { Name: "NextOfKin", Show: true },
-                { Name: "Doctor", Show: true },
-                { Name: "HomeAffairsOfficer", Show: true },
-                { Name: "OtherInformation", Show: true },
-                { Name: "PurchasedItems", Show: true },
-                { Name: "UploadedItems", Show: true }
-            ];
-
-            $scope.collapseExpand = function () {
-
-                if (arguments.length === 0) return null;
-                var elementId = arguments[0] == null ? null : arguments[0];
-
-                var tab = _.find($scope.Tabs, function (x) { return _.isEqual(x.Name, elementId); });
-                if (_.isUndefined(tab)) return null;
-                tab.Show = !tab.Show;
-            };
-
-            $scope.getTabByName = function () {
-
-                if (arguments.length === 0) return null;
-                var elementId = arguments[0] == null ? null : arguments[0];
-
-                return _.find($scope.Tabs, function (x) { return _.isEqual(x.Name, elementId); });
-
-            };
-
-            $scope.getDoctor = function () {
-
-                if (_.isNull($scope.funeral.DoctorId)) return null;
-
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    ariaLabelledBy: "modal-title",
-                    ariaDescribedBy: "modal-body",
-                    templateUrl: "/components/doctor/modal/modal-edit-doctor.html",
-                    controller: "ModalEditDoctorController",
-                    size: "lg",
-                    resolve: {
-                        doctor: [
-                            "appService", function (appService) {
-                                return appService.GetData(fms.Entity.Doctor.Urls.GetDoctorById, { doctorId: $scope.funeral.DoctorId });
-                            }
-                        ]
-                    }
-                });
-
-                modalInstance.result.then(function (selectedRecord) {
-                    $scope.doctor = selectedRecord;
-                    $scope.funeral["DoctorId"] = selectedRecord.Id;
-                });
-
-            };
-
-            $scope.setSelectedDoctor = function() {
-                if (arguments.length === 0) return false;
-                var selectedRecord = arguments[0] == null ? null : arguments[0];
-                $scope.doctor = selectedRecord;
-                $scope.funeral["DoctorId"] = selectedRecord["Id"];
-                return true;
-            };
-
-            $scope.getDoctors = function () {
-
-                fms.Routes.SetListLookup(
-                    $uibModal,
-                    appService,
-                    "/components/doctor/modal/modal-list-doctor.html",
-                    "ModalListDoctorController",
-                    {
-                        records: [
-                            "appService", function (appService) {
-                                return appService.GetData(fms.Entity.Doctor.Urls.GetActiveDoctors);
-                            }
-                        ]
-                    },
-                    $scope.setSelectedDoctor
-                );
-
-            };
-
-            $scope.getHomeAffairsOfficer = function () {
-
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    ariaLabelledBy: "modal-title",
-                    ariaDescribedBy: "modal-body",
-                    templateUrl: "/components/homeaffairsofficer/modal/modal-edit-homeaffairsofficer.html",
-                    controller: "ModalEditHomeAffairsOfficerController",
-                    size: "lg",
-                    resolve: {
-                        homeAffairsOfficer: [
-                            "appService", function (appService) {
-                                return appService.GetData(fms.Entity.HomeAffairsOfficer.Urls.GetHomeAffairsOfficerById, { homeaffairsofficerId: $scope.homeAffairsOfficer.Id });
-                            }
-                        ]
-                    }
-                });
-
-                modalInstance.result.then(function (selectedRecord) {
-                    $scope.doctor["HospitalName"] = selectedRecord.Name;
-                    $scope.doctor["HospitalId"] = selectedRecord.Id;
-                });
-
-            };
-
-            $scope.setSelectedHomeAffairsOfficer = function () {
-                if (arguments.length === 0) return false;
-                var selectedRecord = arguments[0] == null ? null : arguments[0];
-                $scope.homeAffairsOfficer = selectedRecord;
-                $scope.funeral["HomeAffairsOfficerId"] = selectedRecord["Id"];
-                return true;
-            };
-
-            $scope.getHomeAffairsOfficers = function () {
-                fms.Routes.SetListLookup(
-                    $uibModal,
-                    appService,
-                    "/components/homeaffairsofficer/modal/modal-list-homeaffairsofficer.html",
-                    "ModalListHomeAffairsOfficerController",
-                    {
-                        records: [
-                            "appService", function (appService) {
-                                return appService.GetData(fms.Entity.HomeAffairsOfficer.Urls.GetActiveHomeAffairsOfficers);
-                            }
-                        ]
-                    },
-                    $scope.setSelectedHomeAffairsOfficer
-                );
-            };
-
-            $scope.clearLookupInput = function () {
-
-                if (arguments.length === 0) return null;
-                var entityName = arguments[0] == null ? null : arguments[0];
-                switch (entityName) {
-                    case "mortuary":
-                        $scope.funeral["MortuaryName"] = null;
-                        $scope.funeral["MortuaryId"] = null;
-                        break;
-                    case "cemetery":
-                        $scope.funeral["CemeteryName"] = null;
-                        $scope.funeral["CemeteryId"] = null;
-                        break;
-                    case "doctor":
-                        $scope.doctor = null;
-                        $scope.funeral["DoctorId"] = null;
-                        break;
-                    case "homeAffairsOfficer":
-                        $scope.homeAffairsOfficer = null;
-                        $scope.funeral["HomeAffairsOfficerId"] = null;
-                        break;
-                    case "newFuneralBoughtItem.supplier":
-                        $scope.newFuneralBoughtItem["SupplierId"] = null;
-                        $scope.newFuneralBoughtItem["SupplierName"] = null;
-                        break;
-                    default:
-                }
-
-            };
-
-            $scope.OnChange_SAIdNumber = function () {
-
-                var data = fms.Functions.ExtractFromIdNunmber($scope.deceased["SAIdNumber"]);
-                $scope.deceased["DateOfBirth"] = moment(data.birthdate).format("MM/DD/YYYY HH:mm A");
-                $scope.deceased["GenderId"] = data.gender === "male" ? 1: 2;
-
-            };
-
-            $scope.processForm = function () {
-                if (arguments.length === 0) return null;
-                var form = arguments[0] == null ? null : arguments[0];
-                if (!form.$valid) {
-                    return null;
-                }
-                $scope.deceased["DateOfDeath"] = $("#DateOfDeath").val();
-                var keyValuesDeceased = fms.Functions.SplitObjectIntoArray($scope.deceased);
-                var keyValuesInformant = fms.Functions.SplitObjectIntoArray($scope.informant);
-                var keyValuesNextOfKin = fms.Functions.SplitObjectIntoArray($scope.nextOfKin);
-                var keyValuesDoctor = fms.Functions.SplitObjectIntoArray($scope.doctor);
-                var keyValuesHomeAffairsOfficer = fms.Functions.SplitObjectIntoArray($scope.homeAffairsOfficer);
-                var keyValuesFuneral = fms.Functions.SplitObjectIntoArray($scope.funeral);
-                appService.PostForm("/Funeral/CreateFuneral", {
-                    deceased: keyValuesDeceased
-                    , informant: keyValuesInformant
-                    , nextOfKin: keyValuesNextOfKin
-                    , doctor: keyValuesDoctor
-                    , homeAffairsOfficer: keyValuesHomeAffairsOfficer
-                    , funeral: keyValuesFuneral
-                }).then(function successCallback(response) {
-                    appService.NavigateTo("editfuneral", { funeralid: response.data.funeralId });
-                }, function errorCallback(response) {
-                });
-            };
-
-        }
-    ])
-    .controller("EditFuneralController",
-    [
-        "$scope", "$uibModal", "appService", "funeral", "deceased", "informant", "nextOfKin", "doctor", "homeAffairsOfficer", "funeralBoughtItems", "funeralDocuments",
-        function ($scope, $uibModal, appService, funeral, deceased, informant, nextOfKin, doctor, homeAffairsOfficer, funeralBoughtItems, funeralDocuments) {
-
-            $scope.funeral = funeral.data;
-            $scope.deceased = deceased.data;
-            $scope.informant = informant.data;
-            $scope.nextOfKin = nextOfKin.data;
-            $scope.doctor = doctor.data;
-            $scope.homeAffairsOfficer = homeAffairsOfficer.data;
-            $scope.funeralBoughtItems = funeralBoughtItems.data;
-            $scope.funeralDocuments = funeralDocuments.data;
-            $scope.newFuneralBoughtItem = { Quantity: 1, Description: "" };
-            $scope.selectedFuneralBoughtItemIds = [];
-            $scope.newFuneralDocument = null;
-            $scope.Tabs = [
-                { Name: "BeforeMortuary", Show: true },
-                { Name: "DuringMortuary", Show: false },
-                { Name: "AfterMortuary", Show: false },
-                { Name: "Documents", Show: false },
-                { Name: "Deceased", Show: true },
-                { Name: "Informant", Show: true },
-                { Name: "NextOfKin", Show: true },
-                { Name: "Doctor", Show: true },
-                { Name: "HomeAffairsOfficer", Show: true },
-                { Name: "OtherInformation", Show: true },
-                { Name: "PurchasedItems", Show: true },
-                { Name: "UploadedItems", Show: true }
-            ];
-
-            $scope.collapseExpand = function () {
-
-                if (arguments.length === 0) return null;
-                var elementId = arguments[0] == null ? null : arguments[0];
-
-                var tab = _.find($scope.Tabs, function (x) { return _.isEqual(x.Name, elementId); });
-                if (_.isUndefined(tab)) return null;
-                tab.Show = !tab.Show;
-            };
-
-            $scope.getTabByName = function () {
-
-                if (arguments.length === 0) return null;
-                var elementId = arguments[0] == null ? null : arguments[0];
-
-                return _.find($scope.Tabs, function (x) { return _.isEqual(x.Name, elementId); });
-
-            };
-
-            $scope.goToCreateView = function () {
-
-                appService.NavigateTo("addfuneral");
-
-            };
-
-            /*---Doctor Lookup - START*/
-            $scope.setSelectedDoctor = function (selectedRecord) {
-                $scope.doctor = selectedRecord;
-                $scope.funeral["DoctorId"] = selectedRecord["Id"];
-            };
-            $scope.getDoctors = function () {
-                fms.Routes.SetListLookup(
-                    $uibModal,
-                    "/components/doctor/modal/modal-list-doctor.html",
-                    "ModalListDoctorController",
-                    {
-                        records: [
-                            "appService", function (appService) {
-                                return appService.GetData(fms.Entity.Doctor.Urls.GetActiveDoctors);
-                            }
-                        ]
-                    },
-                    $scope.setSelectedDoctor
-                );
-            };
-            $scope.getDoctor = function (doctorId) {
-                fms.Routes.SetEntityViewLookup(
-                    $uibModal,
-                    "/components/doctor/modal/modal-view-doctor.html",
-                    "ModalEditDoctorController",
-                    {
-                        record: [
-                            "appService", function (appService) {
-                                return appService.GetData(fms.Entity.Doctor.Urls.GetDoctorById,
-                                    { doctorId: doctorId });
-                            }
-                        ]
-                    }
-                );
-            };
-            /*---Doctor Lookup - END*/
-
-            /*---Home Affairs Officer Lookup - START*/
-            $scope.setSelectedHomeAffairsOfficer = function (selectedRecord) {
-                $scope.homeAffairsOfficer = selectedRecord;
-                $scope.funeral["HomeAffairsOfficerId"] = selectedRecord["Id"];
-            };
-            $scope.getHomeAffairsOfficers = function() {
-                fms.Routes.SetListLookup(
-                    $uibModal,
-                    "/components/homeaffairsofficer/modal/modal-list-homeaffairsofficer.html",
-                    "ModalListHomeAffairsOfficerController",
-                    {
-                        records: [
-                            "appService", function(appService) {
-                                return appService.GetData(fms.Entity.HomeAffairsOfficer.Urls
-                                    .GetActiveHomeAffairsOfficers);
-                            }
-                        ]
-                    },
-                    $scope.setSelectedHomeAffairsOfficer
-                );
-            };
-            $scope.getHomeAffairsOfficer = function (homeAffairsOfficerId) {
-                fms.Routes.SetEntityViewLookup(
-                    $uibModal,
-                    "/components/homeaffairsofficer/modal/modal-view-homeaffairsofficer.html",
-                    "ModalEditHomeAffairsOfficerController",
-                    {
-                        record: [
-                            "appService", function(appService) {
-                                return appService.GetData(fms.Entity.HomeAffairsOfficer.Urls.GetHomeAffairsOfficerById,
-                                    { homeAffairsOfficerId: homeAffairsOfficerId });
-                            }
-                        ]
-                    }
-                );
-            };
-            /*---Doctor Lookup - END*/
-
-            /*---Cemetery Lookup - START*/
-            $scope.setSelectedCemetery = function (selectedRecord) {
-                $scope.cemetery = selectedRecord;
-                $scope.funeral["CemeteryId"] = selectedRecord["Id"];
-            };
-            $scope.getCemeteries = function () {
-                fms.Routes.SetListLookup(
-                    $uibModal,
-                    "/components/cemetery/modal/modal-list-cemetery.html",
-                    "ModalListCemeteryController",
-                    {
-                        records: [
-                            "appService", function (appService) {
-                                return appService.GetData(fms.Entity.Cemetery.Urls.GetActiveCemeteries);
-                            }
-                        ]
-                    },
-                    $scope.setSelectedCemetery
-                );
-            };
-            $scope.getCemetery = function(cemeteryId) {
-                fms.Routes.SetEntityViewLookup(
-                    $uibModal,
-                    "/components/cemetery/modal/modal-view-cemetery.html",
-                    "ModalEditCemteryController",
-                    {
-                        record: [
-                            "appService", function(appService) {
-                                return appService.GetData(fms.Entity.Cemetery.Urls.GetCemeteryById,
-                                    { cemeteryId: cemeteryId });
-                            }
-                        ]
-                    }
-                );
-            };
-            /*---Cemetery Lookup - END*/
-
-            /*---Mortuary Lookup - START*/
-            $scope.setSelectedMortuary = function (selectedRecord) {
-                $scope.mortuary = selectedRecord;
-                $scope.funeral["MortuaryId"] = selectedRecord["Id"];
-            };
-            $scope.getMortuaries = function () {
-                fms.Routes.SetListLookup(
-                    $uibModal,
-                    "/components/mortuary/modal/modal-list-mortuary.html",
-                    "ModalListMortuaryController",
-                    {
-                        records: [
-                            "appService", function (appService) {
-                                return appService.GetData(fms.Entity.Mortuary.Urls.GetActiveMortuaries);
-                            }
-                        ]
-                    },
-                    $scope.setSelectedMortuary
-                );
-            };
-            $scope.getMortuary = function (mortuaryId) {
-                fms.Routes.SetEntityViewLookup(
-                    $uibModal,
-                    "/components/mortuary/modal/modal-view-mortuary.html",
-                    "ModalEditMortuaryController",
-                    {
-                        record: [
-                            "appService", function (appService) {
-                                return appService.GetData(fms.Entity.Mortuary.Urls.GetMortuaryById,
-                                    { mortuaryId: mortuaryId });
-                            }
-                        ]
-                    }
-                );
-            };
-            /*---Mortuary Lookup - END*/
-            
-            /*---Supplier Lookup - START*/
-            $scope.setSelectedSupplier = function() {
-                if (arguments.length === 0) return false;
-                var selectedRecord = arguments[0] == null ? null : arguments[0];
-                $scope.supplier = selectedRecord;
-                $scope.newFuneralBoughtItem["SupplierId"] = selectedRecord["Id"];
-                return true;
-            };
-            $scope.getSuppliers = function() {
-                fms.Routes.SetListLookup(
-                    $uibModal,
-                    "/components/supplier/modal/modal-list-supplier.html",
-                    "ModalListSupplierController",
-                    {
-                        records: [
-                            "appService", function(appService) {
-                                return appService.GetData(fms.Entity.Supplier.Urls.GetActiveSuppliers);
-                            }
-                        ]
-                    },
-                    $scope.setSelectedSupplier
-                );
-            };
-            $scope.getSupplier = function (supplierId) {
-                fms.Routes.SetEntityViewLookup(
-                    $uibModal,
-                    "/components/supplier/modal/modal-view-supplier.html",
-                    "ModalEditSupplierController",
-                    {
-                        record: [
-                            "appService", function (appService) {
-                                return appService.GetData(fms.Entity.Supplier.Urls.GetSupplierById,
-                                    { supplierId: supplierId });
-                            }
-                        ]
-                    }
-                );
-            };
-            /*---Supplier Lookup - END*/
-
-            $scope.getTotalOfPurchaseItems = function() {
-                return _.sumBy($scope.funeralBoughtItems, function (x) { return (x.Amount * x.Quantity); });
             }
+        ])
+    .controller("AddFuneralController",
+        [
+            "$rootScope", "$scope", "$uibModal", "appService",
+            function($rootScope, $scope, $uibModal, appService) {
 
-            $scope.clearLookupInput = function () {
+                $scope.funeral = {};
+                $scope.deceased = {};
+                $scope.informant = {};
+                $scope.nextOfKin = {};
+                $scope.doctor = {};
+                $scope.homeAffairsOfficer = {};
+                $scope.Tabs = [
+                    { Name: "BeforeMortuary", Show: true },
+                    { Name: "Documents", Show: false },
+                    { Name: "Deceased", Show: true },
+                    { Name: "Informant", Show: true },
+                    { Name: "NextOfKin", Show: true },
+                    { Name: "Doctor", Show: true },
+                    { Name: "HomeAffairsOfficer", Show: true },
+                    { Name: "OtherInformation", Show: true },
+                    { Name: "PurchasedItems", Show: true },
+                    { Name: "UploadedItems", Show: true }
+                ];
+                $scope.formHasBeenSubmitted = false;
+                $scope.informantIsRequired = false;
 
-                if (arguments.length === 0) return null;
-                var entityName = arguments[0] == null ? null : arguments[0];
-                switch (entityName) {
+                $scope.collapseExpand = function() {
+
+                    if (arguments.length === 0) return null;
+                    var elementId = arguments[0] == null ? null : arguments[0];
+
+                    var tab = _.find($scope.Tabs, function(x) { return _.isEqual(x.Name, elementId); });
+                    if (_.isUndefined(tab)) return null;
+                    tab.Show = !tab.Show;
+                };
+
+                $scope.getTabByName = function() {
+
+                    if (arguments.length === 0) return null;
+                    var elementId = arguments[0] == null ? null : arguments[0];
+
+                    return _.find($scope.Tabs, function(x) { return _.isEqual(x.Name, elementId); });
+
+                };
+
+                $scope.GetFieldByName = function (modelName, fieldName) {
+                    return fms.Fields.GetFieldByModelByName(modelName, fieldName);
+                };
+
+                /*---Doctor Lookup - START*/
+                $scope.setSelectedDoctor = function(selectedRecord) {
+                    $scope.doctor = selectedRecord;
+                    $scope.funeral["DoctorId"] = selectedRecord["Id"];
+                };
+                $scope.getDoctors = function() {
+                    fms.Routes.SetListLookup(
+                        $uibModal,
+                        "/components/doctor/modal/modal-list-doctor.html",
+                        "ModalListDoctorController",
+                        {
+                            records: [
+                                "appService", function(appService) {
+                                    return appService.GetData(fms.Entity.Doctor.Urls.GetActiveDoctors);
+                                }
+                            ]
+                        },
+                        $scope.setSelectedDoctor
+                    );
+                };
+                $scope.getDoctor = function(doctorId) {
+                    fms.Routes.SetEntityViewLookup(
+                        $uibModal,
+                        "/components/doctor/modal/modal-view-doctor.html",
+                        "ModalEditDoctorController",
+                        {
+                            record: [
+                                "appService", function(appService) {
+                                    return appService.GetData(fms.Entity.Doctor.Urls.GetDoctorById,
+                                        { doctorId: doctorId });
+                                }
+                            ]
+                        }
+                    );
+                };
+                /*---Doctor Lookup - END*/
+
+                /*---Home Affairs Officer Lookup - START*/
+                $scope.setSelectedHomeAffairsOfficer = function(selectedRecord) {
+                    $scope.homeAffairsOfficer = selectedRecord;
+                    $scope.funeral["HomeAffairsOfficerId"] = selectedRecord["Id"];
+                };
+                $scope.getHomeAffairsOfficers = function() {
+                    fms.Routes.SetListLookup(
+                        $uibModal,
+                        "/components/homeaffairsofficer/modal/modal-list-homeaffairsofficer.html",
+                        "ModalListHomeAffairsOfficerController",
+                        {
+                            records: [
+                                "appService", function(appService) {
+                                    return appService.GetData(fms.Entity.HomeAffairsOfficer.Urls
+                                        .GetActiveHomeAffairsOfficers);
+                                }
+                            ]
+                        },
+                        $scope.setSelectedHomeAffairsOfficer
+                    );
+                };
+                $scope.getHomeAffairsOfficer = function(homeAffairsOfficerId) {
+                    fms.Routes.SetEntityViewLookup(
+                        $uibModal,
+                        "/components/homeaffairsofficer/modal/modal-view-homeaffairsofficer.html",
+                        "ModalEditHomeAffairsOfficerController",
+                        {
+                            record: [
+                                "appService", function(appService) {
+                                    return appService.GetData(
+                                        fms.Entity.HomeAffairsOfficer.Urls.GetHomeAffairsOfficerById,
+                                        { homeAffairsOfficerId: homeAffairsOfficerId });
+                                }
+                            ]
+                        }
+                    );
+                };
+                /*---Doctor Lookup - END*/
+
+                $scope.clearLookupInput = function() {
+
+                    if (arguments.length === 0) return null;
+                    var entityName = arguments[0] == null ? null : arguments[0];
+                    switch (entityName) {
                     case "mortuary":
                         $scope.funeral["MortuaryName"] = null;
                         $scope.funeral["MortuaryId"] = null;
@@ -535,117 +192,491 @@
                         $scope.newFuneralBoughtItem["SupplierName"] = null;
                         break;
                     default:
-                }
-
-            };
-
-            $scope.selectFuneralBoughtItemRecord = function () {
-
-                if (arguments.length === 0) return null;
-                var _record = arguments[0] == null ? null : arguments[0];
-
-                if (_record.Selected) {
-                    //add id in array
-                    $scope.selectedFuneralBoughtItemIds.push(_record.Id);
-                }
-                else {
-                    //remove id from array
-                    var evens = _.remove($scope.selectedFuneralBoughtItemIds, function (x) {
-                        return _.isEqual(x, _record.Id);
-                    });
-                }
-
-            };
-            $scope.addFuneralBoughtItem = function () {
-
-                $scope.newFuneralBoughtItem["FuneralId"] = $scope.funeral.Id;
-                var keyValueFuneralBoughtItem = fms.Functions.SplitObjectIntoArray($scope.newFuneralBoughtItem);
-                appService.PostForm("/FuneralBoughtItem/AddFuneralBoughtItem", { funeralBoughtItem: keyValueFuneralBoughtItem })
-                    .then(function successCallback(response) {
-
-                        return appService.RefreshCurrentState();
-
-                    }, function errorCallback(response) {
-                    });
-
-            };
-            $scope.disableAddFuneralBoughtItemButton = function () {
-
-                return ((_.isNull($scope.newFuneralBoughtItem.Name) || _.isUndefined($scope.newFuneralBoughtItem.Name))
-                    || (_.isNull($scope.newFuneralBoughtItem.Quantity) || _.isUndefined($scope.newFuneralBoughtItem.Quantity))
-                    || (_.isNull($scope.newFuneralBoughtItem.Amount) || _.isUndefined($scope.newFuneralBoughtItem.Amount)));
-
-            };
-            $scope.disableDeleteFuneralBoughtItemButton = function () {
-
-                return $scope.selectedFuneralBoughtItemIds.length == 0;
-
-            };
-            $scope.disableEditFuneralBoughtItemButton = function () {
-                return $scope.selectedFuneralBoughtItemIds.length !== 1;
-            };
-
-            $scope.OnChange_FileInput = function (e) {
-
-                if (arguments.length === 0) return null;
-                var e = arguments[0] == null ? null : arguments[0];
-                if (e.files.length === 0) {
-                    $scope.newFuneralDocument = null;
-                    return null;
-                }
-                $scope.newFuneralDocument = e.files[0];
-            };
-            $scope.ClearFileInput = function () {
-                if (arguments.length === 0) return null;
-                var inputId = arguments[0] == null ? null : arguments[0];
-                $("#funeralDocument").replaceWith($("#funeralDocument").val("").clone(true));
-            };
-            $scope.uploadFuneralDocument = function () {
-                appService.UploadFile(
-                    "FuneralDocument/AddFuneralDocument",
-                    $scope.newFuneralDocument,
-                    {
-                        documentTypeId: $scope.newFuneralDocument.DocumentTypeId,
-                        description: $scope.newFuneralDocument.Description,
-                        funeralId: $scope.funeral.Id
-                    },
-                    "document")
-                    .then(function successCallback(response) {
-                        return appService.RefreshCurrentState();
-                    }, function errorCallback(response) {
-                    });
-            };
-
-            $scope.processForm = function () {
-                if (arguments.length === 0) return null;
-                var form = arguments[0] == null ? null : arguments[0];
-                if (!form.$valid) {
-                    return null;
-                }
-                $scope.deceased["DateOfDeath"] = $("#DateOfDeath").val();
-                $scope.deceased["DateOfBirth"] = $("#DateOfBirth").val();
-                var keyValuesDeceased = fms.Functions.SplitObjectIntoArray($scope.deceased);
-                var keyValuesInformant = fms.Functions.SplitObjectIntoArray($scope.informant);
-                var keyValuesNextOfKin = fms.Functions.SplitObjectIntoArray($scope.nextOfKin);
-                var keyValuesDoctor = fms.Functions.SplitObjectIntoArray($scope.doctor);
-                var keyValuesHomeAffairsOfficer = fms.Functions.SplitObjectIntoArray($scope.homeAffairsOfficer);
-                var keyValuesFuneral = fms.Functions.SplitObjectIntoArray($scope.funeral);
-                appService.PostForm("/Funeral/UpdateFuneral", {
-                    deceased: keyValuesDeceased
-                    , informant: keyValuesInformant
-                    , nextOfKin: keyValuesNextOfKin
-                    , doctor: keyValuesDoctor
-                    , homeAffairsOfficer: keyValuesHomeAffairsOfficer
-                    , funeral: keyValuesFuneral
-                }).then(function successCallback(response) {
-                    if (response.data.state !== "success") {
-                        fms.Notifications.Toastr.UpdateErrorNotification();
                     }
-                    fms.Notifications.Toastr.UpdateSuccessNotification();
-                    return appService.RefreshCurrentState();
-                }, function errorCallback(response) {
-                });
-            };
 
-        }
-    ]);
+                };
+
+                $scope.OnChange_SAIdNumber = function(saIdNumber) {
+
+                    var data = fms.Functions.ExtractFromIdNunmber(saIdNumber);
+                    $scope.deceased["DateOfBirth"] = moment(data.birthdate).format("MM/DD/YYYY HH:mm A");
+                    $scope.deceased["GenderId"] = data.gender === "male" ? 1 : 2;
+
+                };
+
+                $scope.OnChange_InformantFirstName = function(firstName) {
+                    if (!_.isNull(firstName) && !_.isUndefined(firstName)) {
+                        fms.Fields.SetFieldRequirementLevel("informant", "saidnumber", true);
+                    } else {
+                        fms.Fields.SetFieldRequirementLevel("informant", "saidnumber", false);
+                    }
+                };
+
+                $scope.OnChange_InformantIdNumber = function (saIdNumber) {
+
+                    var data = fms.Functions.ExtractFromIdNunmber(saIdNumber);
+                    $scope.informant["DateOfBirth"] = moment(data.birthdate).format("MM/DD/YYYY HH:mm A");
+                    $scope.informant["GenderId"] = data.gender === "male" ? 1 : 2;
+
+                };
+
+                $scope.OnChange_NexyOfKinIdNumber = function (saIdNumber) {
+
+                    var data = fms.Functions.ExtractFromIdNunmber(saIdNumber);
+                    $scope.nextOfKin["DateOfBirth"] = moment(data.birthdate).format("MM/DD/YYYY HH:mm A");
+                    $scope.nextOfKin["GenderId"] = data.gender === "male" ? 1 : 2;
+
+                };
+
+                $scope.OnChange_DateOfBirth = function() {
+                    $scope.deceased["DateOfBirth"] = $("#DateOfBirth").val();
+                };
+
+                $scope.processForm = function (form) {
+                    $scope.formHasBeenSubmitted = true;
+                    $scope.deceased["DateOfBirth"] = $("#DateOfBirth").val();
+                    if (!form.$valid) {
+                        return;
+                    }
+                    var keyValuesDeceased = fms.Functions.SplitObjectIntoArray($scope.deceased);
+                    var keyValuesInformant = fms.Functions.SplitObjectIntoArray($scope.informant);
+                    var keyValuesNextOfKin = fms.Functions.SplitObjectIntoArray($scope.nextOfKin);
+                    var keyValuesDoctor = fms.Functions.SplitObjectIntoArray($scope.doctor);
+                    var keyValuesHomeAffairsOfficer = fms.Functions.SplitObjectIntoArray($scope.homeAffairsOfficer);
+                    var keyValuesFuneral = fms.Functions.SplitObjectIntoArray($scope.funeral);
+                    appService.PostForm("/Funeral/CreateFuneral",
+                        {
+                            deceased: keyValuesDeceased,
+                            informant: keyValuesInformant,
+                            nextOfKin: keyValuesNextOfKin,
+                            doctor: keyValuesDoctor,
+                            homeAffairsOfficer: keyValuesHomeAffairsOfficer,
+                            funeral: keyValuesFuneral
+                        }).then(function (response) {
+                            if (response.data.state !== "success") {
+                                fms.Notifications.Toastr.CreateErrorNotification();
+                            }
+                            fms.Notifications.Toastr.CreateSuccessNotification();
+                            appService.NavigateTo("editfuneral", { funeralid: response.data.funeralId });
+                        },
+                        function (response) {
+                        });
+                };
+
+            }
+        ])
+    .controller("EditFuneralController",
+        [
+            "$scope", "$window", "$uibModal", "appService", "funeral", "deceased", "informant", "nextOfKin", "doctor",
+            "homeAffairsOfficer", "funeralBoughtItems", "funeralDocuments",
+            function ($scope,
+                $window,
+                $uibModal,
+                appService,
+                funeral,
+                deceased,
+                informant,
+                nextOfKin,
+                doctor,
+                homeAffairsOfficer,
+                funeralBoughtItems,
+                funeralDocuments) {
+
+                $scope.funeral = funeral.data;
+                $scope.deceased = deceased.data;
+                $scope.informant = informant.data;
+                $scope.nextOfKin = nextOfKin.data;
+                $scope.doctor = doctor.data;
+                $scope.homeAffairsOfficer = homeAffairsOfficer.data;
+                $scope.funeralBoughtItems = funeralBoughtItems.data;
+                $scope.funeralDocuments = funeralDocuments.data;
+                $scope.newFuneralBoughtItem = { Quantity: 1, Description: "" };
+                $scope.selectedFuneralBoughtItemIds = [];
+                $scope.newFuneralDocument = null;
+                $scope.cemetery = { Id: $scope.funeral["CemeteryId"], Name: $scope.funeral["CemeteryName"] };
+                $scope.mortuary = { Id: $scope.funeral["MortuaryId"], Name: $scope.funeral["MortuaryName"] };
+                $scope.Tabs = [
+                    { Name: "BeforeMortuary", Show: true },
+                    { Name: "DuringMortuary", Show: true },
+                    { Name: "AfterMortuary", Show: true },
+                    { Name: "Documents", Show: true },
+                    { Name: "Deceased", Show: true },
+                    { Name: "Informant", Show: true },
+                    { Name: "NextOfKin", Show: true },
+                    { Name: "Doctor", Show: true },
+                    { Name: "HomeAffairsOfficer", Show: true },
+                    { Name: "OtherInformation", Show: true },
+                    { Name: "PurchasedItems", Show: true },
+                    { Name: "UploadedItems", Show: true }
+                ];
+
+                $scope.collapseExpand = function() {
+
+                    if (arguments.length === 0) return null;
+                    var elementId = arguments[0] == null ? null : arguments[0];
+
+                    var tab = _.find($scope.Tabs, function(x) { return _.isEqual(x.Name, elementId); });
+                    if (_.isUndefined(tab)) return null;
+                    tab.Show = !tab.Show;
+                };
+
+                $scope.getTabByName = function() {
+
+                    if (arguments.length === 0) return null;
+                    var elementId = arguments[0] == null ? null : arguments[0];
+
+                    return _.find($scope.Tabs, function(x) { return _.isEqual(x.Name, elementId); });
+
+                };
+
+                $scope.goToCreateView = function() {
+
+                    appService.NavigateTo("addfuneral");
+
+                };
+
+                /*---Doctor Lookup - START*/
+                $scope.setSelectedDoctor = function(selectedRecord) {
+                    $scope.doctor = selectedRecord;
+                    $scope.funeral["DoctorId"] = selectedRecord["Id"];
+                };
+                $scope.getDoctors = function() {
+                    fms.Routes.SetListLookup(
+                        $uibModal,
+                        "/components/doctor/modal/modal-list-doctor.html",
+                        "ModalListDoctorController",
+                        {
+                            records: [
+                                "appService", function(appService) {
+                                    return appService.GetData(fms.Entity.Doctor.Urls.GetActiveDoctors);
+                                }
+                            ]
+                        },
+                        $scope.setSelectedDoctor
+                    );
+                };
+                $scope.getDoctor = function(doctorId) {
+                    fms.Routes.SetEntityViewLookup(
+                        $uibModal,
+                        "/components/doctor/modal/modal-view-doctor.html",
+                        "ModalEditDoctorController",
+                        {
+                            record: [
+                                "appService", function(appService) {
+                                    return appService.GetData(fms.Entity.Doctor.Urls.GetDoctorById,
+                                        { doctorId: doctorId });
+                                }
+                            ]
+                        }
+                    );
+                };
+                /*---Doctor Lookup - END*/
+
+                /*---Home Affairs Officer Lookup - START*/
+                $scope.setSelectedHomeAffairsOfficer = function(selectedRecord) {
+                    $scope.homeAffairsOfficer = selectedRecord;
+                    $scope.funeral["HomeAffairsOfficerId"] = selectedRecord["Id"];
+                };
+                $scope.getHomeAffairsOfficers = function() {
+                    fms.Routes.SetListLookup(
+                        $uibModal,
+                        "/components/homeaffairsofficer/modal/modal-list-homeaffairsofficer.html",
+                        "ModalListHomeAffairsOfficerController",
+                        {
+                            records: [
+                                "appService", function(appService) {
+                                    return appService.GetData(fms.Entity.HomeAffairsOfficer.Urls
+                                        .GetActiveHomeAffairsOfficers);
+                                }
+                            ]
+                        },
+                        $scope.setSelectedHomeAffairsOfficer
+                    );
+                };
+                $scope.getHomeAffairsOfficer = function(homeAffairsOfficerId) {
+                    fms.Routes.SetEntityViewLookup(
+                        $uibModal,
+                        "/components/homeaffairsofficer/modal/modal-view-homeaffairsofficer.html",
+                        "ModalEditHomeAffairsOfficerController",
+                        {
+                            record: [
+                                "appService", function(appService) {
+                                    return appService.GetData(
+                                        fms.Entity.HomeAffairsOfficer.Urls.GetHomeAffairsOfficerById,
+                                        { homeAffairsOfficerId: homeAffairsOfficerId });
+                                }
+                            ]
+                        }
+                    );
+                };
+                /*---Doctor Lookup - END*/
+
+                /*---Cemetery Lookup - START*/
+                $scope.setSelectedCemetery = function(selectedRecord) {
+                    $scope.cemetery = selectedRecord;
+                    $scope.funeral["CemeteryId"] = selectedRecord["Id"];
+                };
+                $scope.getCemeteries = function() {
+                    fms.Routes.SetListLookup(
+                        $uibModal,
+                        "/components/cemetery/modal/modal-list-cemetery.html",
+                        "ModalListCemeteryController",
+                        {
+                            records: [
+                                "appService", function(appService) {
+                                    return appService.GetData(fms.Entity.Cemetery.Urls.GetActiveCemeteries);
+                                }
+                            ]
+                        },
+                        $scope.setSelectedCemetery
+                    );
+                };
+                $scope.getCemetery = function(cemeteryId) {
+                    fms.Routes.SetEntityViewLookup(
+                        $uibModal,
+                        "/components/cemetery/modal/modal-view-cemetery.html",
+                        "ModalEditCemteryController",
+                        {
+                            record: [
+                                "appService", function(appService) {
+                                    return appService.GetData(fms.Entity.Cemetery.Urls.GetCemeteryById,
+                                        { cemeteryId: cemeteryId });
+                                }
+                            ]
+                        }
+                    );
+                };
+                /*---Cemetery Lookup - END*/
+
+                /*---Mortuary Lookup - START*/
+                $scope.setSelectedMortuary = function(selectedRecord) {
+                    $scope.mortuary = selectedRecord;
+                    $scope.funeral["MortuaryId"] = selectedRecord["Id"];
+                };
+                $scope.getMortuaries = function() {
+                    fms.Routes.SetListLookup(
+                        $uibModal,
+                        "/components/mortuary/modal/modal-list-mortuary.html",
+                        "ModalListMortuaryController",
+                        {
+                            records: [
+                                "appService", function(appService) {
+                                    return appService.GetData(fms.Entity.Mortuary.Urls.GetActiveMortuaries);
+                                }
+                            ]
+                        },
+                        $scope.setSelectedMortuary
+                    );
+                };
+                $scope.getMortuary = function(mortuaryId) {
+                    fms.Routes.SetEntityViewLookup(
+                        $uibModal,
+                        "/components/mortuary/modal/modal-view-mortuary.html",
+                        "ModalEditMortuaryController",
+                        {
+                            record: [
+                                "appService", function(appService) {
+                                    return appService.GetData(fms.Entity.Mortuary.Urls.GetMortuaryById,
+                                        { mortuaryId: mortuaryId });
+                                }
+                            ]
+                        }
+                    );
+                };
+                /*---Mortuary Lookup - END*/
+
+                /*---Supplier Lookup - START*/
+                $scope.setSelectedSupplier = function() {
+                    if (arguments.length === 0) return false;
+                    var selectedRecord = arguments[0] == null ? null : arguments[0];
+                    $scope.supplier = selectedRecord;
+                    $scope.newFuneralBoughtItem["SupplierId"] = selectedRecord["Id"];
+                    return true;
+                };
+                $scope.getSuppliers = function() {
+                    fms.Routes.SetListLookup(
+                        $uibModal,
+                        "/components/supplier/modal/modal-list-supplier.html",
+                        "ModalListSupplierController",
+                        {
+                            records: [
+                                "appService", function(appService) {
+                                    return appService.GetData(fms.Entity.Supplier.Urls.GetActiveSuppliers);
+                                }
+                            ]
+                        },
+                        $scope.setSelectedSupplier
+                    );
+                };
+                $scope.getSupplier = function(supplierId) {
+                    fms.Routes.SetEntityViewLookup(
+                        $uibModal,
+                        "/components/supplier/modal/modal-view-supplier.html",
+                        "ModalEditSupplierController",
+                        {
+                            record: [
+                                "appService", function(appService) {
+                                    return appService.GetData(fms.Entity.Supplier.Urls.GetSupplierById,
+                                        { supplierId: supplierId });
+                                }
+                            ]
+                        }
+                    );
+                };
+                /*---Supplier Lookup - END*/
+
+                $scope.getTotalOfPurchaseItems = function() {
+                    return _.sumBy($scope.funeralBoughtItems, function(x) { return (x.Amount * x.Quantity); });
+                }
+
+                $scope.clearLookupInput = function() {
+
+                    if (arguments.length === 0) return null;
+                    var entityName = arguments[0] == null ? null : arguments[0];
+                    switch (entityName) {
+                    case "mortuary":
+                        $scope.funeral["MortuaryName"] = null;
+                        $scope.funeral["MortuaryId"] = null;
+                        break;
+                    case "cemetery":
+                        $scope.funeral["CemeteryName"] = null;
+                        $scope.funeral["CemeteryId"] = null;
+                        break;
+                    case "doctor":
+                        $scope.doctor = null;
+                        $scope.funeral["DoctorId"] = null;
+                        break;
+                    case "homeAffairsOfficer":
+                        $scope.homeAffairsOfficer = null;
+                        $scope.funeral["HomeAffairsOfficerId"] = null;
+                        break;
+                    case "newFuneralBoughtItem.supplier":
+                        $scope.newFuneralBoughtItem["SupplierId"] = null;
+                        $scope.newFuneralBoughtItem["SupplierName"] = null;
+                        break;
+                    default:
+                    }
+
+                };
+
+                $scope.selectFuneralBoughtItemRecord = function() {
+
+                    if (arguments.length === 0) return null;
+                    var _record = arguments[0] == null ? null : arguments[0];
+
+                    if (_record.Selected) {
+                        //add id in array
+                        $scope.selectedFuneralBoughtItemIds.push(_record.Id);
+                    } else {
+                        //remove id from array
+                        var evens = _.remove($scope.selectedFuneralBoughtItemIds,
+                            function(x) {
+                                return _.isEqual(x, _record.Id);
+                            });
+                    }
+
+                };
+                $scope.addFuneralBoughtItem = function() {
+
+                    $scope.newFuneralBoughtItem["FuneralId"] = $scope.funeral.Id;
+                    var keyValueFuneralBoughtItem = fms.Functions.SplitObjectIntoArray($scope.newFuneralBoughtItem);
+                    appService.PostForm("/FuneralBoughtItem/AddFuneralBoughtItem",
+                            { funeralBoughtItem: keyValueFuneralBoughtItem })
+                        .then(function successCallback(response) {
+
+                                return appService.RefreshCurrentState();
+
+                            },
+                            function errorCallback(response) {
+                            });
+
+                };
+                $scope.disableAddFuneralBoughtItemButton = function() {
+
+                    return ((_.isNull($scope.newFuneralBoughtItem.Name) ||
+                            _.isUndefined($scope.newFuneralBoughtItem.Name)) ||
+                        (_.isNull($scope.newFuneralBoughtItem.Quantity) ||
+                            _.isUndefined($scope.newFuneralBoughtItem.Quantity)) ||
+                        (_.isNull($scope.newFuneralBoughtItem.Amount) ||
+                            _.isUndefined($scope.newFuneralBoughtItem.Amount)));
+
+                };
+                $scope.disableDeleteFuneralBoughtItemButton = function() {
+
+                    return $scope.selectedFuneralBoughtItemIds.length == 0;
+
+                };
+                $scope.disableEditFuneralBoughtItemButton = function() {
+                    return $scope.selectedFuneralBoughtItemIds.length !== 1;
+                };
+
+                $scope.OnChange_FileInput = function(e) {
+                    if (e.files.length === 0) {
+                        $scope.newFuneralDocument = null;
+                        return;
+                    }
+                    $scope.newFuneralDocument = e.files[0];
+                };
+                $scope.ClearFileInput = function (inputId) {
+                    $("#funeralDocument").replaceWith($("#funeralDocument").val("").clone(true));
+                };
+                $scope.uploadFuneralDocument = function() {
+                    appService.UploadFile(
+                            "FuneralDocument/AddFuneralDocument",
+                            $scope.newFuneralDocument,
+                            {
+                                documentTypeId: $scope.newFuneralDocument.DocumentTypeId,
+                                description: $scope.newFuneralDocument.Description,
+                                funeralId: $scope.funeral.Id
+                            },
+                            "document")
+                        .then(function successCallback(response) {
+                                return appService.RefreshCurrentState();
+                            },
+                            function errorCallback(response) {
+                            });
+                };
+
+                $scope.GenerateConfirmationLetter = function() {
+                    $window.open("/Report/GetConfirmationReport?funeralId=" + $scope.funeral["Id"], "_blank");
+                };
+
+                $scope.GenerateInvoice = function () {
+                    $window.open("/Report/GetInvoiceReport?funeralId=" + $scope.funeral["Id"], "_blank");
+                };
+
+                $scope.processForm = function (form) {
+                    if (!form.$valid) {
+                        return;
+                    }
+                    $scope.deceased["DateOfBirth"] = moment($("#DateOfBirth").val()).format("YYYY/MM/DD");
+                    $scope.deceased["DateOfDeath"] = moment($("#DateOfDeath").val()).format("YYYY/MM/DD");
+                    $scope.funeral["BurialDate"] = moment($("#BurialDate").val()).format("YYYY/MM/DD");
+                    var keyValuesDeceased = fms.Functions.SplitObjectIntoArray($scope.deceased);
+                    var keyValuesInformant = fms.Functions.SplitObjectIntoArray($scope.informant);
+                    var keyValuesNextOfKin = fms.Functions.SplitObjectIntoArray($scope.nextOfKin);
+                    var keyValuesDoctor = fms.Functions.SplitObjectIntoArray($scope.doctor);
+                    var keyValuesHomeAffairsOfficer = fms.Functions.SplitObjectIntoArray($scope.homeAffairsOfficer);
+                    var keyValuesFuneral = fms.Functions.SplitObjectIntoArray($scope.funeral);
+                    appService.PostForm("/Funeral/UpdateFuneral",
+                        {
+                            deceased: keyValuesDeceased,
+                            informant: keyValuesInformant,
+                            nextOfKin: keyValuesNextOfKin,
+                            doctor: keyValuesDoctor,
+                            homeAffairsOfficer: keyValuesHomeAffairsOfficer,
+                            funeral: keyValuesFuneral
+                        }).then(function successCallback(response) {
+                            if (response.data.state !== "success") {
+                                fms.Notifications.Toastr.UpdateErrorNotification();
+                                return;
+                            }
+                            fms.Notifications.Toastr.UpdateSuccessNotification();
+                            appService.RefreshCurrentState();
+                        },
+                        function errorCallback(response) {
+                        });
+                };
+
+            }
+        ]);

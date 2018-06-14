@@ -13,10 +13,18 @@ angular.module("fmsApp")
                 fms.Routes.SetRoutes("funeral", "add"),
                 fms.Routes.SetRoutes("funeral", "edit"),
                 fms.Routes.SetRoutes("deceased", "list"),
+                fms.Routes.SetRoutes("deceased", "edit"),
                 fms.Routes.SetRoutes("informant", "list"),
+                fms.Routes.SetRoutes("informant", "edit"),
                 fms.Routes.SetRoutes("nextofkin", "list"),
+                fms.Routes.SetRoutes("nextofkin", "edit"),
                 fms.Routes.SetRoutes("doctor", "list"),
-                fms.Routes.SetRoutes("homeaffairsofficer", "list")
+                fms.Routes.SetRoutes("doctor", "edit"),
+                fms.Routes.SetRoutes("homeaffairsofficer", "list"),
+                fms.Routes.SetRoutes("homeaffairsofficer", "edit"),
+                fms.Routes.SetRoutes("member", "list"),
+                fms.Routes.SetRoutes("member", "add"),
+                fms.Routes.SetRoutes("member", "edit")
             ];
 
             states.forEach(function (state) {

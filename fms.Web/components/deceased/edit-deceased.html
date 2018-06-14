@@ -1,0 +1,137 @@
+﻿<form name="form" ng-submit="processForm(form)" novalidate>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white">
+            <div class="float-left p-4">
+                <h3 class="text-muted font-weight-bold">VIEW/EDIT DECEASED'S FORM</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1">
+            <div class="float-left">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1">
+            <div class="card border-light">
+                <div class="card-header bg-white" ng-click="collapseExpand('Deceased')">
+                    <div class="float-left">
+                        <a class="text-muted font-weight-bold">
+                            <div class="btn btn-light">
+                                <i class="fas fa-braille"></i>
+                            </div>
+                            General Information
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label class="">First name</label>
+                            <input type="text" class="form-control" ng-model="record.FirstName">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="">Last name</label>
+                            <input type="text" class="form-control" ng-model="record.LastName">
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label class="">ID Number</label>
+                            <input type="text" class="form-control" ng-model="record.SAIdNumber">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputCity">Birthday</label>
+                            <div class="input-group mb-3" id="datetimepicker4" data-target-input="nearest">
+                                <input type="text" id="DateOfBirth" class="form-control datetimepicker-input" data-target="#datetimepicker4" ng-model="record.DateOfBirth" />
+                                <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="fa fa-calendar"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>Gender</label>
+                            <div class="custom-controls-stacked d-block">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="deceasedGenderMale" name="deceasedGender" class="custom-control-input" value="1" ng-model="record.GenderId">
+                                    <label class="custom-control-label" for="deceasedGenderMale">Male</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="deceasedGenderFemale" name="deceasedGender" class="custom-control-input" value="2" ng-model="record.GenderId">
+                                    <label class="custom-control-label" for="deceasedGenderFemale">Female</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>The body of the deceased was retrieved from</label>
+                            <div class="custom-controls-stacked d-block">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="hospital" name="placeOfDeath" class="custom-control-input" value="Hospital" ng-model="record.WhereWasTheBodyRetrieved">
+                                    <label class="custom-control-label" for="hospital">Hospital</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="mortuary" name="placeOfDeath" class="custom-control-input" value="Home" ng-model="record.WhereWasTheBodyRetrieved">
+                                    <label class="custom-control-label" for="mortuary">Home</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="other" name="placeOfDeath" class="custom-control-input" value="Other" ng-model="record.WhereWasTheBodyRetrieved">
+                                    <label class="custom-control-label" for="other">Other</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>Date of death</label>
+                            <div class="input-group mb-3" id="datetimepicker1" data-target-input="nearest">
+                                <input type="text" id="DateOfDeath" class="form-control datetimepicker-input" data-target="#datetimepicker1" ng-model="record.DateOfDeath" />
+                                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="fa fa-calendar"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-12">
+                            <label>Address of Deceased</label>
+                            <input type="text" class="form-control" ng-model="record.FullAddress">
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-12">
+                            <label>Place of Death</label>
+                            <input type="text" class="form-control" ng-model="record.PlaceOfDeath">
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-12">
+                            <label>Cause of Death</label>
+                            <textarea class="form-control" ng-model="record.CauseOfDeath"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1">
+            <div class="float-left">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

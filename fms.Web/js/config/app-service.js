@@ -42,8 +42,6 @@ angular.module("fmsApp")
                 },
                 UploadFile: function (url, document, paramObject, inputIdName) {
                     if (paramObject == null) return $http.get(url);
-                    var parameterUrl = "";
-                    var count = 0;
                     var formData = new FormData();
                     _.forEach(paramObject, function (value, key) {
                         formData.append(key, value);
@@ -52,7 +50,7 @@ angular.module("fmsApp")
                     return $http.post(url, formData, {
                         withCredentials: true,
                         headers: { 'Content-Type': undefined },
-                        transformRequest: angular.identity
+                        transformRequest: angular["identity"]
                     });
                 }
             };

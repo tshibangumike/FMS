@@ -7,48 +7,19 @@
             $scope.records = homeAffairsOfficers.data;
             $scope.selectedRecords = [];
 
-            $scope.selectRecord = function () {
-                if (_.isEqual(arguments.length, 0)) return null;
-                var _record = _.isNull(arguments[0], 0) ? null : arguments[0];
-                if (_.isNull(arguments[0])) return null;
-                if (_record.Selected) {
-                    //add id in array
-                    $scope.selectedRecords.push(_record);
-                }
-                else {
-                    //remove id from array
-                    _.remove($scope.selectedRecords, function (x) {
-                        return _.isEqual(x.Id, _record.Id);
-                    });
-                }
+            $scope.selectRecord = function (record) {
+                fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, record);
             };
 
-            $scope.addNewHomeAffairsOfficer = function () {
-
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    ariaLabelledBy: "modal-title",
-                    ariaDescribedBy: "modal-body",
-                    templateUrl: "/components/homeaffairsofficer/modal/modal-add-homeaffairsofficer.html",
-                    controller: "AddHomeAffairsOfficerController",
-                    size: "lg",
-                });
-
-                modalInstance.result.then(function (selectedRecord) {
-                    $scope.selectedRecords.push(selectedRecord);
-                    if (!_.isEqual($scope.selectedRecords.length, 1)) return;
-                    $uibModalInstance.close($scope.selectedRecords[0]);
-                });
-
+            $scope.toggleSelection = function (record) {
+                record.Selected = !record.Selected;
             };
 
-            $scope.save = function () {
-                if (!_.isEqual($scope.selectedRecords.length, 1)) return;
-                $uibModalInstance.close($scope.selectedRecords[0]);
-            };
-
-            $scope.cancel = function () {
-                $uibModalInstance.dismiss("cancel");
+            $scope.edit = function (record) {
+                if (_.isNull(record))
+                    appService.NavigateTo("edithomeaffairsofficer", { homeaffairsofficerid: $scope.selectedRecordIds[0] });
+                else
+                    appService.NavigateTo("edithomeaffairsofficer", { homeaffairsofficerid: record["Id"] });
             };
 
         }
@@ -77,37 +48,11 @@
     ])
     .controller("EditHomeAffairsOfficerController",
     [
-        "$scope", "$uibModal", "$uibModalInstance", "appService", "homeAffairsOfficer",
-        function ($scope, $uibModal, $uibModalInstance, appService, homeAffairsOfficer) {
+        "$scope", "appService", "record",
+        function ($scope, appService, record) {
 
             $scope.formHasBeenSubmitted = true;
-            $scope.homeAffairsOfficer = homeAffairsOfficer.data;
-
-            $scope.getHospitals = function () {
-
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    ariaLabelledBy: "modal-title",
-                    ariaDescribedBy: "modal-body",
-                    templateUrl: "/components/hospital/modal/modal-list-hospital.html",
-                    controller: "ListHospitalController",
-                    size: "lg",
-                    backdrop: false,
-                    resolve: {
-                        records: [
-                            "appService", function (appService) {
-                                return appService.GetData("/Hospital/GetActiveHospitals");
-                            }
-                        ]
-                    }
-                });
-
-                modalInstance.result.then(function (selectedRecord) {
-                    $scope.doctor["HospitalName"] = selectedRecord.Name;
-                    $scope.doctor["HospitalId"] = selectedRecord.Id;
-                });
-
-            };
+            $scope.record = record.data;
 
             $scope.cancel = function () {
                 $uibModalInstance.dismiss("cancel");
@@ -116,6 +61,7 @@
             $scope.save = function () {
                 $uibModalInstance.close($scope.doctor);
             };
+
         }
     ])
     .controller("ModalListHomeAffairsOfficerController",
@@ -130,7 +76,7 @@
                 if (_.isEqual(arguments.length, 0)) return null;
                 var record = _.isNull(arguments[0], 0) ? null : arguments[0];
                 if (_.isNull(arguments[0])) return null;
-                fms.Functions.AddToOrRemoveFromArray($scope.selectedRecords, record);
+                fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, record);
             };
 
             $scope.addNewHomeAffairsOfficer = function () {

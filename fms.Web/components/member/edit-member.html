@@ -1,10 +1,217 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
+﻿<form name="form" ng-submit="processForm(form)" novalidate>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white">
+            <div class="float-left p-4">
+                <h3 class="text-muted font-weight-bold">NEW MEMBER'S FORM</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1">
+            <div class="float-left">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i>
+                    Save
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-plus-square"></i>
+                    New
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1">
+            <div class="card border-light">
+                <div class="card-header bg-white">
+                    <div class="float-left">
+                        <a class="text-muted font-weight-bold">
+                            <div class="btn btn-light">
+                                <i class="fas fa-braille"></i>
+                            </div>
+                            General Information
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label class="">First name</label>
+                            <input type="text" class="form-control" ng-model="record.FirstName" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="">Last name</label>
+                            <input type="text" class="form-control" ng-model="record.LastName" />
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label class="">ID Number</label>
+                            <input type="text" class="form-control" ng-model="record.SAIdNumber" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Gender</label>
+                            <div class="custom-controls-stacked d-block">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="deceasedGenderMale" name="deceasedGender" class="custom-control-input" value="1" ng-model="record.GenderId">
+                                    <label class="custom-control-label" for="deceasedGenderMale">Male</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="deceasedGenderFemale" name="deceasedGender" class="custom-control-input" value="2" ng-model="record.GenderId">
+                                    <label class="custom-control-label" for="deceasedGenderFemale">Female</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>Contact Number</label>
+                            <input type="text" class="form-control" ng-model="record.ContactNumber">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>EmailAddress</label>
+                            <input type="text" class="form-control" ng-model="record.EmailAddress">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 bg-white p-1">
+            <div class="card border-light">
+                <div class="card-header bg-white" ng-click="collapseExpand('GeneralInformation')">
+                    <div class="float-left">
+                        <a class="text-muted font-weight-bold">
+                            <div class="btn btn-light">
+                                <i class="fas fa-angle-up" ng-show="getTabByName('GeneralInformation').Show"></i>
+                                <i class="fas fa-angle-down" ng-show="!getTabByName('GeneralInformation').Show"></i>
+                            </div>
+                            Payment Records
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" ng-show="getTabByName('GeneralInformation').Show">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th colspan="6">
+                                    <div class="float-right">
+                                        <button type="button" class="btn btn-primary btn-sm" ng-disabled="disableEditFuneralBoughtItemButton()">
+                                            <i class="fas fa-edit"></i>
+                                            Edit
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" ng-disabled="disableDeleteFuneralBoughtItemButton()">
+                                            <i class="fas fa-trash-alt"></i>
+                                            Delete
+                                        </button>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col"></th>
+                                <th scope="col">Period</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Created On</th>
+                                <th>Proof of Payment</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="payment in payments">
+                                <th scope="row">{{ $index + 1 }}</th>
+                                <td scope="row">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="{{ payment.Id }}"
+                                               ng-model="payment.Selected"
+                                               ng-change="selectFuneralBoughtItemRecord(payment)"
+                                               ng-checked="all">
+                                        <label class="custom-control-label" for="{{ payment.Id }}"></label>
+                                    </div>
+                                </td>
+                                <td>{{ payment.PeriodName }}</td>
+                                <td>{{ payment.Amount }}</td>
+                                <td>{{ payment.PaymentDate }}</td>
+                                <td>{{ payment.CreatedOn }}</td>
+                                <td>
+                                    <span ng-if="payment.DocumentMimeType == 'application/pdf'">
+                                        <i class="far fa-file-pdf"></i>
+                                    </span>
+                                    <span ng-if="payment.DocumentMimeType == 'image/jpeg' || payment.DocumentMimeType == 'image/png'">
+                                        <i class="fas fa-image"></i>
 
-</body>
-</html>
+                                    </span>
+                                    {{ payment.PeriodName }}
+                                </td>
+                                <td>
+                                    <a href="/Document/DownloadDocument?documentId={{ payment.DocumentId }}&documentName={{ payment.PeriodName }}"
+                                       class="btn btn-primary btn-sm"
+                                       target="_blank">
+                                        <i class="fas fa-download"></i>
+                                        Download
+                                    </a>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <select class="form-control" ng-model="newPayment.PaymentPeriodId">
+                                        <option ng-repeat="paymentPeriod in paymentPeriods" value="{{ paymentPeriod.Id }}">{{ paymentPeriod.Name }}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroupPrepend3">R</span>
+                                        </div>
+                                        <input type="number" class="form-control" min="0" step="1" ng-model="newPayment.Amount" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group mb-3" id="datetimepicker4" data-target-input="nearest">
+                                        <input type="text" id="paymentDate" class="form-control datetimepicker-input" data-target="#datetimepicker4" />
+                                        <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                                            <button class="btn btn-outline-secondary" type="button">
+                                                <i class="fa fa-calendar"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="ProofOfPayment"
+                                               onchange="angular.element(this).scope().OnChange_FileInput(this)">
+                                        <label class="custom-file-label" for="ProofOfPayment">Choose file...</label>
+                                        <div class="invalid-feedback">Example invalid custom file feedback</div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" ng-click="addPayment()" ng-disabled="disableAddFuneralBoughtItemButton()">
+                                        <i class="fas fa-plus-square"></i>
+                                        Add
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1">
+            <div class="float-left">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

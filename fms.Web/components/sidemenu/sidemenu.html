@@ -17,16 +17,17 @@
         </a>
     </li>
     <li>
-        <a class="btn-block" ui-sref-active="link-active" data-toggle="collapse" data-target="#people" aria-expanded="false" aria-controls="people">
-            <i class="fas fa-chevron-circle-right"></i>
+        <a class="btn-block" ui-sref-active="link-active" ng-click="collapseExpand('People')">
+            <i class="fas fa-chevron-circle-right" ng-show="!getTabByName('People').Show"></i>
+            <i class="fas fa-chevron-circle-down" ng-show="getTabByName('People').Show"></i>
             <span class="sidebar-nav-item">People</span>
         </a>
-        <ul class="collapse list-unstyled" id="people">
-            <li><a ui-sref="listdeceased">Deceased</a></li>
-            <li><a ui-sref="listinformant">Informant</a></li>
-            <li><a ui-sref="listnextofkin">Next of Kin</a></li>
-            <li><a ui-sref="listdoctor">Doctor</a></li>
-            <li><a ui-sref="listhomeaffairsofficer">Home Affairs Officer</a></li>
+        <ul class="list-unstyled" ng-show="getTabByName('People').Show">
+            <li><a ui-sref="listdeceased" ui-sref-active="link-active">Deceased</a></li>
+            <li><a ui-sref="listinformant" ui-sref-active="link-active">Informant</a></li>
+            <li><a ui-sref="listnextofkin" ui-sref-active="link-active">Next of Kin</a></li>
+            <li><a ui-sref="listdoctor" ui-sref-active="link-active">Doctor</a></li>
+            <li><a ui-sref="listhomeaffairsofficer" ui-sref-active="link-active">Home Affairs Officer</a></li>
         </ul>
     </li>
     <li>
@@ -36,7 +37,7 @@
         </a>
     </li>
     <li>
-        <a class="btn-block" ui-sref="listmember" ui-sref-active="link-active">
+        <a class="btn-block" ui-sref="listsupplier" ui-sref-active="link-active">
             <i class="fas fa-chevron-circle-right"></i>
             <span class="sidebar-nav-item"> Suppliers</span>
         </a>

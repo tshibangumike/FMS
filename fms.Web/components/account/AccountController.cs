@@ -2,10 +2,11 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using fms.Web.components._base;
 
 namespace fms.Web.components.account
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         public ActionResult Authenticate(string username, string password)
         {
@@ -13,17 +14,24 @@ namespace fms.Web.components.account
             var credential = CredentialService.QueryCredentialByUsernameByPassword(username, password);
             if (credential == null)
             {
-                return Json("error", JsonRequestBehavior.AllowGet);
+                return Json(new { state = "error", message = "Invalid username and password combination" }, JsonRequestBehavior.AllowGet);
             }
             var appUserId = (Guid)credential.FirstOrDefault(x => x.Key == "AppUserId").Value;
-            if (appUserId == null) return Json("error", JsonRequestBehavior.AllowGet);
+            if (appUserId == Guid.Empty) return Json(new { state = "error", message = "Invalid username and password combination" }, JsonRequestBehavior.AllowGet);
 
             var appUser = AppUserService.QueryAppUserById(appUserId);
 
             AccountService.SetCookie(Response, appUser);
 
-            return Json(appUser, JsonRequestBehavior.AllowGet);
+            return Json(new { state = "success", appUser = appUser }, JsonRequestBehavior.AllowGet);
 
+        }
+
+        public ActionResult GetCurrentUser()
+        {
+            var currentUserId = GetCurrentUserId();
+            var appUser = AppUserService.QueryAppUserById(Guid.Parse(currentUserId));
+            return Json(new { state = "success", appUser = appUser }, JsonRequestBehavior.AllowGet);
         }
 
     }

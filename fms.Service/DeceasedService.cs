@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 
 namespace fms.Service
@@ -13,26 +14,29 @@ namespace fms.Service
             var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Deceased_queryactivedeceaseds]", null);
             return records;
         }
+
         public static Dictionary<string, object> QueryDeceasedById(Guid deceasedId)
         {
             var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Deceased_querydeceasedbyid]",
-                 new List<SqlParameter>
-                    {
-                            new SqlParameter("@id", deceasedId),
-                    });
+                new List<SqlParameter>
+                {
+                    new SqlParameter("@id", deceasedId),
+                });
             if (records != null && records.Count == 1) return records[0];
             return null;
         }
+
         public static Dictionary<string, object> QueryDeceasedByFuneralId(Guid funeralId)
         {
             var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Deceased_querydeceasedbyfuneralid]",
-                 new List<SqlParameter>
-                    {
-                            new SqlParameter("@funeralId", funeralId),
-                    });
+                new List<SqlParameter>
+                {
+                    new SqlParameter("@funeralId", funeralId),
+                });
             if (records != null && records.Count == 1) return records[0];
             return null;
         }
+
         public static ReturnObject InsertDeceased(List<KeyValue> deceased)
         {
             try
@@ -48,11 +52,11 @@ namespace fms.Service
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Deceased_create]",
                     new List<SqlParameter>
                     {
-                            new SqlParameter("@personId", personId),
-                            new SqlParameter("@dateOfDeath", parsedDateOfDeath),
-                            new SqlParameter("@placeOfDeath", placeOfDeath),
-                            new SqlParameter("@whereWasTheBodyRetrieved", whereWasTheBodyRetrieved),
-                            new SqlParameter("@causeOfDeath", causeOfDeath)
+                        new SqlParameter("@personId", personId),
+                        new SqlParameter("@dateOfDeath", parsedDateOfDeath),
+                        new SqlParameter("@placeOfDeath", placeOfDeath),
+                        new SqlParameter("@whereWasTheBodyRetrieved", whereWasTheBodyRetrieved),
+                        new SqlParameter("@causeOfDeath", causeOfDeath)
                     });
                 if (returnValue == 1)
                 {
@@ -81,6 +85,7 @@ namespace fms.Service
                 };
             }
         }
+
         public static ReturnObject UpdateDeceased(List<KeyValue> deceased)
         {
             try
@@ -91,16 +96,16 @@ namespace fms.Service
                 var whereWasTheBodyRetrieved = deceased.FirstOrDefault(x => x.Key == "WhereWasTheBodyRetrieved")?.Value;
                 var causeOfDeath = deceased.FirstOrDefault(x => x.Key == "CauseOfDeath")?.Value;
 
-                var parsedDateOfDeath = dateOfDeath == null ? dateOfDeath : DateTime.Parse(dateOfDeath).ToString();
+                var parsedDateOfDeath = dateOfDeath == null ? null : DateTime.Parse(dateOfDeath).ToString(CultureInfo.InvariantCulture);
 
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Deceased_update]",
                     new List<SqlParameter>
                     {
-                            new SqlParameter("@personId", personId),
-                            new SqlParameter("@dateOfDeath", parsedDateOfDeath),
-                            new SqlParameter("@placeOfDeath", placeOfDeath),
-                            new SqlParameter("@whereWasTheBodyRetrieved", whereWasTheBodyRetrieved),
-                            new SqlParameter("@causeOfDeath", causeOfDeath),
+                        new SqlParameter("@personId", personId),
+                        new SqlParameter("@dateOfDeath", parsedDateOfDeath),
+                        new SqlParameter("@placeOfDeath", placeOfDeath),
+                        new SqlParameter("@whereWasTheBodyRetrieved", whereWasTheBodyRetrieved),
+                        new SqlParameter("@causeOfDeath", causeOfDeath),
                     });
                 if (returnValue == 1)
                 {
