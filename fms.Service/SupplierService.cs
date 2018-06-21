@@ -8,11 +8,17 @@ namespace fms.Service
 {
     public class SupplierService
     {
-        public static List<Dictionary<string, object>> QueryActiveSuppliers()
+        public static List<Dictionary<string, object>> QueryActiveSuppliers(int pageNumber, int listType)
         {
-            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Supplier_queryactivesuppliers]", null);
+            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Supplier_queryactivesuppliers]",
+                new List<SqlParameter>
+                {
+                    new SqlParameter("@pagenumber", pageNumber),
+                    new SqlParameter("@listtype", listType),
+                });
             return records;
         }
+
         public static ReturnObject InsertSupplier(List<KeyValue> supplier)
         {
             try
@@ -24,9 +30,10 @@ namespace fms.Service
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Supplier_create]",
                     new List<SqlParameter>
                     {
-                            new SqlParameter("@id", id),
-                            new SqlParameter("@name", name),
-                            new SqlParameter("@addressId", addressId)
+                        new SqlParameter("@id", id),
+                        new SqlParameter("@name", name),
+                        new SqlParameter("@addressId", addressId),
+                        new SqlParameter("@stateId", 1)
                     });
                 if (returnValue == 1)
                 {
@@ -37,13 +44,13 @@ namespace fms.Service
                         Message = "record was successfully created!"
                     };
                 }
-                else
-                    return new ReturnObject()
-                    {
-                        Id = id,
-                        State = "error",
-                        Message = "an error occured while creating this record!"
-                    };
+
+                return new ReturnObject()
+                {
+                    Id = id,
+                    State = "error",
+                    Message = "an error occured while creating this record!"
+                };
             }
             catch (Exception ex)
             {

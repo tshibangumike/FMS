@@ -24,7 +24,10 @@ angular.module("fmsApp")
                 fms.Routes.SetRoutes("homeaffairsofficer", "edit"),
                 fms.Routes.SetRoutes("member", "list"),
                 fms.Routes.SetRoutes("member", "add"),
-                fms.Routes.SetRoutes("member", "edit")
+                fms.Routes.SetRoutes("member", "edit"),
+                fms.Routes.SetRoutes("supplier", "list"),
+                fms.Routes.SetRoutes("supplier", "add"),
+                fms.Routes.SetRoutes("supplier", "edit")
             ];
 
             states.forEach(function (state) {

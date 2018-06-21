@@ -1,0 +1,51 @@
+﻿<form name="form" ng-submit="processForm(form)" novalidate>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white">
+            <div class="float-left p-4">
+                <h3 class="text-muted font-weight-bold">NEW SUPPLIER'S FORM</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1">
+            <div class="card border-light">
+                <div class="card-header bg-white">
+                    <div class="float-left">
+                        <a class="text-muted font-weight-bold">
+                            <div class="btn btn-light">
+                                <i class="fas fa-braille"></i>
+                            </div>
+                            General Information
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label class="">Name</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   name="supplier_Name"
+                                   ng-model="supplier.Name" 
+                                   ng-required="true" 
+                                   ng-class="{ 'is-invalid' : form.supplier_Name.$invalid && formHasBeenSubmitted }"/>
+                            <div class="text-danger" ng-show="form.supplier_Name.$invalid && formHasBeenSubmitted">
+                                <span ng-if="form.supplier_Name.$error.required">Please provide a value</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1">
+            <div class="float-left">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

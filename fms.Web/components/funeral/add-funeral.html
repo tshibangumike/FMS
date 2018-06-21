@@ -43,7 +43,7 @@
                 <div class="card-body" ng-show="getTabByName('Deceased').Show">
                     <div class="form-row m-2">
                         <div class="form-group col-md-6">
-                            <label>Deceased First name</label> <span class="required"></span>
+                            <label>First name</label> <span class="required"></span>
                             <input type="text"
                                    name="deceased_FirstName"
                                    class="form-control"
@@ -84,7 +84,7 @@
                                    class="form-control"
                                    name="deceased_SAIdNumber"
                                    ng-model="deceased.SAIdNumber"
-                                   ng-change="OnChange_SAIdNumber(deceased.SAIdNumber)"
+                                   ng-change="OnChange_SAIdNumber('deceased', deceased.SAIdNumber)"
                                    ng-minlength="13"
                                    ng-maxlength="13"
                                    limit-to="13"
@@ -97,32 +97,67 @@
                             </div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Birthday</label> <span class="required"></span>
-                            <div class="input-group" id="dtpDateOfBirth" data-target-input="nearest">
-                                <input type="text"
-                                       id="DateOfBirth"
-                                       name="deceased_DateOfBirth"
-                                       class="form-control datetimepicker-input"
-                                       data-target="#dtpDateOfBirth"
-                                       ng-model="deceased.DateOfBirth"
-                                       ng-change="OnChange_DateOfBirth()"
-                                       ng-required="true"
-                                       ng-class="{ 'is-invalid' : form.deceased_DateOfBirth.$invalid && formHasBeenSubmitted }" />
-                                <script>
-                                    $(function() {
-                                        $('#datetimepicker1').datetimepicker({
-                                            format: "DD/MM/YYYY"
-                                        });
-                                    });
-                                </script>
-                                <div class="input-group-append" data-target="#dtpDateOfBirth" data-toggle="datetimepicker">
-                                    <button class="btn btn-outline-secondary" type="button" ng-class="{ 'btn-outline-danger' : form.deceased_DateOfBirth.$invalid && formHasBeenSubmitted }">
-                                        <i class="fa fa-calendar"></i>
-                                    </button>
+                            <label>Birthday</label> <span class="required"></span> 
+                            <div class="row">
+                                <div class="col-sm">
+                                    <input type="number"
+                                           class="form-control"
+                                           placeholder="Year"
+                                           name="deceasedDOB_Year"
+                                           ng-model="deceasedDOB.Year"
+                                           ng-change="OnChange_Year('deceasedDOB', deceasedDOB.Year)"
+                                           ng-required="true"
+                                           ng-min="1900"
+                                           ng-max="{{ currentYear }}"
+                                           ng-minlength="4"
+                                           ng-maxlength="4"
+                                           limit-to="4"
+                                           ng-class="{ 'is-invalid' : form.deceasedDOB_Year.$invalid && formHasBeenSubmitted }">
+                                    <small class="form-text text-muted ml-2">Year</small>
+                                </div>
+                                <div class="col-sm">
+                                    <input type="number"
+                                           class="form-control"
+                                           placeholder="Month"
+                                           name="deceasedDOB_Month"
+                                           ng-model="deceasedDOB.Month"
+                                           ng-required="true"
+                                           ng-disabled="!deceasedDOB.Year"
+                                           ng-change="OnChange_Month('deceasedDOB', deceasedDOB.Month)"
+                                           ng-min="1"
+                                           ng-max="12"
+                                           ng-minlength="1"
+                                           ng-maxlength="2"
+                                           limit-to="2"
+                                           ng-class="{ 'is-invalid' : form.deceasedDOB_Month.$invalid && formHasBeenSubmitted }">
+                                    <small class="form-text text-muted ml-2">Month</small>
+                                </div>
+                                <div class="col-sm">
+                                    <input type="number"
+                                           class="form-control"
+                                           placeholder="Day"
+                                           name="deceasedDOB_Day"
+                                           ng-model="deceasedDOB.Day"
+                                           ng-required="true"
+                                           ng-disabled="!deceasedDOB.Year || !deceasedDOB.Month"
+                                           ng-min="1"
+                                           ng-max="{{ GetLastDayOfMonth(deceasedDOB.Year, deceasedDOB.Month) }}"
+                                           ng-minlength="1"
+                                           ng-maxlength="2"
+                                           limit-to="2"
+                                           ng-class="{ 'is-invalid' : form.deceasedDOB_Day.$invalid && formHasBeenSubmitted }">
+                                    <small class="form-text text-muted ml-2">Day</small>
                                 </div>
                             </div>
-                            <div class="text-danger" ng-show="form.deceased_DateOfBirth.$invalid && formHasBeenSubmitted">
-                                <span ng-if="form.deceased_DateOfBirth.$error.required">Please provide a value</span>
+                            <div class="row text-danger" ng-show="(form.deceasedDOB_Year.$invalid && formHasBeenSubmitted) || (form.deceasedDOB_Month.$invalid && formHasBeenSubmitted) || (form.deceasedDOB_Day.$invalid && formHasBeenSubmitted)">
+                                <span class="col-md-12" ng-if="form.deceasedDOB_Year.$error.required">Please fill out the year block (1st block)</span>
+                                <span class="col-md-12" ng-if="form.deceasedDOB_Year.$error.ngMin || form.deceasedDOB_Year.$error.ngMax">Year value must be between than 1830 and {{ currentYear }}</span>
+
+                                <span class="col-md-12" ng-if="form.deceasedDOB_Month.$error.required">Please fill out the month block (2nd block)</span>
+                                <span class="col-md-12" ng-if="form.deceasedDOB_Month.$error.ngMin || form.deceasedDOB_Month.$error.ngMax">Month value must be between 1 and 12</span>
+
+                                <span class="col-md-12" ng-if="form.deceasedDOB_Day.$error.required">Please fill out the day block (3rd block)</span>
+                                <span class="col-md-12" ng-if="form.deceasedDOB_Day.$error.ngMin || form.deceasedDOB_Day.$error.ngMax">Day value must be between 1 and {{ GetLastDayOfMonth(deceasedDOB.Year, deceasedDOB.Month) }}</span>
                             </div>
                         </div>
                     </div>
@@ -153,52 +188,112 @@
                                     <label class="custom-control-label" for="deceasedGenderFemale">Female</label>
                                 </div>
                             </div>
-                            <div class="text-danger" ng-show="applicantForm.eppei_gender.$invalid && FormSubmitted">
-                                <span ng-if="applicantForm.eppei_gender.$error.required">{{ GetRequiredFieldErrorMessage('radio') }}</span>
+                            <div class="text-danger" ng-show="form.deceased_Gender.$invalid && formHasBeenSubmitted">
+                                <span ng-if="form.deceased_Gender.$error.required">Please provide a value</span>
                             </div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label>The body of the deceased was retrieved from</label>
+                            <label>The body of the deceased was retrieved from</label> <span class="required"></span>
                             <div class="custom-controls-stacked d-block">
-                                <div class="custom-control custom-radio custom-control-inline">
+                                <div class="custom-control custom-radio custom-control-inline"> 
                                     <input type="radio"
                                            id="hospital"
                                            name="placeOfDeath"
                                            class="custom-control-input"
                                            value="Hospital"
-                                           ng-model="deceased.WhereWasTheBodyRetrieved">
+                                           ng-model="deceased.WhereWasTheBodyRetrieved"
+                                           ng-required="true" />
                                     <label class="custom-control-label" for="hospital">Hospital</label>
                                 </div>
                                 <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" id="mortuary" name="placeOfDeath" class="custom-control-input" value="Home" ng-model="deceased.WhereWasTheBodyRetrieved">
+                                    <input type="radio" 
+                                           id="mortuary" 
+                                           name="placeOfDeath" 
+                                           class="custom-control-input" 
+                                           value="Home" 
+                                           ng-model="deceased.WhereWasTheBodyRetrieved"
+                                           ng-required="true" />
                                     <label class="custom-control-label" for="mortuary">Home</label>
                                 </div>
                                 <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" id="other" name="placeOfDeath" class="custom-control-input" value="Other" ng-model="deceased.WhereWasTheBodyRetrieved">
+                                    <input type="radio" 
+                                           id="other" 
+                                           name="placeOfDeath" 
+                                           class="custom-control-input" 
+                                           value="Other" 
+                                           ng-model="deceased.WhereWasTheBodyRetrieved"
+                                           ng-required="true" />
                                     <label class="custom-control-label" for="other">Other</label>
                                 </div>
+                            </div>
+                            <div class="text-danger" ng-show="form.placeOfDeath.$invalid && formHasBeenSubmitted">
+                                <span ng-if="form.placeOfDeath.$error.required">Please provide a value</span>
                             </div>
                         </div>
                     </div>
                     <div class="form-row m-2">
                         <div class="form-group col-md-6">
                             <label>Date of death</label> <span class="required"></span>
-                            <div class="input-group" id="datetimepicker1" data-target-input="nearest">
-                                <input type="text"
-                                       id="DateOfDeath"
-                                       class="form-control datetimepicker-input"
-                                       data-target="#datetimepicker1"
-                                       ng-model="deceased.DateOfDeath"
-                                       ng-required="true"
-                                       ng-class="{ 'is-invalid' : form.deceased_DateOfBirth.$invalid && formHasBeenSubmitted }" />
-                                <div class="input-group-append" data-target="#dtpDateOfBirth" data-toggle="datetimepicker">
-                                    <button class="btn btn-outline-secondary" type="button" ng-class="{ 'btn-outline-danger' : form.deceased_DateOfBirth.$invalid && formHasBeenSubmitted }">
-                                        <i class="fa fa-calendar"></i>
-                                    </button>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <input type="number"
+                                           class="form-control"
+                                           placeholder="Year"
+                                           name="deceasedDOD_Year"
+                                           ng-model="deceasedDOD.Year"
+                                           ng-change="OnChange_Year('deceasedDOD', deceasedDOD.Year)"
+                                           ng-required="true"
+                                           min="1900"
+                                           max="{{ currentYear }}"
+                                           ng-minlength="4"
+                                           ng-maxlength="4"
+                                           limit-to="4"
+                                           ng-class="{ 'is-invalid' : form.deceasedDOD_Year.$invalid && formHasBeenSubmitted }">
+                                    <small class="form-text text-muted ml-2">Year</small>
+                                </div>
+                                <div class="col-sm">
+                                    <input type="number"
+                                           class="form-control"
+                                           placeholder="Month"
+                                           name="deceasedDOD_Month"
+                                           ng-model="deceasedDOD.Month"
+                                           ng-disabled="!deceasedDOD.Year"
+                                           ng-change="OnChange_Month('deceasedDOD', deceasedDOD.Month)"
+                                           ng-required="true"
+                                           min="1"
+                                           max="12"
+                                           ng-minlength="1"
+                                           ng-maxlength="2"
+                                           limit-to="2"
+                                           ng-class="{ 'is-invalid' : form.deceasedDOD_Month.$invalid && formHasBeenSubmitted }">
+                                    <small class="form-text text-muted ml-2">Month</small>
+                                </div>
+                                <div class="col-sm">
+                                    <input type="number"
+                                           class="form-control"
+                                           placeholder="Day"
+                                           name="deceasedDOD_Day"
+                                           ng-model="deceasedDOD.Day"
+                                           ng-required="true"
+                                           ng-disabled="!deceasedDOD.Year || !deceasedDOD.Month"
+                                           min="1"
+                                           max="{{ GetLastDayOfMonth(deceasedDOD.Year, deceasedDOD.Month) }}"
+                                           ng-minlength="1"
+                                           ng-maxlength="2"
+                                           limit-to="2"
+                                           ng-class="{ 'is-invalid' : form.deceasedDOD_Day.$invalid && formHasBeenSubmitted }">
+                                    <small class="form-text text-muted ml-2">Day</small>
                                 </div>
                             </div>
-                            <div class="text-danger" ng-show="form.deceased_DateOfBirth.$invalid && formHasBeenSubmitted">
-                                <span ng-if="form.deceased_DateOfBirth.$error.required">Please provide a value</span>
+                            <div class="row text-danger" ng-show="(form.deceasedDOD_Year.$invalid && formHasBeenSubmitted) || (form.deceasedDOD_Month.$invalid && formHasBeenSubmitted) || (form.deceasedDOD_Day.$invalid && formHasBeenSubmitted)">
+                                <span class="col-md-12" ng-if="form.deceasedDOD_Year.$error.required">Please fill out the year block (1st block)</span>
+                                <span class="col-md-12" ng-if="form.deceasedDOD_Year.$error.ngMin || form.deceasedDOD_Year.$error.ngMax">Year value must be between than 1830 and {{ currentYear }}</span>
+
+                                <span class="col-md-12" ng-if="form.deceasedDOD_Month.$error.required">Please fill out the month block (2nd block)</span>
+                                <span class="col-md-12" ng-if="form.deceasedDOD_Month.$error.ngMin || form.deceasedDOD_Month.$error.ngMax">Month value must be between 1 and 12</span>
+
+                                <span class="col-md-12" ng-if="form.deceasedDOD_Day.$error.required">Please fill out the day block (3rd block)</span>
+                                <span class="col-md-12" ng-if="form.deceasedDOD_Day.$error.ngMin || form.deceasedDOD_Day.$error.ngMax">Day value must be between 1 and {{ GetLastDayOfMonth(deceasedDOD.Year, deceasedDOD.Month) }}</span>
                             </div>
                         </div>
                     </div>
@@ -274,7 +369,7 @@
                     </div>
                     <div class="form-row m-2">
                         <div class="form-group col-md-6">
-                            <label>ID Number</label> <span class="required"></span>
+                            <label>ID Number</label>
                             <input type="text" class="form-control"
                                    name="informant_SAIdNumber"
                                    ng-model="informant.SAIdNumber" />
@@ -361,12 +456,20 @@
                 <div class="card-body" ng-show="getTabByName('NextOfKin').Show">
                     <div class="form-row m-2">
                         <div class="form-group col-md-6">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="sameAsInformant" ng-model="sameAsInformant" ng-change="OnChange_SameAsInformant(sameAsInformant)">
+                                <label class="custom-control-label" for="sameAsInformant">Same as Next Of Kin</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
                             <label>First name</label> <span ng-if="nextOfKin.LastName.length > 0" class="required"></span>
                             <input type="text" class="form-control"
                                    name="nextOfKin_FirstName"
                                    ng-model="nextOfKin.FirstName"
                                    ng-required="nextOfKin.LastName.length > 0"
-                                   ng-class="{ 'is-invalid' : form.nextOfKin_FirstName.$invalid && formHasBeenSubmitted }" />
+                                   ng-class="{ 'is-invalid' : form.nextOfKin_FirstName.$invalid && formHasBeenSubmitted }"/>
                             <div class="text-danger" ng-show="form.nextOfKin_FirstName.$invalid && formHasBeenSubmitted">
                                 <span ng-if="form.nextOfKin_FirstName.$error.required">Please provide a value</span>
                             </div>
@@ -377,7 +480,7 @@
                                    name="nextOfKin_LastName"
                                    ng-model="nextOfKin.LastName"
                                    ng-required="nextOfKin.FirstName.length > 0"
-                                   ng-class="{ 'is-invalid' : form.nextOfKin_LastName.$invalid && formHasBeenSubmitted }" />
+                                   ng-class="{ 'is-invalid' : form.nextOfKin_LastName.$invalid && formHasBeenSubmitted }"/>
                             <div class="text-danger" ng-show="form.nextOfKin_LastName.$invalid && formHasBeenSubmitted">
                                 <span ng-if="form.nextOfKin_LastName.$error.required">Please provide a value</span>
                             </div>
@@ -385,10 +488,10 @@
                     </div>
                     <div class="form-row m-2">
                         <div class="form-group col-md-6">
-                            <label>ID Number</label> <span class="required"></span>
+                            <label>ID Number</label> 
                             <input type="text" class="form-control"
                                    name="nextOfKin_SAIdNumber"
-                                   ng-model="nextOfKin.SAIdNumber" />
+                                   ng-model="nextOfKin.SAIdNumber"/>
                         </div>
                         <div class="form-group col-md-6">
                             <label>Gender</label> <span ng-if="nextOfKin.FirstName.length > 0 || nextOfKin.LastName.length > 0" class="required"></span>
@@ -400,7 +503,7 @@
                                            value="1"
                                            ng-model="nextOfKin.GenderId"
                                            ng-required="nextOfKin.FirstName.length > 0 || nextOfKin.LastName.length > 0"
-                                           ng-class="{ 'is-invalid' : form.nextOfKin_Gender.$invalid && formHasBeenSubmitted }" />
+                                           ng-class="{ 'is-invalid' : form.nextOfKin_Gender.$invalid && formHasBeenSubmitted }"/>
                                     <label class="custom-control-label" for="nextOfKinGenderMale">Male</label>
                                 </div>
                                 <div class="custom-control custom-radio custom-control-inline">
@@ -410,7 +513,7 @@
                                            value="2"
                                            ng-model="nextOfKin.GenderId"
                                            ng-required="nextOfKin.FirstName.length > 0 || nextOfKin.LastName.length > 0"
-                                           ng-class="{ 'is-invalid' : form.nextOfKin_Gender.$invalid && formHasBeenSubmitted }" />
+                                           ng-class="{ 'is-invalid' : form.nextOfKin_Gender.$invalid && formHasBeenSubmitted }"/>
                                     <label class="custom-control-label" for="nextOfKinGenderFemale">Female</label>
                                 </div>
                             </div>
@@ -434,7 +537,7 @@
                                    name="nextOfKin_ContactNumber"
                                    ng-model="nextOfKin.ContactNumber"
                                    ng-required="nextOfKin.FirstName.length > 0 || nextOfKin.LastName.length > 0"
-                                   ng-class="{ 'is-invalid' : form.nextOfKin_ContactNumber.$invalid && formHasBeenSubmitted }" />
+                                   ng-class="{ 'is-invalid' : form.nextOfKin_ContactNumber.$invalid && formHasBeenSubmitted }"/>
                             <div class="text-danger" ng-show="form.nextOfKin_ContactNumber.$invalid && formHasBeenSubmitted">
                                 <span ng-if="form.nextOfKin_ContactNumber.$error.required">Please provide a value</span>
                             </div>
@@ -448,7 +551,7 @@
                                    name="nextOfKin_RelationshipToDeceased"
                                    ng-model="nextOfKin.RelationshipToDeceased"
                                    ng-required="nextOfKin.FirstName.length > 0 || nextOfKin.LastName.length > 0"
-                                   ng-class="{ 'is-invalid' : form.nextOfKin_Gender.$invalid && formHasBeenSubmitted }" />
+                                   ng-class="{ 'is-invalid' : form.nextOfKin_Gender.$invalid && formHasBeenSubmitted }"/>
                             <div class="text-danger" ng-show="form.nextOfKin_Gender.$invalid && formHasBeenSubmitted">
                                 <span ng-if="form.nextOfKin_Gender.$error.required">Please provide a value</span>
                             </div>

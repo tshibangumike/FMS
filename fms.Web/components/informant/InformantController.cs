@@ -8,9 +8,9 @@ namespace fms.Web.components.informant
 {
     public class InformantController : BaseController
     {
-        public ActionResult GetActiveInformants()
+        public ActionResult GetActiveInformants(int pageNumber, int listType)
         {
-            var record = InformantService.QueryActiveInformants();
+            var record = InformantService.QueryActiveInformants(pageNumber, listType);
             return Json(record, JsonRequestBehavior.AllowGet);
         }
 

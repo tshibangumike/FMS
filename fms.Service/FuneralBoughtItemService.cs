@@ -10,13 +10,15 @@ namespace fms.Service
     {
         public static List<Dictionary<string, object>> QueryFuneralBoughtItemsByFuneralId(Guid funeralId)
         {
-            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Funeralboughtitem_queryfuneralboughtitembyfuneralid]",
-                 new List<SqlParameter>
-                    {
-                            new SqlParameter("@funeralId", funeralId),
-                    });
+            var records = SharedService.ExecuteGetSqlStoredProcedure(
+                "[bbu].[Funeralboughtitem_queryfuneralboughtitembyfuneralid]",
+                new List<SqlParameter>
+                {
+                    new SqlParameter("@funeralId", funeralId),
+                });
             return records;
         }
+
         public static ReturnObject InsertFuneralBoughtItem(List<KeyValue> funeralBoughtItem)
         {
             try
@@ -32,12 +34,13 @@ namespace fms.Service
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Funeralboughtitem_create]",
                     new List<SqlParameter>
                     {
-                            new SqlParameter("@id", Id),
-                            new SqlParameter("@name", name),
-                            new SqlParameter("@amount", amount),
-                            new SqlParameter("@quantity", quantity),
-                            new SqlParameter("@funeralId", funeralId),
-                            new SqlParameter("@supplierId", supplierId)
+                        new SqlParameter("@id", Id),
+                        new SqlParameter("@name", name),
+                        new SqlParameter("@amount", amount),
+                        new SqlParameter("@quantity", quantity),
+                        new SqlParameter("@funeralId", funeralId),
+                        new SqlParameter("@supplierId", supplierId),
+                        new SqlParameter("@stateId", 1)
                     });
                 if (returnValue == 1)
                 {
@@ -66,6 +69,7 @@ namespace fms.Service
                 };
             }
         }
+
         public static ReturnObject UpdateFuneralBoughtItem(List<KeyValue> funeralBoughtItem)
         {
             try
@@ -79,10 +83,10 @@ namespace fms.Service
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Funeralboughtitem_update]",
                     new List<SqlParameter>
                     {
-                            new SqlParameter("@id", Id),
-                            new SqlParameter("@name", name),
-                            new SqlParameter("@amount", amount),
-                            new SqlParameter("@quantity", quantity)
+                        new SqlParameter("@id", Id),
+                        new SqlParameter("@name", name),
+                        new SqlParameter("@amount", amount),
+                        new SqlParameter("@quantity", quantity)
                     });
                 if (returnValue == 1)
                 {

@@ -22,15 +22,20 @@ namespace fms.Web.components.funeraldocument
             var funeralDocument = new List<KeyValue>();
             KeyValueService.AddAttribute(funeralDocument, "Id", Guid.NewGuid().ToString());
             KeyValueService.AddAttribute(funeralDocument, "Name", document.FileName);
+            KeyValueService.AddAttribute(funeralDocument, "FileName", document.FileName);
             KeyValueService.AddAttribute(funeralDocument, "MimeType", document.ContentType);
-            KeyValueService.AddAttribute(funeralDocument, "DocumentSize", document.ContentLength.ToString());
+            KeyValueService.AddAttribute(funeralDocument, "Size", document.ContentLength.ToString());
             KeyValueService.AddAttribute(funeralDocument, "DocumentTypeId", documentTypeId.ToString());
             KeyValueService.AddAttribute(funeralDocument, "Description", description);
             KeyValueService.AddAttribute(funeralDocument, "FuneralId", funeralId);
             var stream = document.InputStream;
             var binaryReader = new BinaryReader(stream);
             var bytes = binaryReader.ReadBytes((int) stream.Length);
+
             GenericModelService.AddAuditAttributeForCreateEvent(funeralDocument, GetCurrentUserId());
+
+            DocumentService.InsertDocument(funeralDocument, bytes);
+
             var funeralDocumentReturnObject = FuneralDocumentService.InsertFuneralDocument(funeralDocument, bytes);
             return funeralDocumentReturnObject.State == "success"
                 ? Json(new {state = "success", funeralDocumentId = funeralDocumentReturnObject.Id},

@@ -35,10 +35,7 @@ namespace fms.Service
             {
                 var id = funeralDocument.FirstOrDefault(x => x.Key == "Id")?.Value;
                 var name = funeralDocument.FirstOrDefault(x => x.Key == "Name")?.Value;
-                var documentTypeId = funeralDocument.FirstOrDefault(x => x.Key == "DocumentTypeId")?.Value;
                 var description = funeralDocument.FirstOrDefault(x => x.Key == "Description")?.Value;
-                var documentSize = funeralDocument.FirstOrDefault(x => x.Key == "DocumentSize")?.Value;
-                var mimeType = funeralDocument.FirstOrDefault(x => x.Key == "MimeType")?.Value;
                 var funeralId = funeralDocument.FirstOrDefault(x => x.Key == "FuneralId")?.Value;
                 var createdById = funeralDocument.FirstOrDefault(x => x.Key == "CreatedById")?.Value;
                 var createdOn = funeralDocument.FirstOrDefault(x => x.Key == "CreatedOn")?.Value;
@@ -50,16 +47,13 @@ namespace fms.Service
                     {
                         new SqlParameter("@id", id),
                         new SqlParameter("@name", name),
-                        new SqlParameter("@documentTypeId", documentTypeId),
                         new SqlParameter("@description", description),
-                        new SqlParameter("@documentContent", image),
-                        new SqlParameter("@documentSize", documentSize),
-                        new SqlParameter("@mimeType", mimeType),
                         new SqlParameter("@funeralId", funeralId),
                         new SqlParameter("@createdById", createdById),
                         new SqlParameter("@createdOn", createdOn),
                         new SqlParameter("@modifiedById", modifiedById),
-                        new SqlParameter("@modifiedOn", modifiedOn)
+                        new SqlParameter("@modifiedOn", modifiedOn),
+                        new SqlParameter("@stateId", 1)
                     });
                 if (returnValue == 1)
                 {

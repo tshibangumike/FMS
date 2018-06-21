@@ -8,27 +8,35 @@ namespace fms.Service
 {
     public class MortuaryService
     {
-        public static List<Dictionary<string, object>> QueryActiveMortuaries()
+        public static List<Dictionary<string, object>> QueryActiveMortuaries(int pageNumber, int listType)
         {
-            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Mortuary_queryactivemortuaries]", null);
+            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Mortuary_queryactivemortuaries]",
+                new List<SqlParameter>
+                {
+                    new SqlParameter("@pagenumber", pageNumber),
+                    new SqlParameter("@listtype", listType),
+                });
             return records;
         }
+
         public static Dictionary<string, object> QueryMortuaryById(Guid mortuaryId)
         {
             var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Mortuary_querymortuarybyid]",
-                 new List<SqlParameter>
-                    {
-                            new SqlParameter("@id", mortuaryId),
-                    });
+                new List<SqlParameter>
+                {
+                    new SqlParameter("@id", mortuaryId),
+                });
             if (records != null && records.Count == 1) return records[0];
             return null;
         }
+
         public static List<Dictionary<string, object>> QueryMortuariesByName(string searchText)
         {
             var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Mortuary_querymortuarybyname]",
-                new List<SqlParameter> { new SqlParameter("@searchText", searchText) });
+                new List<SqlParameter> {new SqlParameter("@searchText", searchText)});
             return records;
         }
+
         public static ReturnObject InsertMortuary(List<KeyValue> mortuary)
         {
             try
@@ -40,9 +48,10 @@ namespace fms.Service
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Mortuary_create]",
                     new List<SqlParameter>
                     {
-                            new SqlParameter("@id", id),
-                            new SqlParameter("@name", name),
-                            new SqlParameter("@addressId", addressId)
+                        new SqlParameter("@id", id),
+                        new SqlParameter("@name", name),
+                        new SqlParameter("@addressId", addressId),
+                        new SqlParameter("@stateId", 1)
 
                     });
                 if (returnValue == 1)
@@ -54,13 +63,13 @@ namespace fms.Service
                         Message = "record was successfully created!"
                     };
                 }
-                else
-                    return new ReturnObject()
-                    {
-                        Id = "",
-                        State = "error",
-                        Message = "an error occured while creating this record!"
-                    };
+
+                return new ReturnObject()
+                {
+                    Id = "",
+                    State = "error",
+                    Message = "an error occured while creating this record!"
+                };
             }
             catch (Exception ex)
             {

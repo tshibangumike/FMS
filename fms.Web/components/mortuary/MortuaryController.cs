@@ -8,11 +8,11 @@ namespace fms.Web.components.mortuary
 {
     public class MortuaryController : BaseController
     {
-        public ActionResult GetActiveMortuaries()
+        public ActionResult GetActiveMortuaries(int pageNumber, int listType)
         {
             try
             {
-                var records = MortuaryService.QueryActiveMortuaries();
+                var records = MortuaryService.QueryActiveMortuaries(pageNumber, listType);
                 return Json(records, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -20,6 +20,7 @@ namespace fms.Web.components.mortuary
                 return Json(ex.Message, JsonRequestBehavior.AllowGet);
             }
         }
+
         public ActionResult GetMortuaryById(Guid mortuaryId)
         {
             try
@@ -32,6 +33,7 @@ namespace fms.Web.components.mortuary
                 return Json(ex.Message, JsonRequestBehavior.AllowGet);
             }
         }
+
         public ActionResult GetMortuarysByName(string searchText)
         {
             try
@@ -44,6 +46,7 @@ namespace fms.Web.components.mortuary
                 return Json(ex.Message, JsonRequestBehavior.AllowGet);
             }
         }
+
         public ActionResult AddMortuary(List<KeyValue> mortuary)
         {
             try
@@ -57,9 +60,10 @@ namespace fms.Web.components.mortuary
                 if (returnObject.State == "success")
                 {
                     var newMortuary = MortuaryService.QueryMortuaryById(Guid.Parse(returnObject.Id));
-                    return Json(new { state = "success", mortuary = newMortuary }, JsonRequestBehavior.AllowGet);
+                    return Json(new {state = "success", mortuary = newMortuary}, JsonRequestBehavior.AllowGet);
                 }
-                return Json(new { state = "error", hospital = "" }, JsonRequestBehavior.AllowGet);
+
+                return Json(new {state = "error", hospital = ""}, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

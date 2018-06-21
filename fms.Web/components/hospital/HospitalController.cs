@@ -9,11 +9,11 @@ namespace fms.Web.components.hospital
 {
     public class HospitalController : BaseController
     {
-        public ActionResult GetActiveHospitals()
+        public ActionResult GetActiveHospitals(int pageNumber, int listType)
         {
             try
             {
-                var records = HospitalService.QueryActiveHospitals();
+                var records = HospitalService.QueryActiveHospitals(pageNumber, listType);
                 return Json(records, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -21,6 +21,7 @@ namespace fms.Web.components.hospital
                 return Json(ex.Message, JsonRequestBehavior.AllowGet);
             }
         }
+
         public ActionResult GetHospitalById(Guid hospitalId)
         {
             try
@@ -33,6 +34,7 @@ namespace fms.Web.components.hospital
                 return Json(ex.Message, JsonRequestBehavior.AllowGet);
             }
         }
+
         public ActionResult GetHospitalsByName(string searchText)
         {
             try
@@ -45,6 +47,7 @@ namespace fms.Web.components.hospital
                 return Json(ex.Message, JsonRequestBehavior.AllowGet);
             }
         }
+
         public ActionResult AddHospital(List<KeyValue> hospital)
         {
             try
@@ -55,12 +58,11 @@ namespace fms.Web.components.hospital
                     Value = Guid.NewGuid().ToString()
                 });
                 var returnObject = HospitalService.InsertHospital(hospital);
-                if (returnObject.State == "success")
-                {
-                    var newHospital = HospitalService.QueryHospitalById(Guid.Parse(returnObject.Id));
-                    return Json(new { state = "success", hospital = newHospital }, JsonRequestBehavior.AllowGet);
-                }
-                return Json(new { state = "error", hospital = "" }, JsonRequestBehavior.AllowGet);
+                if (returnObject.State != "success")
+                    return Json(new {state = "error", hospital = ""}, JsonRequestBehavior.AllowGet);
+                var newHospital = HospitalService.QueryHospitalById(Guid.Parse(returnObject.Id));
+                return Json(new {state = "success", hospital = newHospital}, JsonRequestBehavior.AllowGet);
+
             }
             catch (Exception ex)
             {

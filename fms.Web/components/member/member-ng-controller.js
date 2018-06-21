@@ -6,6 +6,15 @@
 
                 $scope.records = records.data;
                 $scope.selectedRecordIds = [];
+                $scope.pageNumber = 1;
+                $scope.listType = 1;
+                $scope.totalPageNumber = 0;
+
+                this.init = function () {
+                    if ($scope.records.length > 0) {
+                        $scope.totalPageNumber = $scope.records[0]["TotalPageNumber"];
+                    }
+                };
 
                 $scope.selectAll = function(isSelected) {
                     fms.Functions.SelectAllRecords(isSelected, $scope.records);
@@ -29,6 +38,45 @@
                     else
                         appService.NavigateTo("editmember", { memberid: record.Id });
                 };
+
+                $scope.getMembers = function (pageNumber, listType) {
+                    appService.GetData(
+                            fms.Entity.Member.Urls.GetActiveMembers,
+                            {
+                                pageNumber: pageNumber,
+                                listType: listType
+                            })
+                        .then(function (response) {
+                                $scope.records = response.data;
+                            },
+                            function (response) {
+                            });
+                };
+
+                $scope.startFromBegining = function () {
+                    $scope.pageNumber = 1;
+                    $scope.getMembers($scope.pageNumber, $scope.listType);
+                };
+
+                $scope.next = function () {
+                    $scope.pageNumber++;
+                    if ($scope.pageNumber > $scope.totalPageNumber) {
+                        $scope.pageNumber--;
+                        return;
+                    }
+                    $scope.getMembers($scope.pageNumber, $scope.listType);
+                };
+
+                $scope.previous = function () {
+                    $scope.pageNumber--;
+                    if ($scope.pageNumber <= 0) {
+                        $scope.pageNumber++;
+                        return;
+                    }
+                    $scope.getMembers($scope.pageNumber, $scope.listType);
+                };
+
+                this.init();
 
             }
         ])
@@ -104,7 +152,6 @@
                 };
 
                 $scope.addPayment = function() {
-
                     appService.UploadFile(
                             "Document/AddDocument",
                             $scope.newProofOfPayment,

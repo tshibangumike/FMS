@@ -1,4 +1,115 @@
 ﻿angular.module("fmsApp")
+    .controller("ListSupplierController",
+    [
+        "$scope", "appService", "records",
+        function ($scope, appService, records) {
+
+            $scope.records = records.data;
+            $scope.selectedRecords = [];
+            $scope.pageNumber = 1;
+            $scope.listType = 1;
+            $scope.totalPageNumber = 0;
+
+            this.init = function () {
+                if ($scope.records.length > 0) {
+                    $scope.totalPageNumber = $scope.records[0]["TotalPageNumber"];
+                }
+            };
+
+            $scope.selectRecord = function (record) {
+                fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, record);
+            };
+
+            $scope.create = function () {
+                appService.NavigateTo("addsupplier");
+            };
+
+            $scope.getSuppliers = function (pageNumber, listType) {
+                appService.GetData(
+                        fms.Entity.Supplier.Urls.GetActiveSuppliers,
+                        {
+                            pageNumber: pageNumber,
+                            listType: listType
+                        })
+                    .then(function (response) {
+                            $scope.records = response.data;
+                        },
+                        function (response) {
+                        });
+            };
+
+            $scope.startFromBegining = function () {
+                $scope.pageNumber = 1;
+                $scope.getSuppliers($scope.pageNumber, $scope.listType);
+            };
+
+            $scope.next = function () {
+                $scope.pageNumber++;
+                if ($scope.pageNumber > $scope.totalPageNumber) {
+                    $scope.pageNumber--;
+                    return;
+                }
+                $scope.getSuppliers($scope.pageNumber, $scope.listType);
+            };
+
+            $scope.previous = function () {
+                $scope.pageNumber--;
+                if ($scope.pageNumber <= 0) {
+                    $scope.pageNumber++;
+                    return;
+                }
+                $scope.getSuppliers($scope.pageNumber, $scope.listType);
+            };
+
+            this.init();
+
+        }
+    ])
+    .controller("AddSupplierController",
+    [
+        "$scope", "appService",
+        function ($scope, appService) {
+
+            $scope.formHasBeenSubmitted = false;
+            $scope.supplier = {};
+
+            $scope.cancel = function () {
+                $uibModalInstance.dismiss("cancel");
+            };
+
+            $scope.processForm = function (form) {
+                $scope.formHasBeenSubmitted = true;
+                if (!form.$valid) {
+                    return;
+                }
+                var keyValue = fms.Functions.SplitObjectIntoArray($scope.supplier);
+                appService.PostForm(fms.Entity.Supplier.Urls.AddSupplier, { supplier: keyValue })
+                    .then(function (response) {
+                            if (response.data.state !== "success") {
+                                fms.Notifications.Toastr.CreateErrorNotification();
+                            }
+                            fms.Notifications.Toastr.CreateSuccessNotification();
+                            appService.NavigateTo("editsupplier", { funeralid: response.data.funeralId });
+                    },
+                    function (response) {
+                    });
+            };
+
+        }
+    ])
+    .controller("EditSupplierController",
+    [
+        "$scope", "$uibModalInstance", "record",
+        function ($scope, $uibModalInstance, record) {
+
+            $scope.supplier = record.data;
+
+            $scope.cancel = function () {
+                $uibModalInstance.dismiss("cancel");
+            };
+
+        }
+    ])
     .controller("ModalListSupplierController",
         [
             "$rootScope", "$scope", "$uibModal", "$uibModalInstance", "appService", "records",

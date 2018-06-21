@@ -8,27 +8,35 @@ namespace fms.Service
 {
     public class CemeteryService
     {
-        public static List<Dictionary<string, object>> QueryActiveCemeteries()
+        public static List<Dictionary<string, object>> QueryActiveCemeteries(int pageNumber, int listType)
         {
-            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Cemetery_queryactivecemetries]", null);
+            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Cemetery_queryactivecemetries]",
+                new List<SqlParameter>
+                {
+                    new SqlParameter("@pagenumber", pageNumber),
+                    new SqlParameter("@listtype", listType),
+                });
             return records;
         }
+
         public static Dictionary<string, object> QueryCemeteryById(Guid cemeteryId)
         {
             var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Cemetery_querycemeterybyid]",
-                 new List<SqlParameter>
-                    {
-                            new SqlParameter("@id", cemeteryId),
-                    });
+                new List<SqlParameter>
+                {
+                    new SqlParameter("@id", cemeteryId),
+                });
             if (records != null && records.Count == 1) return records[0];
             return null;
         }
+
         public static List<Dictionary<string, object>> QueryCemeteriesByName(string searchText)
         {
             var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Cemetery_querycemeterybyname]",
-                new List<SqlParameter> { new SqlParameter("@searchText", searchText) });
+                new List<SqlParameter> {new SqlParameter("@searchText", searchText)});
             return records;
         }
+
         public static ReturnObject InsertCemetery(List<KeyValue> cemetery)
         {
             try
@@ -40,9 +48,10 @@ namespace fms.Service
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Cemetery_create]",
                     new List<SqlParameter>
                     {
-                            new SqlParameter("@id", id),
-                            new SqlParameter("@name", name),
-                            new SqlParameter("@addressId", addressId)
+                        new SqlParameter("@id", id),
+                        new SqlParameter("@name", name),
+                        new SqlParameter("@addressId", addressId),
+                        new SqlParameter("@stateId", 1)
 
                     });
                 if (returnValue == 1)
@@ -54,13 +63,13 @@ namespace fms.Service
                         Message = "record was successfully created!"
                     };
                 }
-                else
-                    return new ReturnObject()
-                    {
-                        Id = "",
-                        State = "error",
-                        Message = "an error occured while creating this record!"
-                    };
+
+                return new ReturnObject()
+                {
+                    Id = "",
+                    State = "error",
+                    Message = "an error occured while creating this record!"
+                };
             }
             catch (Exception ex)
             {

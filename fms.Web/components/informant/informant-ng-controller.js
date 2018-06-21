@@ -6,6 +6,15 @@
 
                 $scope.records = informants.data;
                 $scope.selectedRecords = [];
+                $scope.pageNumber = 1;
+                $scope.listType = 1;
+                $scope.totalPageNumber = 0;
+
+                this.init = function() {
+                    if ($scope.records.length > 0) {
+                        $scope.totalPageNumber = $scope.records[0]["TotalPageNumber"];
+                    }
+                };
 
                 $scope.selectRecord = function(record) {
                     fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, record);
@@ -23,6 +32,45 @@
 
                 };
 
+                $scope.getInformants = function(pageNumber, listType) {
+                    appService.GetData(
+                            fms.Entity.Informant.Urls.GetActiveInformants,
+                            {
+                                pageNumber: pageNumber,
+                                listType: listType
+                            })
+                        .then(function(response) {
+                                $scope.records = response.data;
+                            },
+                            function(response) {
+                            });
+                };
+
+                $scope.startFromBegining = function() {
+                    $scope.pageNumber = 1;
+                    $scope.getInformants($scope.pageNumber, $scope.listType);
+                };
+
+                $scope.next = function() {
+                    $scope.pageNumber++;
+                    if ($scope.pageNumber > $scope.totalPageNumber) {
+                        $scope.pageNumber--;
+                        return;
+                    }
+                    $scope.getInformants($scope.pageNumber, $scope.listType);
+                };
+
+                $scope.previous = function() {
+                    $scope.pageNumber--;
+                    if ($scope.pageNumber <= 0) {
+                        $scope.pageNumber++;
+                        return;
+                    }
+                    $scope.getInformants($scope.pageNumber, $scope.listType);
+                };
+
+                this.init();
+
             }
         ])
     .controller("EditInformantController",
@@ -36,8 +84,6 @@
                     if (!form.$valid) {
                         return;
                     }
-                    $scope.record["DateOfDeath"] = $("#DateOfDeath").val();
-                    $scope.record["DateOfBirth"] = $("#DateOfBirth").val();
                     var keyValue = fms.Functions.SplitObjectIntoArray($scope.record);
                     appService.PostForm(fms.Entity.Informant.Urls.UpdateInformant,
                         {

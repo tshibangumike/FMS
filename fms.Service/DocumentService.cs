@@ -34,13 +34,13 @@ namespace fms.Service
                     new List<SqlParameter>
                     {
                         new SqlParameter("@id", id),
-                        new SqlParameter("@name", name),
                         new SqlParameter("@fileName", fileName),
                         new SqlParameter("@mimeType", mimeType),
                         new SqlParameter("@size", size),
                         new SqlParameter("@fileContent", fileContent),
                         new SqlParameter("@createdOn", createdOn),
-                        new SqlParameter("@createdById", createdById)
+                        new SqlParameter("@createdById", createdById),
+                        new SqlParameter("@stateId", 1)
                     });
                 if (returnValue == 1)
                 {

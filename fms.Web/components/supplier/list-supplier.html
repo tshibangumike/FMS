@@ -1,9 +1,13 @@
 ﻿<div class="row m-1">
     <div class="col-md-12 bg-white p-3">
         <div class="float-left">
-            <h3 class="text-muted font-weight-bold">LIST OF DOCTORS</h3>
+            <h3 class="text-muted font-weight-bold">LIST OF SUPPLIERS</h3>
         </div>
         <div class="float-right">
+            <button type="button" class="btn btn-primary" ng-click="create()">
+                <i class="fas fa-plus-square"></i>
+                New Supplier
+            </button>
             <button type="button" class="btn btn-primary" ng-click="edit()">
                 <i class="fas fa-pencil-alt"></i>
                 Edit
@@ -23,11 +27,7 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col"></th>
-                                <th scope="col">Full Name</th>
-                                <th scope="col">Gender</th>
-                                <th scope="col">Contact Number</th>
-                                <th scope="col">Email Address</th>
-                                <th scope="col">Hospital</th>
+                                <th scope="col">Name</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -45,19 +45,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    {{ record.FirstName }} {{ record.LastName }}
-                                </td>
-                                <td>
-                                    {{ record.GenderName }}
-                                </td>
-                                <td>
-                                    {{ record.ContactNumber }}
-                                </td>
-                                <td>
-                                    {{ record.EmailAddress }}
-                                </td>
-                                <td>
-                                    {{ record.HospitalName }}
+                                    {{ record.Name }} 
                                 </td>
                             </tr>
                         </tbody>
@@ -88,8 +76,6 @@
                             </button>
                         </label>
                     </div>
-
-
                 </div>
             </div>
         </div>

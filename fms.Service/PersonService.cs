@@ -63,7 +63,8 @@ namespace fms.Service
                         new SqlParameter("@createdById", createdById),
                         new SqlParameter("@createdOn", parsedCreatedOn),
                         new SqlParameter("@modifiedById", modifiedById),
-                        new SqlParameter("@modifiedOn", parsedModifiedOn)
+                        new SqlParameter("@modifiedOn", parsedModifiedOn),
+                        new SqlParameter("@stateId", 1)
                     });
                 if (returnValue == 1)
                 {

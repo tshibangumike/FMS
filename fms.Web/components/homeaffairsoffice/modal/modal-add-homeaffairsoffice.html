@@ -1,0 +1,36 @@
+﻿<form name="form" ng-submit="processForm(form)" novalidate>
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">QUICK CREATE NEW HOME AFFAIRS OFFICE'S FORM</h3>
+    </div>
+    <div class="modal-body" id="modal-body">
+        <div class="form-row m-2">
+            <div class="form-group col-md-12">
+                <label class="">Name</label> <span class="required"></span>
+                <input type="text"
+                       class="form-control"
+                       name="homeAffairsOffice_Name"
+                       ng-model="record.Name"
+                       ng-required="true"
+                       ng-minlength="2"
+                       ng-maxlength="75"
+                       limit-to="75"
+                       ng-class="{ 'is-invalid' : form.homeAffairsOffice_Name.$invalid && formHasBeenSubmitted }" />
+                <div class="text-danger" ng-show="form.homeAffairsOffice_Name.$invalid && formHasBeenSubmitted">
+                    <span ng-if="form.homeAffairsOffice_Name.$error.required">Please provide a value</span>
+                    <span ng-if="form.homeAffairsOffice_Name.$error.minlength">Value must be contain at lease 2 letters.</span>
+                    <span ng-if="form.homeAffairsOffice_Name.$error.maxlength">Value must be contain at most 75 letters</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success m-1">
+            <i class="fa fa-check-circle"></i>
+            Save
+        </button>
+        <button type="button" class="btn btn-danger m-1" ng-click="cancel()">
+            <i class="fa fa-ban"></i>
+            Cancel
+        </button>
+    </div>
+</form>

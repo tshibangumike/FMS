@@ -8,46 +8,57 @@ namespace fms.Service
 {
     public class NextOfKinService
     {
+        public static List<Dictionary<string, object>> QueryActiveNextOfKins(int pageNumber, int listType)
+        {
+            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[NextOfKin_queryactivenextofkins]",
+                new List<SqlParameter>
+                {
+                    new SqlParameter("@pagenumber", pageNumber),
+                    new SqlParameter("@listtype", listType),
+                });
+            return records;
+        }
+
         public static Dictionary<string, object> QueryNextOfKinById(Guid nextOfKinId)
         {
             var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[NextOfKin_querynextofkinbyid]",
-                 new List<SqlParameter>
-                    {
-                            new SqlParameter("@id", nextOfKinId),
-                    });
+                new List<SqlParameter>
+                {
+                    new SqlParameter("@id", nextOfKinId),
+                });
             if (records != null && records.Count == 1) return records[0];
             return null;
         }
+
         public static Dictionary<string, object> QueryNextOfKinByFuneralId(Guid funeralId)
         {
             var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[NextOfKin_querynextofkinbyfuneralid]",
-                 new List<SqlParameter>
-                    {
-                            new SqlParameter("@funeralId", funeralId),
-                    });
+                new List<SqlParameter>
+                {
+                    new SqlParameter("@funeralId", funeralId),
+                });
             if (records != null && records.Count == 1) return records[0];
             return null;
         }
-        public static List<Dictionary<string, object>> QueryActiveNextOfKins()
-        {
-            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[NextOfKin_queryactivenextofkins]", null);
-            return records;
-        }
+
         public static int QueryCountOfNextOsKinssByFuneralId(Guid funeralId)
         {
-            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Nextofkin_querycountofnextofkinsbyfuneralid]",
-                 new List<SqlParameter>
-                    {
-                            new SqlParameter("@funeralId", funeralId),
-                    });
+            var records = SharedService.ExecuteGetSqlStoredProcedure(
+                "[bbu].[Nextofkin_querycountofnextofkinsbyfuneralid]",
+                new List<SqlParameter>
+                {
+                    new SqlParameter("@funeralId", funeralId),
+                });
             if (records != null && records.Count == 1)
             {
                 var count = records[0].FirstOrDefault(x => x.Key == "Count").Value;
                 if (count == null) return -1;
-                else return (int)count;
+                else return (int) count;
             }
+
             return -1;
         }
+
         public static ReturnObject InsertNextOfKin(List<KeyValue> nextOfKin)
         {
             try
@@ -59,8 +70,9 @@ namespace fms.Service
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[NextOfKin_create]",
                     new List<SqlParameter>
                     {
-                            new SqlParameter("@personId", personId),
-                            new SqlParameter("@relationshipToDeceased", relationshipToDeceased),
+                        new SqlParameter("@personId", personId),
+                        new SqlParameter("@relationshipToDeceased", relationshipToDeceased),
+                        new SqlParameter("@stateId", 1)
                     });
                 if (returnValue == 1)
                 {
@@ -71,13 +83,13 @@ namespace fms.Service
                         Message = "record was successfully created!"
                     };
                 }
-                else
-                    return new ReturnObject()
-                    {
-                        Id = personId,
-                        State = "error",
-                        Message = "an error occured while creating this record!"
-                    };
+
+                return new ReturnObject()
+                {
+                    Id = personId,
+                    State = "error",
+                    Message = "an error occured while creating this record!"
+                };
             }
             catch (Exception ex)
             {
@@ -89,6 +101,7 @@ namespace fms.Service
                 };
             }
         }
+
         public static ReturnObject UpdateNextOfKin(List<KeyValue> nextOfKin)
         {
             try
@@ -100,8 +113,8 @@ namespace fms.Service
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[NextOfKin_update]",
                     new List<SqlParameter>
                     {
-                            new SqlParameter("@personId", personId),
-                            new SqlParameter("@relationshipToDeceased", relationshipToDeceased),
+                        new SqlParameter("@personId", personId),
+                        new SqlParameter("@relationshipToDeceased", relationshipToDeceased),
                     });
                 if (returnValue == 1)
                 {

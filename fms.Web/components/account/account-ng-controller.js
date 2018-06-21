@@ -23,4 +23,25 @@
                             });
                 };
             }
+        ])
+    .controller("ProfileController",
+        [
+            "$scope", "appService",
+            function($scope, appService) {
+
+                $scope.processForm = function() {
+                    $scope.formHasBeenSubmitted = true;
+                    appService.PostForm("/Account/Authenticate",
+                            { username: $scope.account["Username"], password: $scope.account["Password"] })
+                        .then(function(response) {
+                                if (_.isEqual(response.data.state, "error")) {
+                                    $scope.errorMessage = response.data.message;
+                                    return;
+                                }
+                                appService.NavigateTo("listfuneral");
+                            },
+                            function(response) {
+                            });
+                };
+            }
         ]);

@@ -8,6 +8,17 @@ namespace fms.Service
 {
     public class InformantService
     {
+        public static List<Dictionary<string, object>> QueryActiveInformants(int pageNumber, int listType)
+        {
+            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Informant_queryactiveinformants]",
+                new List<SqlParameter>
+                {
+                    new SqlParameter("@pagenumber", pageNumber),
+                    new SqlParameter("@listtype", listType),
+                });
+            return records;
+        }
+
         public static Dictionary<string, object> QueryInformantById(Guid informantId)
         {
             var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Informant_queryinformantbyid]",
@@ -28,12 +39,6 @@ namespace fms.Service
                 });
             if (records != null && records.Count == 1) return records[0];
             return null;
-        }
-
-        public static List<Dictionary<string, object>> QueryActiveInformants()
-        {
-            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Informant_queryactiveinformants]", null);
-            return records;
         }
 
         public static int QueryCountOfInformantsByFuneralId(Guid funeralId)
@@ -67,6 +72,7 @@ namespace fms.Service
                     {
                         new SqlParameter("@personId", personId),
                         new SqlParameter("@relationshipToDeceased", relationshipToDeceased),
+                        new SqlParameter("@stateId", 1)
                     });
                 if (returnValue == 1)
                 {
@@ -77,13 +83,13 @@ namespace fms.Service
                         Message = "record was successfully created!"
                     };
                 }
-                else
-                    return new ReturnObject()
-                    {
-                        Id = personId,
-                        State = "error",
-                        Message = "an error occured while creating this record!"
-                    };
+
+                return new ReturnObject()
+                {
+                    Id = personId,
+                    State = "error",
+                    Message = "an error occured while creating this record!"
+                };
             }
             catch (Exception ex)
             {

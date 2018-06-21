@@ -6,17 +6,41 @@
 
                 $scope.records = funerals.data;
                 $scope.selectedRecordIds = [];
+                $scope.pageNumber = 1;
+                $scope.listType = 1;
+                $scope.totalPageNumber = 0;
+
+                this.init = function() {
+                    if ($scope.records.length > 0) {
+                        $scope.totalPageNumber = $scope.records[0]["TotalPageNumber"];
+                    }
+                };
 
                 $scope.selectAll = function(isSelected) {
                     fms.Functions.SelectAllRecords(isSelected, $scope.records);
                 };
 
                 $scope.selectRecord = function(record) {
-                    fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, record);
+                    fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecordIds, record);
                 };
 
                 $scope.toggleSelection = function(record) {
                     record.Selected = !record.Selected;
+                };
+
+                $scope.getFunerals = function(pageNumber, listType) {
+                    appService.GetData(
+                            fms.Entity.Funeral.Urls.GetActiveFunerals,
+                            {
+                                pageNumber: pageNumber,
+                                listType: listType
+                            })
+                        .then(function(response) {
+
+                                $scope.records = response.data;
+                            },
+                            function(response) {
+                            });
                 };
 
                 $scope.create = function() {
@@ -25,19 +49,41 @@
 
                 };
 
-                $scope.edit = function() {
-
-                    var _record = null;
-
-                    if (arguments.length === 1)
-                        _record = _.isEqual(arguments.length, 1) ? arguments[0] : null;
-
-                    if (_.isNull(_record))
-                        appService.NavigateTo("editfuneral", { funeralid: $scope.selectedRecordIds[0] });
-                    else
-                        appService.NavigateTo("editfuneral", { funeralid: _record.Id });
-
+                $scope.edit = function(record) {
+                    if (_.isNull(record) || _.isUndefined(record)) {
+                        var selectedRecords = _.filter($scope.records, function(x) { return x.Selected; });
+                        if (_.isNull(selectedRecords) ||
+                            _.isNull(selectedRecords) ||
+                            selectedRecords.length === 0) return;
+                        appService.NavigateTo("editfuneral", { funeralid: selectedRecords[0]["Id"] });
+                    } else
+                        appService.NavigateTo("editfuneral", { funeralid: record.Id });
                 };
+
+                $scope.startFromBegining = function() {
+                    $scope.pageNumber = 1;
+                    $scope.getFunerals($scope.pageNumber, $scope.listType);
+                };
+
+                $scope.next = function() {
+                    $scope.pageNumber++;
+                    if ($scope.pageNumber > $scope.totalPageNumber) {
+                        $scope.pageNumber--;
+                        return;
+                    }
+                    $scope.getFunerals($scope.pageNumber, $scope.listType);
+                };
+
+                $scope.previous = function() {
+                    $scope.pageNumber--;
+                    if ($scope.pageNumber <= 0) {
+                        $scope.pageNumber++;
+                        return;
+                    }
+                    $scope.getFunerals($scope.pageNumber, $scope.listType);
+                };
+
+                this.init();
 
             }
         ])
@@ -64,8 +110,12 @@
                     { Name: "PurchasedItems", Show: true },
                     { Name: "UploadedItems", Show: true }
                 ];
+                $scope.deceasedDOB = { Year: null, Month: null, Day: null };
+                $scope.deceasedDOD = { Year: null, Month: null, Day: null };
+                $scope.informantDOB = { Year: null, Month: null, Day: null };
+                $scope.nextOfKinDOB = { Year: null, Month: null, Day: null };
                 $scope.formHasBeenSubmitted = false;
-                $scope.informantIsRequired = false;
+                $scope.currentYear = (new Date()).getFullYear();
 
                 $scope.collapseExpand = function() {
 
@@ -86,9 +136,10 @@
 
                 };
 
-                $scope.GetFieldByName = function (modelName, fieldName) {
-                    return fms.Fields.GetFieldByModelByName(modelName, fieldName);
+                $scope.GetLastDayOfMonth = function(year, month) {
+                    return fms.Functions.GetMonthLastDay(year, month);
                 };
+
 
                 /*---Doctor Lookup - START*/
                 $scope.setSelectedDoctor = function(selectedRecord) {
@@ -103,7 +154,8 @@
                         {
                             records: [
                                 "appService", function(appService) {
-                                    return appService.GetData(fms.Entity.Doctor.Urls.GetActiveDoctors);
+                                    return appService.GetData(fms.Entity.Doctor.Urls.GetActiveDoctors,
+                                        { pageNumber: 1, listType: 2 });
                                 }
                             ]
                         },
@@ -141,7 +193,8 @@
                             records: [
                                 "appService", function(appService) {
                                     return appService.GetData(fms.Entity.HomeAffairsOfficer.Urls
-                                        .GetActiveHomeAffairsOfficers);
+                                        .GetActiveHomeAffairsOfficers,
+                                        { pageNumber: 1, listType: 2 });
                                 }
                             ]
                         },
@@ -196,12 +249,35 @@
 
                 };
 
-                $scope.OnChange_SAIdNumber = function(saIdNumber) {
+                $scope.OnChange_SameAsInformant = function(sameAsInformant) {
+                    if (_.isEqual(sameAsInformant, true)) {
+                        $scope.nextOfKin = $scope.informant;
+                    } else {
+                        $scope.nextOfKin = null;
+                    }
+                };
 
+                $scope.OnChange_SAIdNumber = function(entityName, saIdNumber) {
                     var data = fms.Functions.ExtractFromIdNunmber(saIdNumber);
-                    $scope.deceased["DateOfBirth"] = moment(data.birthdate).format("MM/DD/YYYY HH:mm A");
+                    switch (entityName) {
+                    case fms.Entity.Deceased.EntityName.toLowerCase():
+                        $scope.deceasedDOB["Year"] = moment(data.birthdate).year();
+                        $scope.deceasedDOB["Month"] = 1 + moment(data.birthdate).month();
+                        $scope.deceasedDOB["Day"] = moment(data.birthdate).date();
+                        break;
+                    case fms.Entity.Informant.EntityName.toLowerCase():
+                        $scope.informantDOB["Year"] = moment(data.birthdate).year();
+                        $scope.informantDOB["Month"] = moment(data.birthdate).month();
+                        $scope.informantDOB["Day"] = moment(data.birthdate).date();
+                        break;
+                    case fms.Entity.NextOfKin.EntityName.toLowerCase():
+                        $scope.nextOfKinDOB["Year"] = moment(data.birthdate).year();
+                        $scope.nextOfKinDOB["Month"] = moment(data.birthdate).month();
+                        $scope.nextOfKinDOB["Day"] = moment(data.birthdate).date();
+                        break;
+                    default:
+                    }
                     $scope.deceased["GenderId"] = data.gender === "male" ? 1 : 2;
-
                 };
 
                 $scope.OnChange_InformantFirstName = function(firstName) {
@@ -212,7 +288,7 @@
                     }
                 };
 
-                $scope.OnChange_InformantIdNumber = function (saIdNumber) {
+                $scope.OnChange_InformantIdNumber = function(saIdNumber) {
 
                     var data = fms.Functions.ExtractFromIdNunmber(saIdNumber);
                     $scope.informant["DateOfBirth"] = moment(data.birthdate).format("MM/DD/YYYY HH:mm A");
@@ -220,7 +296,7 @@
 
                 };
 
-                $scope.OnChange_NexyOfKinIdNumber = function (saIdNumber) {
+                $scope.OnChange_NexyOfKinIdNumber = function(saIdNumber) {
 
                     var data = fms.Functions.ExtractFromIdNunmber(saIdNumber);
                     $scope.nextOfKin["DateOfBirth"] = moment(data.birthdate).format("MM/DD/YYYY HH:mm A");
@@ -232,9 +308,26 @@
                     $scope.deceased["DateOfBirth"] = $("#DateOfBirth").val();
                 };
 
-                $scope.processForm = function (form) {
+                $scope.processForm = function(form) {
                     $scope.formHasBeenSubmitted = true;
-                    $scope.deceased["DateOfBirth"] = $("#DateOfBirth").val();
+                    if (!_.isNull($scope.deceasedDOB["Year"]) &&
+                        !_.isNull($scope.deceasedDOB["Month"]) &&
+                        !_.isNull($scope.deceasedDOB["Day"])) {
+                        $scope.deceased["DateOfBirth"] = $scope.deceasedDOB["Year"] +
+                            "/" +
+                            $scope.deceasedDOB["Month"] +
+                            "/" +
+                            $scope.deceasedDOB["Day"];
+                    }
+                    if (!_.isNull($scope.deceasedDOD["Year"]) &&
+                        !_.isNull($scope.deceasedDOD["Month"]) &&
+                        !_.isNull($scope.deceasedDOD["Day"])) {
+                        $scope.deceased["DateOfDeath"] = $scope.deceasedDOD["Year"] +
+                            "/" +
+                            $scope.deceasedDOD["Month"] +
+                            "/" +
+                            $scope.deceasedDOD["Day"];
+                    }
                     if (!form.$valid) {
                         return;
                     }
@@ -252,14 +345,14 @@
                             doctor: keyValuesDoctor,
                             homeAffairsOfficer: keyValuesHomeAffairsOfficer,
                             funeral: keyValuesFuneral
-                        }).then(function (response) {
+                        }).then(function(response) {
                             if (response.data.state !== "success") {
                                 fms.Notifications.Toastr.CreateErrorNotification();
                             }
                             fms.Notifications.Toastr.CreateSuccessNotification();
                             appService.NavigateTo("editfuneral", { funeralid: response.data.funeralId });
                         },
-                        function (response) {
+                        function(response) {
                         });
                 };
 
@@ -267,10 +360,13 @@
         ])
     .controller("EditFuneralController",
         [
-            "$scope", "$window", "$uibModal", "appService", "funeral", "deceased", "informant", "nextOfKin", "doctor",
+            "$scope", "$window", "$location", "$anchorScroll", "$uibModal", "appService", "funeral", "deceased",
+            "informant", "nextOfKin", "doctor",
             "homeAffairsOfficer", "funeralBoughtItems", "funeralDocuments",
-            function ($scope,
+            function($scope,
                 $window,
+                $location,
+                $anchorScroll,
                 $uibModal,
                 appService,
                 funeral,
@@ -292,9 +388,14 @@
                 $scope.funeralDocuments = funeralDocuments.data;
                 $scope.newFuneralBoughtItem = { Quantity: 1, Description: "" };
                 $scope.selectedFuneralBoughtItemIds = [];
-                $scope.newFuneralDocument = null;
+                $scope.newFuneralDocument = { Description: null };
                 $scope.cemetery = { Id: $scope.funeral["CemeteryId"], Name: $scope.funeral["CemeteryName"] };
                 $scope.mortuary = { Id: $scope.funeral["MortuaryId"], Name: $scope.funeral["MortuaryName"] };
+                $scope.deceasedDOB = { Year: null, Month: null, Day: null };
+                $scope.deceasedDOD = { Year: null, Month: null, Day: null };
+                $scope.funeralBD = { Year: null, Month: null, Day: null };
+                $scope.formHasBeenSubmitted = false;
+                $scope.currentYear = (new Date()).getFullYear();
                 $scope.Tabs = [
                     { Name: "BeforeMortuary", Show: true },
                     { Name: "DuringMortuary", Show: true },
@@ -309,6 +410,30 @@
                     { Name: "PurchasedItems", Show: true },
                     { Name: "UploadedItems", Show: true }
                 ];
+
+                this.init = function() {
+                    if (!_.isNull($scope.deceased["DateOfBirth"])) {
+                        $scope.deceasedDOB = {
+                            Year: moment($scope.deceased["DateOfBirth"]).year(),
+                            Month: (1 + moment($scope.deceased["DateOfBirth"]).month()),
+                            Day: moment($scope.deceased["DateOfBirth"]).date()
+                        };
+                    }
+                    if (!_.isNull($scope.deceased["DateOfDeath"])) {
+                        $scope.deceasedDOD = {
+                            Year: moment($scope.deceased["DateOfDeath"]).year(),
+                            Month: (1 + moment($scope.deceased["DateOfDeath"]).month()),
+                            Day: moment($scope.deceased["DateOfDeath"]).date()
+                        };
+                    }
+                    if (!_.isNull($scope.funeral["BurialDate"])) {
+                        $scope.funeralBD = {
+                            Year: moment($scope.funeral["BurialDate"]).year(),
+                            Month: (1 + moment($scope.funeral["BurialDate"]).month()),
+                            Day: moment($scope.funeral["BurialDate"]).date()
+                        };
+                    }
+                };
 
                 $scope.collapseExpand = function() {
 
@@ -335,6 +460,75 @@
 
                 };
 
+                $scope.GetLastDayOfMonth = function(year, month) {
+                    return fms.Functions.GetMonthLastDay(year, month);
+                };
+
+                $scope.OnChange_Year = function(modelName, year) {
+                    if (_.isNull(year) || _.isUndefined(year)) {
+                        switch (modelName) {
+                        case "deceasedDOB":
+                            $scope.deceasedDOB["Month"] = $scope.deceasedDOB["Day"] = null;
+                            break;
+                        case "deceasedDOD":
+                            $scope.deceasedDOD["Month"] = deceasedDOD.deceasedDOB["Day"] = null;
+                            break;
+                        case "funeralBD":
+                            $scope.funeralBD["Month"] = $scope.funeralBD["Day"] = null;
+                            break;
+                        default:
+                        }
+                    }
+                };
+
+                $scope.OnChange_Month = function(modelName, month) {
+                    if (_.isNull(month) || _.isUndefined(month)) {
+                        switch (modelName) {
+                        case "deceasedDOB":
+                            $scope.deceasedDOB["Day"] = null;
+                            break;
+                        case "deceasedDOD":
+                            $scope.deceasedDOD["Day"] = null;
+                            break;
+                        case "funeralBD":
+                            $scope.funeralBD["Day"] = null;
+                            break;
+                        default:
+                        }
+                    }
+                };
+
+                $scope.OnChange_SameAsInformant = function(sameAsInformant) {
+                    if (_.isEqual(sameAsInformant, true)) {
+                        $scope.nextOfKin = $scope.informant;
+                    } else {
+                        $scope.nextOfKin = null;
+                    }
+                };
+
+                $scope.OnChange_SAIdNumber = function(entityName, saIdNumber) {
+                    var data = fms.Functions.ExtractFromIdNunmber(saIdNumber);
+                    switch (entityName) {
+                    case fms.Entity.Deceased.EntityName.toLowerCase():
+                        $scope.deceasedDOB["Year"] = moment(data.birthdate).year();
+                        $scope.deceasedDOB["Month"] = 1 + moment(data.birthdate).month();
+                        $scope.deceasedDOB["Day"] = moment(data.birthdate).date();
+                        break;
+                    case fms.Entity.Informant.EntityName.toLowerCase():
+                        $scope.informantDOB["Year"] = moment(data.birthdate).year();
+                        $scope.informantDOB["Month"] = moment(data.birthdate).month();
+                        $scope.informantDOB["Day"] = moment(data.birthdate).date();
+                        break;
+                    case fms.Entity.NextOfKin.EntityName.toLowerCase():
+                        $scope.nextOfKinDOB["Year"] = moment(data.birthdate).year();
+                        $scope.nextOfKinDOB["Month"] = moment(data.birthdate).month();
+                        $scope.nextOfKinDOB["Day"] = moment(data.birthdate).date();
+                        break;
+                    default:
+                    }
+                    $scope.deceased["GenderId"] = data.gender === "male" ? 1 : 2;
+                };
+
                 /*---Doctor Lookup - START*/
                 $scope.setSelectedDoctor = function(selectedRecord) {
                     $scope.doctor = selectedRecord;
@@ -348,7 +542,8 @@
                         {
                             records: [
                                 "appService", function(appService) {
-                                    return appService.GetData(fms.Entity.Doctor.Urls.GetActiveDoctors);
+                                    return appService.GetData(fms.Entity.Doctor.Urls.GetActiveDoctors,
+                                        { pageNumber: 1, listType: 2 });
                                 }
                             ]
                         },
@@ -386,7 +581,8 @@
                             records: [
                                 "appService", function(appService) {
                                     return appService.GetData(fms.Entity.HomeAffairsOfficer.Urls
-                                        .GetActiveHomeAffairsOfficers);
+                                        .GetActiveHomeAffairsOfficers,
+                                        { pageNumber: 1, listType: 2 });
                                 }
                             ]
                         },
@@ -424,7 +620,8 @@
                         {
                             records: [
                                 "appService", function(appService) {
-                                    return appService.GetData(fms.Entity.Cemetery.Urls.GetActiveCemeteries);
+                                    return appService.GetData(fms.Entity.Cemetery.Urls.GetActiveCemeteries,
+                                        { pageNumber: 1, listType: 2 });
                                 }
                             ]
                         },
@@ -461,7 +658,8 @@
                         {
                             records: [
                                 "appService", function(appService) {
-                                    return appService.GetData(fms.Entity.Mortuary.Urls.GetActiveMortuaries);
+                                    return appService.GetData(fms.Entity.Mortuary.Urls.GetActiveMortuaries,
+                                        { pageNumber: 1, listType: 2 });
                                 }
                             ]
                         },
@@ -501,7 +699,8 @@
                         {
                             records: [
                                 "appService", function(appService) {
-                                    return appService.GetData(fms.Entity.Supplier.Urls.GetActiveSuppliers);
+                                    return appService.GetData(fms.Entity.Supplier.Urls.GetActiveSuppliers,
+                                        { pageNumber: 1, listType: 2 });
                                 }
                             ]
                         },
@@ -583,9 +782,14 @@
                     appService.PostForm("/FuneralBoughtItem/AddFuneralBoughtItem",
                             { funeralBoughtItem: keyValueFuneralBoughtItem })
                         .then(function successCallback(response) {
-
-                                return appService.RefreshCurrentState();
-
+                                if (response.data.state !== "success") {
+                                    fms.Notifications.Toastr.CreateErrorNotification(
+                                        "Something wrong happen while adding items!");
+                                    return;
+                                }
+                                fms.Notifications.Toastr.UpdateSuccessNotification(
+                                    "Items has been successfully added!");
+                                appService.RefreshCurrentState();
                             },
                             function errorCallback(response) {
                             });
@@ -617,7 +821,7 @@
                     }
                     $scope.newFuneralDocument = e.files[0];
                 };
-                $scope.ClearFileInput = function (inputId) {
+                $scope.ClearFileInput = function(inputId) {
                     $("#funeralDocument").replaceWith($("#funeralDocument").val("").clone(true));
                 };
                 $scope.uploadFuneralDocument = function() {
@@ -625,15 +829,24 @@
                             "FuneralDocument/AddFuneralDocument",
                             $scope.newFuneralDocument,
                             {
-                                documentTypeId: $scope.newFuneralDocument.DocumentTypeId,
-                                description: $scope.newFuneralDocument.Description,
-                                funeralId: $scope.funeral.Id
+                                documentTypeId: $scope.newFuneralDocument["DocumentTypeId"],
+                                description: $scope.newFuneralDocument["Description"] == undefined
+                                    ? null
+                                    : $scope.newFuneralDocument["Description"],
+                                funeralId: $scope.funeral["Id"]
                             },
                             "document")
-                        .then(function successCallback(response) {
-                                return appService.RefreshCurrentState();
+                        .then(function(response) {
+                                if (response.data.state !== "success") {
+                                    fms.Notifications.Toastr.CreateErrorNotification(
+                                        "Something wrong happen while adding the document!");
+                                    return;
+                                }
+                                fms.Notifications.Toastr.UpdateSuccessNotification(
+                                    "Document has been successfully added!");
+                                appService.RefreshCurrentState();
                             },
-                            function errorCallback(response) {
+                            function(response) {
                             });
                 };
 
@@ -641,17 +854,42 @@
                     $window.open("/Report/GetConfirmationReport?funeralId=" + $scope.funeral["Id"], "_blank");
                 };
 
-                $scope.GenerateInvoice = function () {
+                $scope.GenerateInvoice = function() {
                     $window.open("/Report/GetInvoiceReport?funeralId=" + $scope.funeral["Id"], "_blank");
                 };
 
-                $scope.processForm = function (form) {
+                $scope.processForm = function(form) {
+                    $scope.formHasBeenSubmitted = true;
+                    if (!_.isNull($scope.deceasedDOB["Year"]) &&
+                        !_.isNull($scope.deceasedDOB["Month"]) &&
+                        !_.isNull($scope.deceasedDOB["Day"])) {
+                        $scope.deceased["DateOfBirth"] = $scope.deceasedDOB["Year"] +
+                            "/" +
+                            $scope.deceasedDOB["Month"] +
+                            "/" +
+                            $scope.deceasedDOB["Day"];
+                    }
+                    if (!_.isNull($scope.deceasedDOD["Year"]) &&
+                        !_.isNull($scope.deceasedDOD["Month"]) &&
+                        !_.isNull($scope.deceasedDOD["Day"])) {
+                        $scope.deceased["DateOfDeath"] = $scope.deceasedDOD["Year"] +
+                            "/" +
+                            $scope.deceasedDOD["Month"] +
+                            "/" +
+                            $scope.deceasedDOD["Day"];
+                    }
+                    if (!_.isNull($scope.funeralBD["Year"]) &&
+                        !_.isNull($scope.funeralBD["Month"]) &&
+                        !_.isNull($scope.funeralBD["Day"])) {
+                        $scope.funeral["BurialDate"] = $scope.funeralBD["Year"] +
+                            "/" +
+                            $scope.funeralBD["Month"] +
+                            "/" +
+                            $scope.funeralBD["Day"];
+                    }
                     if (!form.$valid) {
                         return;
                     }
-                    $scope.deceased["DateOfBirth"] = moment($("#DateOfBirth").val()).format("YYYY/MM/DD");
-                    $scope.deceased["DateOfDeath"] = moment($("#DateOfDeath").val()).format("YYYY/MM/DD");
-                    $scope.funeral["BurialDate"] = moment($("#BurialDate").val()).format("YYYY/MM/DD");
                     var keyValuesDeceased = fms.Functions.SplitObjectIntoArray($scope.deceased);
                     var keyValuesInformant = fms.Functions.SplitObjectIntoArray($scope.informant);
                     var keyValuesNextOfKin = fms.Functions.SplitObjectIntoArray($scope.nextOfKin);
@@ -677,6 +915,8 @@
                         function errorCallback(response) {
                         });
                 };
+
+                this.init();
 
             }
         ]);

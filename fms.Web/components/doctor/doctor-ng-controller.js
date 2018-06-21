@@ -6,6 +6,15 @@
 
             $scope.records = doctors.data;
             $scope.selectedRecords = [];
+            $scope.pageNumber = 1;
+            $scope.listType = 1;
+            $scope.totalPageNumber = 0;
+
+            this.init = function () {
+                if ($scope.records.length > 0) {
+                    $scope.totalPageNumber = $scope.records[0]["TotalPageNumber"];
+                }
+            };
 
             $scope.selectRecord = function (record) {
                 fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, record);
@@ -20,8 +29,46 @@
                     appService.NavigateTo("editdoctor", { doctorid: $scope.selectedRecordIds[0] });
                 else
                     appService.NavigateTo("editdoctor", { doctorid: record["Id"] });
-
             };
+
+            $scope.getDoctors = function (pageNumber, listType) {
+                appService.GetData(
+                        fms.Entity.Doctor.Urls.GetActiveDoctors,
+                        {
+                            pageNumber: pageNumber,
+                            listType: listType
+                        })
+                    .then(function (response) {
+                            $scope.records = response.data;
+                        },
+                        function (response) {
+                        });
+            };
+
+            $scope.startFromBegining = function () {
+                $scope.pageNumber = 1;
+                $scope.getDoctors($scope.pageNumber, $scope.listType);
+            };
+
+            $scope.next = function () {
+                $scope.pageNumber++;
+                if ($scope.pageNumber > $scope.totalPageNumber) {
+                    $scope.pageNumber--;
+                    return;
+                }
+                $scope.getDoctors($scope.pageNumber, $scope.listType);
+            };
+
+            $scope.previous = function () {
+                $scope.pageNumber--;
+                if ($scope.pageNumber <= 0) {
+                    $scope.pageNumber++;
+                    return;
+                }
+                $scope.getDoctors($scope.pageNumber, $scope.listType);
+            };
+
+            this.init();
 
         }
     ])
@@ -172,7 +219,8 @@
                     {
                         records: [
                             "appService", function (appService) {
-                                return appService.GetData(fms.Entity.Hospital.Urls.GetActiveHospitals);
+                                return appService.GetData(fms.Entity.Hospital.Urls.GetActiveHospitals,
+                                    { pageNumber: 1, listType: 2 });
                             }
                         ]
                     },

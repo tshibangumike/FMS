@@ -20,9 +20,9 @@ namespace fms.Web.components.nextofkin
             return Json(record, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetActiveNextOfKins()
+        public ActionResult GetActiveNextOfKins(int pageNumber, int listType)
         {
-            var record = NextOfKinService.QueryActiveNextOfKins();
+            var record = NextOfKinService.QueryActiveNextOfKins(pageNumber, listType);
             return Json(record, JsonRequestBehavior.AllowGet);
         }
 

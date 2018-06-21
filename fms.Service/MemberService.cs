@@ -3,16 +3,19 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace fms.Service
 {
     public class MemberService
     {
-        public static List<Dictionary<string, object>> QueryActiveMembers()
+        public static List<Dictionary<string, object>> QueryActiveMembers(int pageNumber, int listType)
         {
-            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Member_queryactivemembers]", null);
+            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Member_queryactivemembers]",
+                new List<SqlParameter>
+                {
+                    new SqlParameter("@pagenumber", pageNumber),
+                    new SqlParameter("@listtype", listType),
+                });
             return records;
         }
 
@@ -37,6 +40,7 @@ namespace fms.Service
                     {
                         new SqlParameter("@personId", personId),
                         new SqlParameter("@memberNumber", memberNumber),
+                        new SqlParameter("@stateId", 1)
                     });
                 if (returnValue == 1)
                 {

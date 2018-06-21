@@ -34,7 +34,8 @@ namespace fms.Service
                             new SqlParameter("@city", city),
                             new SqlParameter("@province", province),
                             new SqlParameter("@country", country),
-                            new SqlParameter("@postalCode", postalCode)
+                            new SqlParameter("@postalCode", postalCode),
+                        new SqlParameter("@stateId", 1)
                     });
                 if (returnValue == 1)
                 {

@@ -8,9 +8,9 @@ namespace fms.Web.components.doctor
 {
     public class DoctorController : BaseController
     {
-        public ActionResult GetActiveDoctors()
+        public ActionResult GetActiveDoctors(int pageNumber, int listType)
         {
-            var records = DoctorService.QueryActiveDoctors();
+            var records = DoctorService.QueryActiveDoctors(pageNumber, listType);
             return Json(records, JsonRequestBehavior.AllowGet);
         }
 

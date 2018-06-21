@@ -8,9 +8,9 @@ namespace fms.Web.components.member
 {
     public class MemberController : BaseController
     {
-        public ActionResult GetActiveMembers()
+        public ActionResult GetActiveMembers(int pageNumber, int listType)
         {
-            var records = MemberService.QueryActiveMembers();
+            var records = MemberService.QueryActiveMembers(pageNumber, listType);
             return Json(records, JsonRequestBehavior.AllowGet);
         }
 

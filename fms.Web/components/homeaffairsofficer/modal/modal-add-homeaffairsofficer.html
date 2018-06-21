@@ -1,32 +1,75 @@
-﻿<form name="form" ng-submit="processForm(form)">
+﻿<form name="form" ng-submit="processForm(form)" novalidate>
     <div class="modal-header">
-        <h3 class="modal-title" id="modal-title">Quick Create New Home Affairs Officer Form</h3>
+        <h3 class="modal-title" id="modal-title">QUICK CREATE NEW HOME AFFAIRS OFFICER'S FORM</h3>
     </div>
     <div class="modal-body" id="modal-body">
         <div class="form-row m-2">
             <div class="form-group col-md-12">
-                <label class="">First name</label>
-                <input type="text" class="form-control" ng-model="homeAffairsOfficer.FirstName" ng-required="true">
+                <label class="">First name</label> <span class="required"></span>
+                <input type="text"
+                       class="form-control"
+                       name="homeAffairsOfficer_FirstName"
+                       ng-model="homeAffairsOfficer.FirstName"
+                       ng-required="true"
+                       ng-minlength="2"
+                       ng-maxlength="75"
+                       limit-to="75"
+                       ng-class="{ 'is-invalid' : form.homeAffairsOfficer_FirstName.$invalid && formHasBeenSubmitted }" />
+                <div class="text-danger" ng-show="form.homeAffairsOfficer_FirstName.$invalid && formHasBeenSubmitted">
+                    <span ng-if="form.homeAffairsOfficer_FirstName.$error.required">Please provide a value</span>
+                    <span ng-if="form.homeAffairsOfficer_FirstName.$error.minlength">Value must be contain at lease 2 letters.</span>
+                    <span ng-if="form.homeAffairsOfficer_FirstName.$error.maxlength">Value must be contain at most 75 letters</span>
+                </div>
             </div>
         </div>
         <div class="form-row m-2">
             <div class="form-group col-md-12">
-                <label class="">Last name</label>
-                <input type="text" class="form-control" ng-model="homeAffairsOfficer.LastName" ng-required="true">
+                <label class="">Last name</label> <span class="required"></span>
+                <input type="text"
+                       class="form-control"
+                       name="homeAffairsOfficer_LastName"
+                       ng-model="homeAffairsOfficer.LastName"
+                       ng-required="true"
+                       ng-minlength="2"
+                       ng-maxlength="75"
+                       limit-to="75"
+                       ng-class="{ 'is-invalid' : form.homeAffairsOfficer_LastName.$invalid && formHasBeenSubmitted }" />
+                <div class="text-danger" ng-show="form.homeAffairsOfficer_LastName.$invalid && formHasBeenSubmitted">
+                    <span ng-if="form.homeAffairsOfficer_LastName.$error.required">Please provide a value</span>
+                    <span ng-if="form.homeAffairsOfficer_LastName.$error.minlength">Value must be contain at lease 2 letters.</span>
+                    <span ng-if="form.homeAffairsOfficer_LastName.$error.maxlength">Value must be contain at most 75 letters</span>
+                </div>
             </div>
         </div>
         <div class="form-row m-2">
             <div class="form-group col-md-12">
-                <label class="">Gender</label>
+                <label class="">Gender</label> <span class="required"></span>
                 <div class="custom-controls-stacked d-block">
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="doctorGenderMale" name="doctorGender" class="custom-control-input" value="1" ng-model="homeAffairsOfficer.GenderId">
-                        <label class="custom-control-label" for="doctorGenderMale">Male</label>
+                        <input type="radio"
+                               id="hoGenderMale"
+                               name="ho_Gender"
+                               class="custom-control-input"
+                               value="1"
+                               ng-model="homeAffairsOfficer.GenderId"
+                               ng-required="true"
+                               ng-class="{ 'is-invalid' : form.ho_Gender.$invalid && formHasBeenSubmitted }" />
+                        <label class="custom-control-label" for="hoGenderMale">Male</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="doctorGenderFemale" name="doctorGender" class="custom-control-input" value="2" ng-model="homeAffairsOfficer.GenderId">
-                        <label class="custom-control-label" for="doctorGenderFemale">Female</label>
+                        <input type="radio"
+                               id="hoGenderFemale"
+                               name="ho_Gender"
+                               class="custom-control-input"
+                               value="2"
+                               ng-model="homeAffairsOfficer.GenderId"
+                               ng-required="true"
+                               ng-class="{ 'is-invalid' : form.ho_Gender.$invalid && formHasBeenSubmitted }" />
+                        <label class="custom-control-label" for="hoGenderFemale">Female</label>
                     </div>
+                </div>
+                <div class="text-danger" ng-show="form.ho_Gender.$invalid && formHasBeenSubmitted">
+                    <span ng-if="form.ho_Gender.$error.required">{{ GetRequiredFieldErrorMessage('radio') }}</span>
                 </div>
             </div>
         </div>
@@ -42,18 +85,28 @@
                 <input type="text" class="form-control" ng-model="homeAffairsOfficer.EmailAddress">
             </div>
         </div>
+        <div class="form-row m-2">
+            <div class="form-group col-md-12">
+                <label class="">Office</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" ng-model="homeAffairsOfficer.HomeAffairsOfficeName">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" ng-click="getHomeAffairsOffices()">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <input type="hidden" ng-model="homeAffairsOfficer.HomeAffairsOfficeId" />
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn btn-labeled btn-success m-1" ng-click="save()">
-            <span class="btn-label">
-                <i class="fa fa-check-circle"></i>
-            </span>
+        <button type="submit" class="btn btn-success m-1">
+            <i class="fa fa-check-circle"></i>
             Save
         </button>
-        <button type="button" class="btn btn-labeled btn-danger m-1" ng-click="cancel()">
-            <span class="btn-label">
-                <i class="fa fa-ban"></i>
-            </span>
+        <button type="button" class="btn btn-danger m-1" ng-click="cancel()">
+            <i class="fa fa-ban"></i>
             Cancel
         </button>
     </div>

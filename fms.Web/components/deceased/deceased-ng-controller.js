@@ -6,6 +6,15 @@
 
                 $scope.records = deceaseds.data;
                 $scope.selectedRecords = [];
+                $scope.pageNumber = 1;
+                $scope.listType = 1;
+                $scope.totalPageNumber = 0;
+
+                this.init = function() {
+                    if ($scope.records.length > 0) {
+                        $scope.totalPageNumber = $scope.records[0]["TotalPageNumber"];
+                    }
+                };
 
                 $scope.selectRecord = function(record) {
                     fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, record);
@@ -22,6 +31,46 @@
                         appService.NavigateTo("editdeceased", { deceasedid: record["Id"] });
 
                 };
+
+                $scope.getDeceaseds = function(pageNumber, listType) {
+                    appService.GetData(
+                            fms.Entity.Deceased.Urls.GetActiveDeceaseds,
+                            {
+                                pageNumber: pageNumber,
+                                listType: listType
+                            })
+                        .then(function(response) {
+
+                                $scope.records = response.data;
+                            },
+                            function(response) {
+                            });
+                };
+
+                $scope.startFromBegining = function() {
+                    $scope.pageNumber = 1;
+                    $scope.getDeceaseds($scope.pageNumber, $scope.listType);
+                };
+
+                $scope.next = function() {
+                    $scope.pageNumber++;
+                    if ($scope.pageNumber > $scope.totalPageNumber) {
+                        $scope.pageNumber--;
+                        return;
+                    }
+                    $scope.getDeceaseds($scope.pageNumber, $scope.listType);
+                };
+
+                $scope.previous = function() {
+                    $scope.pageNumber--;
+                    if ($scope.pageNumber <= 0) {
+                        $scope.pageNumber++;
+                        return;
+                    }
+                    $scope.getDeceaseds($scope.pageNumber, $scope.listType);
+                };
+
+                this.init();
 
             }
         ])
@@ -51,7 +100,7 @@
                             fms.Notifications.Toastr.UpdateSuccessNotification();
                             return appService.RefreshCurrentState();
                         },
-                        function () {
+                        function() {
                             fms.Notifications.Toastr.UpdateErrorNotification();
                         });
                     return null;

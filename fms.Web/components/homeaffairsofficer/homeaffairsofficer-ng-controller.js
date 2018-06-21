@@ -6,6 +6,15 @@
 
             $scope.records = homeAffairsOfficers.data;
             $scope.selectedRecords = [];
+            $scope.pageNumber = 1;
+            $scope.listType = 1;
+            $scope.totalPageNumber = 0;
+
+            this.init = function () {
+                if ($scope.records.length > 0) {
+                    $scope.totalPageNumber = $scope.records[0]["TotalPageNumber"];
+                }
+            };
 
             $scope.selectRecord = function (record) {
                 fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, record);
@@ -22,6 +31,45 @@
                     appService.NavigateTo("edithomeaffairsofficer", { homeaffairsofficerid: record["Id"] });
             };
 
+            $scope.getHomeAffairOfficers = function (pageNumber, listType) {
+                appService.GetData(
+                        fms.Entity.HomeAffairsOfficer.Urls.GetActiveHomeAffairsOfficers,
+                        {
+                            pageNumber: pageNumber,
+                            listType: listType
+                        })
+                    .then(function (response) {
+
+                            $scope.records = response.data;
+                        },
+                        function (response) {
+                        });
+            };
+
+            $scope.startFromBegining = function () {
+                $scope.pageNumber = 1;
+                $scope.getHomeAffairOfficers($scope.pageNumber, $scope.listType);
+            };
+
+            $scope.next = function () {
+                $scope.pageNumber++;
+                if ($scope.pageNumber > $scope.totalPageNumber) {
+                    $scope.pageNumber--;
+                    return;
+                }
+                $scope.getHomeAffairOfficers($scope.pageNumber, $scope.listType);
+            };
+
+            $scope.previous = function () {
+                $scope.pageNumber--;
+                if ($scope.pageNumber <= 0) {
+                    $scope.pageNumber++;
+                    return;
+                }
+                $scope.getHomeAffairOfficers($scope.pageNumber, $scope.listType);
+            };
+
+            this.init();
         }
     ])
     .controller("AddHomeAffairsOfficerController",
@@ -111,19 +159,39 @@
     ])
     .controller("ModalAddHomeAffairsOfficerController",
     [
-        "$scope", "$uibModalInstance", "appService",
-        function ($scope, $uibModalInstance, appService) {
+        "$scope", "$uibModal", "$uibModalInstance", "appService",
+        function ($scope, $uibModal, $uibModalInstance, appService) {
 
             $scope.formHasBeenSubmitted = false;
             $scope.homeAffairsOfficer = {};
+
+            $scope.setSelectedHomeAffairsOffice = function (selectedRecord) {
+                $scope.homeAffairsOfficer["HomeAffairsOfficeId"] = selectedRecord["Id"];
+                $scope.homeAffairsOfficer["HomeAffairsOfficeName"] = selectedRecord["Name"];
+            };
+            $scope.getHomeAffairsOffices = function () {
+                fms.Routes.SetListLookup(
+                    $uibModal,
+                    "/components/homeaffairsoffice/modal/modal-list-homeaffairsoffice.html",
+                    "ModalListHomeAffairsOfficeController",
+                    {
+                        records: [
+                            "appService", function (appService) {
+                                return appService.GetData(fms.Entity.HomeAffairsOffice.Urls.GetActiveHomeAffairsOffices,
+                                    { pageNumber: 1, listType: 2 });
+                            }
+                        ]
+                    },
+                    $scope.setSelectedHomeAffairsOffice 
+                );
+            };
 
             $scope.cancel = function () {
                 $uibModalInstance.dismiss("cancel");
             };
 
-            $scope.processForm = function () {
-                if (arguments.length === 0) return null;
-                var form = arguments[0] == null ? null : arguments[0];
+            $scope.processForm = function (form) {
+                $scope.formHasBeenSubmitted = true;
                 if (!form.$valid) {
                     return null;
                 }

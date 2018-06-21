@@ -119,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="components\account\account-ng-controller.js" />
+    <Content Include="components\account\profil.html" />
     <Content Include="components\account\login.html" />
     <Content Include="components\base\base-ng-controller.js" />
     <Content Include="components\base\base.html" />
@@ -148,6 +149,10 @@
     <Content Include="components\homeaffairsofficer\modal\modal-edit-homeaffairsofficer.html" />
     <Content Include="components\homeaffairsofficer\modal\modal-list-homeaffairsofficer.html" />
     <Content Include="components\homeaffairsofficer\homeaffairsofficer-ng-controller.js" />
+    <Content Include="components\homeaffairsoffice\homeaffairsoffice-ng-controller.js" />
+    <Content Include="components\homeaffairsoffice\modal\modal-add-homeaffairsoffice.html" />
+    <Content Include="components\homeaffairsoffice\modal\modal-edit-homeaffairsoffice.html" />
+    <Content Include="components\homeaffairsoffice\modal\modal-list-homeaffairsoffice.html" />
     <Content Include="components\hospital\hospital-ng-controller.js" />
     <Content Include="components\hospital\list-hospital.html" />
     <Content Include="components\hospital\edit-hospital.html" />
@@ -176,6 +181,9 @@
     <Content Include="components\shared\createview-topbar-buttons.html" />
     <Content Include="components\shared\listview-topbar-buttons.html" />
     <Content Include="components\shared\lookup-list-template.html" />
+    <Content Include="components\supplier\add-supplier.html" />
+    <Content Include="components\supplier\edit-supplier.html" />
+    <Content Include="components\supplier\list-supplier.html" />
     <Content Include="components\supplier\modal\modal-view-supplier.html" />
     <Content Include="components\supplier\modal\modal-add-supplier.html" />
     <Content Include="components\supplier\modal\modal-list-supplier.html" />
@@ -363,7 +371,7 @@
     <Compile Include="components\cemetery\CemeteryController.cs" />
     <Compile Include="components\deceased\DeceasedController.cs" />
     <Compile Include="components\doctor\DoctorController.cs" />
-    <Compile Include="components\DocumentController.cs" />
+    <Compile Include="components\document\DocumentController.cs" />
     <Compile Include="components\funeralboughtitem\FuneralBoughtItemController.cs" />
     <Compile Include="components\funeraldocument\FuneralDocumentController.cs" />
     <Compile Include="components\funeral\FuneralController.cs" />

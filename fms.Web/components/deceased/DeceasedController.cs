@@ -20,9 +20,9 @@ namespace fms.Web.components.deceased
             return Json(record, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetActiveDeceaseds()
+        public ActionResult GetActiveDeceaseds(int pageNumber, int listType)
         {
-            var record = DeceasedService.QueryActiveDeceaseds();
+            var record = DeceasedService.QueryActiveDeceaseds(pageNumber, listType);
             return Json(record, JsonRequestBehavior.AllowGet);
         }
 

@@ -58,6 +58,7 @@
     <Compile Include="KeyValueService.cs" />
     <Compile Include="Log4NetService.cs" />
     <Compile Include="MemberService.cs" />
+    <Compile Include="NumberConfiguration.cs" />
     <Compile Include="PaymentPeriodService.cs" />
     <Compile Include="MortuaryService.cs" />
     <Compile Include="DeceasedService.cs" />

@@ -8,11 +8,11 @@ namespace fms.Web.components.cemetery
 {
     public class CemeteryController : BaseController
     {
-        public ActionResult GetActiveCemeteries()
+        public ActionResult GetActiveCemeteries(int pageNumber, int listType)
         {
             try
             {
-                var records = CemeteryService.QueryActiveCemeteries();
+                var records = CemeteryService.QueryActiveCemeteries(pageNumber, listType);
                 return Json(records, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -20,6 +20,7 @@ namespace fms.Web.components.cemetery
                 return Json(ex.Message, JsonRequestBehavior.AllowGet);
             }
         }
+
         public ActionResult GetCemeteryById(Guid cemeteryId)
         {
             try
@@ -32,6 +33,7 @@ namespace fms.Web.components.cemetery
                 return Json(ex.Message, JsonRequestBehavior.AllowGet);
             }
         }
+
         public ActionResult GetCemeteriesByName(string searchText)
         {
             try
@@ -44,6 +46,7 @@ namespace fms.Web.components.cemetery
                 return Json(ex.Message, JsonRequestBehavior.AllowGet);
             }
         }
+
         public ActionResult AddCemetery(List<KeyValue> cemetery)
         {
             try
@@ -57,9 +60,10 @@ namespace fms.Web.components.cemetery
                 if (returnObject.State == "success")
                 {
                     var newMortuary = CemeteryService.QueryCemeteryById(Guid.Parse(returnObject.Id));
-                    return Json(new { state = "success", cemetery = newMortuary }, JsonRequestBehavior.AllowGet);
+                    return Json(new {state = "success", cemetery = newMortuary}, JsonRequestBehavior.AllowGet);
                 }
-                return Json(new { state = "error", hospital = "" }, JsonRequestBehavior.AllowGet);
+
+                return Json(new {state = "error", hospital = ""}, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

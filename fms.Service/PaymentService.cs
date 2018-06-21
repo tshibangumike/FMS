@@ -32,7 +32,8 @@ namespace fms.Service
                         new SqlParameter("@documentId", documentId),
                         new SqlParameter("@paymentPeriodId", paymentPeriodId),
                         new SqlParameter("@createdOn", createdOn),
-                        new SqlParameter("@createdById", createdById)
+                        new SqlParameter("@createdById", createdById),
+                        new SqlParameter("@stateId", 1)
                     });
                 if (returnValue == 1)
                 {

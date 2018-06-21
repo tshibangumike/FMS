@@ -14,9 +14,9 @@ namespace fms.Web.components.homeaffairsofficer
             return Json(record, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetActiveHomeAffairsOfficers()
+        public ActionResult GetActiveHomeAffairsOfficers(int pageNumber, int listType)
         {
-            var records = HomeAffairsOfficerService.QueryActiveHomeAffairsOfficers();
+            var records = HomeAffairsOfficerService.QueryActiveHomeAffairsOfficers(pageNumber, listType);
             return Json(records, JsonRequestBehavior.AllowGet);
         }
 

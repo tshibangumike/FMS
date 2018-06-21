@@ -9,9 +9,14 @@ namespace fms.Service
 {
     public class DeceasedService
     {
-        public static List<Dictionary<string, object>> QueryActiveDeceaseds()
+        public static List<Dictionary<string, object>> QueryActiveDeceaseds(int pageNumber, int listType)
         {
-            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Deceased_queryactivedeceaseds]", null);
+            var records = SharedService.ExecuteGetSqlStoredProcedure("[bbu].[Deceased_queryactivedeceaseds]", new List<SqlParameter>
+            {
+                new SqlParameter("@pagenumber", pageNumber),
+                new SqlParameter("@listtype", listType),
+                new SqlParameter("@stateId", 1)
+            });
             return records;
         }
 

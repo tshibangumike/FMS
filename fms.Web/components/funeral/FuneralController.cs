@@ -9,9 +9,9 @@ namespace fms.Web.components.funeral
 {
     public class FuneralController : BaseController
     {
-        public ActionResult GetActiveFunerals()
+        public ActionResult GetActiveFunerals(int pageNumber, int listType)
         {
-            var records = FuneralService.QueryActiveFunerals();
+            var records = FuneralService.QueryActiveFunerals(pageNumber, listType);
             return Json(records, JsonRequestBehavior.AllowGet);
         }
 
@@ -150,13 +150,31 @@ namespace fms.Web.components.funeral
             if (funeral.Count <= 0) return Json(new {state = "error", message = ""}, JsonRequestBehavior.AllowGet);
             var funeralId = Guid.NewGuid().ToString();
             KeyValueService.AddAttribute(funeral, "Id", funeralId);
-            var funeralNumber = SharedService.RandomString(8);
+
+            #region Get Vehicle Number
+
+            var counterConfiguration = NumberConfigurationService.GetNextNumber("funeral");
+            var counterConfigurationId = (Guid) counterConfiguration.FirstOrDefault(x => x.Key == "Id").Value;
+            var entityName = (string) counterConfiguration.FirstOrDefault(x => x.Key == "EntityName").Value;
+            var nextNumber = (int) counterConfiguration.FirstOrDefault(x => x.Key == "NextNumber").Value;
+            var prefix = (string) counterConfiguration.FirstOrDefault(x => x.Key == "Prefix").Value;
+            var incrementBy = (int) counterConfiguration.FirstOrDefault(x => x.Key == "IncrementBy").Value;
+            var length = (int) counterConfiguration.FirstOrDefault(x => x.Key == "Length").Value;
+            var number = length == 0 ? "" : nextNumber.ToString("D" + length);
+            var funeralNumber = prefix + number;
+
+            #endregion
+
             KeyValueService.AddAttribute(funeral, "FuneralNumber", funeralNumber);
+
             GenericModelService.AddAuditAttributeForCreateEvent(funeral, GetCurrentUserId());
             var funeralReturnObject = FuneralService.InsertFuneral(funeral);
-            return funeralReturnObject.State == "success"
-                ? Json(new {state = "success", funeralId = funeralReturnObject.Id}, JsonRequestBehavior.AllowGet)
-                : Json(new {state = "error", message = ""}, JsonRequestBehavior.AllowGet);
+
+            if (funeralReturnObject.State != "success")
+                return Json(new {state = "error", message = ""}, JsonRequestBehavior.AllowGet);
+            nextNumber = nextNumber + incrementBy;
+            NumberConfigurationService.SetNextNumber(counterConfigurationId.ToString(), entityName, nextNumber);
+            return Json(new {state = "success", funeralId = funeralReturnObject.Id}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult UpdateFuneral(List<KeyValue> deceased, List<KeyValue> informant, List<KeyValue> nextOfKin,
