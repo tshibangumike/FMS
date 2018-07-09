@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace fms.ConsoleApp
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
 
-            var test = CredentialService.Encrypt("mike");
+            var test = CredentialService.Encrypt("bbU9tG!kH");
 
         }
     }

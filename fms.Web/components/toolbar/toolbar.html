@@ -17,7 +17,7 @@
                             Account
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" ng-click="Logout()">
                             <i class="fas fa-sign-out-alt"></i>
                             Logout
                         </a>
@@ -34,10 +34,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-
-
         $('#sidebarCollapse').on('click', function () {
-
             $('#sidebar, #content').toggleClass('active');
             $('.collapse.in').toggleClass('in');
             $('a[aria-expanded=true]').attr('aria-expanded', 'false');

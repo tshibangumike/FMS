@@ -159,5 +159,42 @@ namespace fms.Service
                 };
             }
         }
+
+        public static ReturnObject DeactivateFuneral(Guid funeralId)
+        {
+            try
+            {
+                var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Funeral_deactivate]",
+                    new List<SqlParameter>
+                    {
+                        new SqlParameter("@id", funeralId)
+                    });
+                if (returnValue == 1)
+                {
+                    return new ReturnObject()
+                    {
+                        Id = funeralId.ToString(),
+                        State = "success",
+                        Message = "record was successfully updated!"
+                    };
+                }
+
+                return new ReturnObject()
+                {
+                    Id = funeralId.ToString(),
+                    State = "error",
+                    Message = "an error occured while updating this record!"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ReturnObject()
+                {
+                    Id = "",
+                    State = "error",
+                    Message = ex.Message
+                };
+            }
+        }
     }
 }

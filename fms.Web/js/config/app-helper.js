@@ -477,6 +477,206 @@ fms.Routes = {
                 };
             default:
             }
+        case "homeaffairsoffice":
+            switch (routeName) {
+            case "list":
+                return {
+                    name: "listhomeaffairsoffice",
+                    url: "/listhomeaffairsoffice",
+                    views: {
+                        "": fms.Routes.GetBaseRouteView(),
+                        "toolbar@listhomeaffairsoffice": fms.Routes.GetToolbarRouteView(),
+                        "sidemenu@listhomeaffairsoffice": fms.Routes.GetSideMenuRouteView(),
+                        "body@listhomeaffairsoffice": {
+                            templateUrl: "/components/homeaffairsoffice/list-homeaffairsoffice.html",
+                            controller: "ListHomeAffairsOfficeController",
+                            resolve: {
+                                records: [
+                                    "appService", function(appService) {
+                                        return appService.GetData(fms.Entity.HomeAffairsOffice.Urls
+                                            .GetActiveHomeAffairsOffices,
+                                            { pageNumber: 1, listType: 1 });
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                };
+            case "edit":
+                return {
+                    name: "edithomeaffairsoffice",
+                    url: "/edithomeaffairsoffice?homeaffairsofficeid",
+                    views: {
+                        "": fms.Routes.GetBaseRouteView(),
+                        "toolbar@edithomeaffairsoffice": fms.Routes.GetToolbarRouteView(),
+                        "sidemenu@edithomeaffairsoffice": fms.Routes.GetSideMenuRouteView(),
+                        "body@edithomeaffairsoffice": {
+                            templateUrl: "/components/homeaffairsoffice/edit-homeaffairsoffice.html",
+                            controller: "EditHomeAffairsOfficeController",
+                            resolve: {
+                                record: [
+                                    "$stateParams", "appService", function($stateParams, appService) {
+                                        return appService.GetData(
+                                            fms.Entity.HomeAffairsOffice.Urls.GetHomeAffairsOfficeById,
+                                            { homeAffairsOfficeId: $stateParams.homeaffairsofficeid });
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                };
+            default:
+            }
+        case "hospital":
+            switch (routeName) {
+            case "list":
+                return {
+                    name: "listhospital",
+                    url: "/listhospital",
+                    views: {
+                        "": fms.Routes.GetBaseRouteView(),
+                        "toolbar@listhospital": fms.Routes.GetToolbarRouteView(),
+                        "sidemenu@listhospital": fms.Routes.GetSideMenuRouteView(),
+                        "body@listhospital": {
+                            templateUrl: "/components/hospital/list-hospital.html",
+                            controller: "ListHospitalController",
+                            resolve: {
+                                records: [
+                                    "appService", function(appService) {
+                                        return appService.GetData(fms.Entity.Hospital.Urls
+                                            .GetActiveHospitals,
+                                            { pageNumber: 1, listType: 1 });
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                };
+            case "edit":
+                return {
+                    name: "edithospital",
+                    url: "/edithospital?hospitalid",
+                    views: {
+                        "": fms.Routes.GetBaseRouteView(),
+                        "toolbar@edithospital": fms.Routes.GetToolbarRouteView(),
+                        "sidemenu@edithospital": fms.Routes.GetSideMenuRouteView(),
+                        "body@edithospital": {
+                            templateUrl: "/components/hospital/edit-hospital.html",
+                            controller: "EditHospitalController",
+                            resolve: {
+                                record: [
+                                    "$stateParams", "appService", function($stateParams, appService) {
+                                        return appService.GetData(
+                                            fms.Entity.Hospital.Urls.GetHospitalById,
+                                            { hospitalId: $stateParams.hospitalid });
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                };
+            default:
+            }
+        case "mortuary":
+            switch (routeName) {
+            case "list":
+                return {
+                    name: "listmortuary",
+                    url: "/listmortuary",
+                    views: {
+                        "": fms.Routes.GetBaseRouteView(),
+                        "toolbar@listmortuary": fms.Routes.GetToolbarRouteView(),
+                        "sidemenu@listmortuary": fms.Routes.GetSideMenuRouteView(),
+                        "body@listmortuary": {
+                            templateUrl: "/components/mortuary/list-mortuary.html",
+                            controller: "ListMortuaryController",
+                            resolve: {
+                                records: [
+                                    "appService", function(appService) {
+                                        return appService.GetData(fms.Entity.Mortuary.Urls
+                                            .GetActiveMortuaries,
+                                            { pageNumber: 1, listType: 1 });
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                };
+            case "edit":
+                return {
+                    name: "editmortuary",
+                    url: "/editmortuary?mortuaryid",
+                    views: {
+                        "": fms.Routes.GetBaseRouteView(),
+                        "toolbar@editmortuary": fms.Routes.GetToolbarRouteView(),
+                        "sidemenu@editmortuary": fms.Routes.GetSideMenuRouteView(),
+                        "body@editmortuary": {
+                            templateUrl: "/components/mortuary/edit-mortuary.html",
+                            controller: "EditMortuaryController",
+                            resolve: {
+                                record: [
+                                    "$stateParams", "appService", function($stateParams, appService) {
+                                        return appService.GetData(
+                                            fms.Entity.Mortuary.Urls.GetMortuaryById,
+                                            { mortuaryId: $stateParams.mortuaryid });
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                };
+            default:
+            }
+        case "cemetery":
+            switch (routeName) {
+            case "list":
+                return {
+                    name: "listcemetery",
+                    url: "/listcemetery",
+                    views: {
+                        "": fms.Routes.GetBaseRouteView(),
+                        "toolbar@listcemetery": fms.Routes.GetToolbarRouteView(),
+                        "sidemenu@listcemetery": fms.Routes.GetSideMenuRouteView(),
+                        "body@listcemetery": {
+                            templateUrl: "/components/cemetery/list-cemetery.html",
+                            controller: "ListCemeteryController",
+                            resolve: {
+                                records: [
+                                    "appService", function(appService) {
+                                        return appService.GetData(fms.Entity.Cemetery.Urls
+                                            .GetActiveCemeteries,
+                                            { pageNumber: 1, listType: 1 });
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                };
+            case "edit":
+                return {
+                    name: "editcemetery",
+                    url: "/editcemetery?cemeteryid",
+                    views: {
+                        "": fms.Routes.GetBaseRouteView(),
+                        "toolbar@editcemetery": fms.Routes.GetToolbarRouteView(),
+                        "sidemenu@editcemetery": fms.Routes.GetSideMenuRouteView(),
+                        "body@editcemetery": {
+                            templateUrl: "/components/cemetery/edit-cemetery.html",
+                            controller: "EditCemeteryController",
+                            resolve: {
+                                record: [
+                                    "$stateParams", "appService", function($stateParams, appService) {
+                                        return appService.GetData(
+                                            fms.Entity.Cemetery.Urls.GetCemeteryById,
+                                            { cemeteryId: $stateParams.cemeteryid });
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                };
+            default:
+            }
         case "supplier":
             switch (routeName) {
             case "list":
@@ -580,6 +780,21 @@ fms.Routes = {
             size: "lg",
             resolve: resolve
         });
+    },
+    ConfirmationLookup: function(uibModal, successFunction) {
+        uibModal
+            .open({
+                animation: true,
+                ariaLabelledBy: "modal-title",
+                ariaDescribedBy: "modal-body",
+                templateUrl: "/components/shared/confirmationdialog/confirmation-dialog.html",
+                controller: "ModalConfirmationDialogDoctorController",
+                size: "lg"
+            })
+            .result.then(function(result) {
+                if (result === "ok")
+                    successFunction();
+            });
     }
 };
 
@@ -692,7 +907,8 @@ fms.Entity = {
             GetActiveDeceaseds: "/Deceased/GetActiveDeceaseds",
             GetDeceasedById: "/Deceased/GetDeceasedById",
             GetDeceasedByFuneralId: "/Deceased/GetDeceasedByFuneralId",
-            UpdateDeceased: "/Deceased/UpdateDeceased"
+            UpdateDeceased: "/Deceased/UpdateDeceased",
+            DeactivateDeceased: "/Deceased/DeactivateDeceased"
         }
     },
     Doctor: {
@@ -701,14 +917,16 @@ fms.Entity = {
             GetActiveDoctors: "/Doctor/GetActiveDoctors",
             GetDoctorById: "/Doctor/GetDoctorById",
             AddDoctor: "/Doctor/AddDoctor",
-            UpdateDoctor: "/Doctor/UpdateDoctor"
+            UpdateDoctor: "/Doctor/UpdateDoctor",
+            DeactivateDoctor: "/Doctor/DeactivateDoctor"
         }
     },
     Funeral: {
         EntityName: "Funeral",
         Urls: {
             GetActiveFunerals: "/Funeral/GetActiveFunerals",
-            GetFuneralById: "/Funeral/GetFuneralById"
+            GetFuneralById: "/Funeral/GetFuneralById",
+            DeactivateFuneral: "/Funeral/DeactivateFuneral"
         }
     },
     HomeAffairsOfficer: {
@@ -716,7 +934,9 @@ fms.Entity = {
         Urls: {
             GetActiveHomeAffairsOfficers: "/HomeAffairsOfficer/GetActiveHomeAffairsOfficers",
             GetHomeAffairsOfficerById: "/HomeAffairsOfficer/GetHomeAffairsOfficerById",
-            AddHomeAffairsOfficer: "/HomeAffairsOfficer/AddHomeAffairsOfficer"
+            AddHomeAffairsOfficer: "/HomeAffairsOfficer/AddHomeAffairsOfficer",
+            UpdateHomeAffairsOfficer: "/HomeAffairsOfficer/UpdateHomeAffairsOfficer",
+            DeactivateHomeAffairsOfficer: "/HomeAffairsOfficer/DeactivateHomeAffairsOfficer"
         }
     },
     HomeAffairsOffice: {
@@ -740,7 +960,8 @@ fms.Entity = {
         Urls: {
             GetActiveInformants: "/Informant/GetActiveInformants",
             GetInformantById: "/Informant/GetInformantById",
-            UpdateInformant: "/Informant/UpdateInformant"
+            UpdateInformant: "/Informant/UpdateInformant",
+            DeactivateInformant: "/Informant/DeactivateInformant"
         }
     },
     Cemetery: {
@@ -763,7 +984,8 @@ fms.Entity = {
             GetActiveMembers: "/Member/GetActiveMembers",
             GetMemberById: "/Member/GetMemberById",
             AddMember: "/Member/AddMember",
-            UpdateMember: "/Member/UpdateMember"
+            UpdateMember: "/Member/UpdateMember",
+            DeactivateMember: "/Member/DeactivateMember"
         }
     },
     NextOfKin: {
@@ -771,7 +993,8 @@ fms.Entity = {
         Urls: {
             GetActiveNextOfKins: "/NextOfKin/GetActiveNextOfKins",
             GetNextOfKinById: "/NextOfKin/GetNextOfKinById",
-            UpdateNextOfKin: "/NextOfKin/UpdateNextOfKin"
+            UpdateNextOfKin: "/NextOfKin/UpdateNextOfKin",
+            DeactivateNextOfKin: "/NextOfKin/DeactivateNextOfKin"
         }
     },
     FuneralBoughtItem: {
@@ -791,7 +1014,8 @@ fms.Entity = {
         Urls: {
             GetActiveSuppliers: "/Supplier/GetActiveSuppliers",
             GetSupplierById: "Supplier/GetSupplierById",
-            AddSupplier: "/Supplier/AddSupplier"
+            AddSupplier: "/Supplier/AddSupplier",
+            UpdateSupplier: "/Supplier/UpdateSupplier"
         }
     },
     Payment: {

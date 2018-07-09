@@ -2,7 +2,7 @@
 angular.module("fmsApp")
     .config([
         "$stateProvider", "$urlRouterProvider", "$httpProvider",
-        function ($stateProvider, $urlRouterProvider, $httpProvider) {
+        function($stateProvider, $urlRouterProvider, $httpProvider) {
 
             $httpProvider.interceptors.push("httpLoader");
             $urlRouterProvider.otherwise("/login");
@@ -22,15 +22,19 @@ angular.module("fmsApp")
                 fms.Routes.SetRoutes("doctor", "edit"),
                 fms.Routes.SetRoutes("homeaffairsofficer", "list"),
                 fms.Routes.SetRoutes("homeaffairsofficer", "edit"),
+                fms.Routes.SetRoutes("homeaffairsoffice", "list"),
+                fms.Routes.SetRoutes("hospital", "list"),
                 fms.Routes.SetRoutes("member", "list"),
                 fms.Routes.SetRoutes("member", "add"),
                 fms.Routes.SetRoutes("member", "edit"),
+                fms.Routes.SetRoutes("mortuary", "list"),
+                fms.Routes.SetRoutes("cemetery", "list"),
                 fms.Routes.SetRoutes("supplier", "list"),
                 fms.Routes.SetRoutes("supplier", "add"),
                 fms.Routes.SetRoutes("supplier", "edit")
             ];
 
-            states.forEach(function (state) {
+            states.forEach(function(state) {
                 $stateProvider.state(state);
             });
 

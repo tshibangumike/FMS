@@ -53,5 +53,27 @@ namespace fms.Web.components.doctor
                 return Json(new {state = "error", message = ex.Message}, JsonRequestBehavior.AllowGet);
             }
         }
+
+        public ActionResult UpdateDoctor(List<KeyValue> doctor)
+        {
+            if (doctor == null || doctor.Count <= 0)
+                return Json(new {state = "success", message = ""}, JsonRequestBehavior.AllowGet);
+            KeyValueService.AddAttribute(doctor, "ModifiedById", GetCurrentUserId());
+            var doctorPersonReturnObject = PersonService.UpdatePerson(doctor);
+            if (doctorPersonReturnObject.State != "success")
+                return Json(new {state = "success", message = ""}, JsonRequestBehavior.AllowGet);
+            var doctorReturnObject = DoctorService.UpdateDoctor(doctor);
+            return doctorReturnObject.State == "success"
+                ? Json(new {state = "success", doctorId = doctorReturnObject.Id}, JsonRequestBehavior.AllowGet)
+                : Json(new {state = "success", message = ""}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeactivateDoctor(Guid doctorId)
+        {
+            var returnObject = InformantService.DeactivateInformant(doctorId);
+            return returnObject.State == "success"
+                ? Json(new { state = "success", informantId = returnObject.Id }, JsonRequestBehavior.AllowGet)
+                : Json(new { state = "success", message = "" }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

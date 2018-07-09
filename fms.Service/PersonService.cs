@@ -136,15 +136,13 @@ namespace fms.Service
                         Message = "record was successfully updated!"
                     };
                 }
-                else
+
+                return new ReturnObject()
                 {
-                    return new ReturnObject()
-                    {
-                        Id = id,
-                        State = "error",
-                        Message = "an error occured while updating this record!"
-                    };
-                }
+                    Id = id,
+                    State = "error",
+                    Message = "an error occured while updating this record!"
+                };
             }
             catch (Exception ex)
             {

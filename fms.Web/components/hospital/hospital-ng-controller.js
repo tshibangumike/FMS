@@ -1,4 +1,22 @@
 ﻿angular.module("fmsApp")
+    .controller("ListHospitalController",
+        [
+            "$rootScope", "$scope", "appService", "records",
+            function ($rootScope, $scope, appService, records) {
+
+                $scope.records = records.data;
+                $scope.selectedRecords = [];
+
+                $scope.selectRecord = function () {
+                    if (_.isEqual(arguments.length, 0)) return null;
+                    var _record = _.isNull(arguments[0], 0) ? null : arguments[0];
+                    if (_.isNull(arguments[0])) return null;
+                    fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, _record);
+                };
+
+
+            }
+        ])
     .controller("ModalListHospitalController",
     [
         "$rootScope", "$scope", "$uibModal", "$uibModalInstance", "appService", "records",

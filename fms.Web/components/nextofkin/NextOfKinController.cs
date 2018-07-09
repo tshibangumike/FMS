@@ -39,5 +39,13 @@ namespace fms.Web.components.nextofkin
                 ? Json(new {state = "success", nextOfKinId = returnObject.Id}, JsonRequestBehavior.AllowGet)
                 : Json(new {state = "success", message = ""}, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult DeactivateNextOfKin(Guid nextOfKinId)
+        {
+            var returnObject = NextOfKinService.DeactivateNextOfKin(nextOfKinId);
+            return returnObject.State == "success"
+                ? Json(new { state = "success", nextOfKinId = returnObject.Id }, JsonRequestBehavior.AllowGet)
+                : Json(new { state = "success", message = "" }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

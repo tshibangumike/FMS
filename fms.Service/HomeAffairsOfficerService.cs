@@ -104,5 +104,42 @@ namespace fms.Service
                 };
             }
         }
+
+        public static ReturnObject DeactivateHomeAffairsOfficer(Guid homeAffairsOfficerId)
+        {
+            try
+            {
+                var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Homeaffairsofficer_deactivate]",
+                    new List<SqlParameter>
+                    {
+                        new SqlParameter("@id", homeAffairsOfficerId)
+                    });
+                if (returnValue == 1)
+                {
+                    return new ReturnObject()
+                    {
+                        Id = homeAffairsOfficerId.ToString(),
+                        State = "success",
+                        Message = "record was successfully updated!"
+                    };
+                }
+
+                return new ReturnObject()
+                {
+                    Id = homeAffairsOfficerId.ToString(),
+                    State = "error",
+                    Message = "an error occured while updating this record!"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ReturnObject()
+                {
+                    Id = "",
+                    State = "error",
+                    Message = ex.Message
+                };
+            }
+        }
     }
 }

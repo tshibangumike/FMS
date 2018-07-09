@@ -25,11 +25,14 @@
                 };
 
                 $scope.edit = function(record) {
-                    if (_.isNull(record))
-                        appService.NavigateTo("editdeceased", { deceasedid: $scope.selectedRecordIds[0] });
-                    else
-                        appService.NavigateTo("editdeceased", { deceasedid: record["Id"] });
-
+                    if (_.isNull(record) || _.isUndefined(record)) {
+                        var selectedRecords = _.filter($scope.records, function (x) { return x.Selected; });
+                        if (_.isNull(selectedRecords) ||
+                            _.isNull(selectedRecords) ||
+                            selectedRecords.length === 0) return;
+                        appService.NavigateTo("editdeceased", { deceasedid: selectedRecords[0]["Id"] });
+                    } else
+                        appService.NavigateTo("editdeceased", { deceasedid: record.Id });
                 };
 
                 $scope.getDeceaseds = function(pageNumber, listType) {
@@ -80,15 +83,124 @@
             function($scope, $uibModal, appService, record) {
 
                 $scope.record = record.data;
+                $scope.formHasBeenSubmitted = false;
+                $scope.Tabs = [
+                    { Name: "Person", Show: true },
+                    { Name: "Deceased", Show: true }
+                ];
 
-                $scope.processForm = function() {
-                    if (arguments.length === 0) return null;
-                    var form = arguments[0] == null ? null : arguments[0];
+                this.init = function() {
+                    if (!_.isNull($scope.record["DateOfBirth"])) {
+                        $scope.recordDOB = {
+                            Year: moment($scope.record["DateOfBirth"]).year(),
+                            Month: (1 + moment($scope.record["DateOfBirth"]).month()),
+                            Day: moment($scope.record["DateOfBirth"]).date()
+                        };
+                    }
+                    if (!_.isNull($scope.record["DateOfBirth"])) {
+                        $scope.recordDOD = {
+                            Year: moment($scope.record["DateOfDeath"]).year(),
+                            Month: (1 + moment($scope.record["DateOfDeath"]).month()),
+                            Day: moment($scope.record["DateOfDeath"]).date()
+                        };
+                    }
+                };
+
+                $scope.collapseExpand = function (elementId) {
+                    var tab = _.find($scope.Tabs, function (x) { return _.isEqual(x.Name, elementId); });
+                    if (_.isUndefined(tab)) return null;
+                    tab.Show = !tab.Show;
+                };
+
+                $scope.getTabByName = function (elementId) {
+                    return _.find($scope.Tabs, function (x) { return _.isEqual(x.Name, elementId); });
+                };
+
+                $scope.DeactivateDeceased = function () {
+                    appService.GetData(fms.Entity.Deceased.Urls.DeactivateDeceased,
+                            {
+                                deceasedId: $scope.record["Id"]
+                            })
+                        .then(function (response) {
+                                appService.NavigateTo("deceased-list");
+                            },
+                            function (response) {
+                            });
+                };
+
+                $scope.Delete = function () {
+                    fms.Routes.ConfirmationLookup($uibModal, $scope.DeactivateDeceased);
+                };
+
+                $scope.GetLastDayOfMonth = function (year, month) {
+                    return fms.Functions.GetMonthLastDay(year, month);
+                };
+
+                $scope.OnChange_Year = function (modelName, year) {
+                    if (_.isNull(year) || _.isUndefined(year)) {
+                        switch (modelName) {
+                            case "recordDOB":
+                                $scope.recordDOB["Month"] = $scope.recordDOB["Day"] = null;
+                                break;
+                            case "recordDOD":
+                                $scope.recordDOD["Month"] = $scope.recordDOD["Day"] = null;
+                                break;
+                            case "funeralBD":
+                                $scope.recordBD["Month"] = $scope.recordBD["Day"] = null;
+                                break;
+                            default:
+                        }
+                    }
+                };
+
+                $scope.OnChange_Month = function (modelName, month) {
+                    if (_.isNull(month) || _.isUndefined(month)) {
+                        switch (modelName) {
+                            case "recordDOB":
+                                $scope.recordDOB["Day"] = null;
+                                break;
+                            case "recordDOD":
+                                $scope.recordDOD["Day"] = null;
+                                break;
+                            case "funeralBD":
+                                $scope.funeralBD["Day"] = null;
+                                break;
+                            default:
+                        }
+                    }
+                };
+
+                $scope.OnChange_SAIdNumber = function(entityName, saIdNumber) {
+                    var data = fms.Functions.ExtractFromIdNunmber(saIdNumber);
+                    $scope.recordDOB["Year"] = moment(data.birthdate).year();
+                    $scope.recordDOB["Month"] = 1 + moment(data.birthdate).month();
+                    $scope.recordDOB["Day"] = moment(data.birthdate).date();
+                    $scope.record["GenderId"] = data.gender === "male" ? 1 : 2;
+                };
+
+                $scope.processForm = function (form) {
+                    $scope.formHasBeenSubmitted = true;
                     if (!form.$valid) {
                         return null;
                     }
-                    $scope.record["DateOfDeath"] = $("#DateOfDeath").val();
-                    $scope.record["DateOfBirth"] = $("#DateOfBirth").val();
+                    if (!_.isNull($scope.recordDOB["Year"]) &&
+                        !_.isNull($scope.recordDOB["Month"]) &&
+                        !_.isNull($scope.recordDOB["Day"])) {
+                        $scope.record["DateOfBirth"] = $scope.recordDOB["Year"] +
+                            "/" +
+                            $scope.recordDOB["Month"] +
+                            "/" +
+                            $scope.recordDOB["Day"];
+                    }
+                    if (!_.isNull($scope.recordDOD["Year"]) &&
+                        !_.isNull($scope.recordDOD["Month"]) &&
+                        !_.isNull($scope.recordDOD["Day"])) {
+                        $scope.record["DateOfDeath"] = $scope.recordDOD["Year"] +
+                            "/" +
+                            $scope.recordDOD["Month"] +
+                            "/" +
+                            $scope.recordDOD["Day"];
+                    }
                     var keyValue = fms.Functions.SplitObjectIntoArray($scope.record);
                     appService.PostForm(fms.Entity.Deceased.Urls.UpdateDeceased,
                         {
@@ -105,5 +217,7 @@
                         });
                     return null;
                 };
+
+                this.init();
             }
         ]);

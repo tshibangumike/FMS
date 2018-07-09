@@ -1,8 +1,8 @@
 ﻿angular.module("fmsApp")
     .controller("ListFuneralController",
         [
-            "$scope", "appService", "funerals",
-            function($scope, appService, funerals) {
+            "$scope", "appService", "$uibModal", "funerals",
+            function($scope, appService, $uibModal, funerals) {
 
                 $scope.records = funerals.data;
                 $scope.selectedRecordIds = [];
@@ -81,6 +81,26 @@
                         return;
                     }
                     $scope.getFunerals($scope.pageNumber, $scope.listType);
+                };
+
+                $scope.Delete = function() {
+                    fms.Routes.ConfirmationLookup($uibModal, $scope.DeactivateFuneral);
+                };
+
+                $scope.DeactivateFuneral = function() {
+                    var selectedRecords = _.filter($scope.records, function(x) { return x.Selected; });
+                    if (_.isNull(selectedRecords) ||
+                        _.isNull(selectedRecords) ||
+                        selectedRecords.length === 0) return;
+                    appService.GetData(fms.Entity.Funeral.Urls.DeactivateFuneral,
+                            {
+                                funeralId: selectedRecords[0]["Id"]
+                            })
+                        .then(function(response) {
+                                appService.RefreshCurrentState();
+                            },
+                            function(response) {
+                            });
                 };
 
                 this.init();
@@ -856,6 +876,22 @@
 
                 $scope.GenerateInvoice = function() {
                     $window.open("/Report/GetInvoiceReport?funeralId=" + $scope.funeral["Id"], "_blank");
+                };
+
+                $scope.Delete = function() {
+                    fms.Routes.ConfirmationLookup($uibModal, $scope.DeactivateFuneral);
+                };
+
+                $scope.DeactivateFuneral = function() {
+                    appService.GetData(fms.Entity.Funeral.Urls.DeactivateFuneral,
+                            {
+                                funeralId: $scope.funeral["Id"]
+                            })
+                        .then(function(response) {
+                                appService.NavigateTo("funeral-list");
+                            },
+                            function(response) {
+                            });
                 };
 
                 $scope.processForm = function(form) {

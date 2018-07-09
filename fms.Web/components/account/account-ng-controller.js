@@ -1,47 +1,48 @@
 ﻿angular.module("fmsApp")
     .controller("LoginController",
-        [
-            "$rootScope", "$scope", "appService",
-            function($rootScope, $scope, appService) {
+    [
+        "$rootScope", "$scope", "appService",
+        function ($rootScope, $scope, appService) {
 
-                $scope.account = {};
-                $scope.errorMessage = null;
-                $scope.formHasBeenSubmitted = false;
+            $scope.account = {};
+            $scope.errorMessage = null;
+            $scope.formHasBeenSubmitted = false;
 
-                $scope.processForm = function() {
-                    $scope.formHasBeenSubmitted = true;
-                    appService.PostForm("/Account/Authenticate",
-                            { username: $scope.account["Username"], password: $scope.account["Password"] })
-                        .then(function(response) {
-                                if (_.isEqual(response.data.state, "error")) {
-                                    $scope.errorMessage = response.data.message;
-                                    return;
-                                }
-                                appService.NavigateTo("listfuneral");
-                            },
-                            function(response) {
-                            });
-                };
-            }
-        ])
+            $scope.processForm = function () {
+                $scope.formHasBeenSubmitted = true;
+                appService.PostForm("/Account/Login",
+                    { username: $scope.account["Username"], password: $scope.account["Password"] })
+                    .then(function (response) {
+                        if (_.isEqual(response.data.state, "error")) {
+                            $scope.account["Password"] = null;
+                            $scope.errorMessage = response.data.message;
+                            return;
+                        }
+                        appService.NavigateTo("listfuneral");
+                    },
+                    function (response) {
+                    });
+            };
+        }
+    ])
     .controller("ProfileController",
-        [
-            "$scope", "appService",
-            function($scope, appService) {
+    [
+        "$scope", "appService",
+        function ($scope, appService) {
 
-                $scope.processForm = function() {
-                    $scope.formHasBeenSubmitted = true;
-                    appService.PostForm("/Account/Authenticate",
-                            { username: $scope.account["Username"], password: $scope.account["Password"] })
-                        .then(function(response) {
-                                if (_.isEqual(response.data.state, "error")) {
-                                    $scope.errorMessage = response.data.message;
-                                    return;
-                                }
-                                appService.NavigateTo("listfuneral");
-                            },
-                            function(response) {
-                            });
-                };
-            }
-        ]);
+            $scope.processForm = function () {
+                $scope.formHasBeenSubmitted = true;
+                appService.PostForm("/Account/Authenticate",
+                    { username: $scope.account["Username"], password: $scope.account["Password"] })
+                    .then(function (response) {
+                        if (_.isEqual(response.data.state, "error")) {
+                            $scope.errorMessage = response.data.message;
+                            return;
+                        }
+                        appService.NavigateTo("listfuneral");
+                    },
+                    function (response) {
+                    });
+            };
+        }
+    ]);

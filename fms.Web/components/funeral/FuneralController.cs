@@ -321,5 +321,13 @@ namespace fms.Web.components.funeral
                 ? Json(new {state = "success", funeralId = funeralReturnObject.Id}, JsonRequestBehavior.AllowGet)
                 : Json("error", JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult DeactivateFuneral(Guid funeralId)
+        {
+            var returnObject = FuneralService.DeactivateFuneral(funeralId);
+            return returnObject.State == "success"
+                ? Json(new { state = "success", funeralId = returnObject.Id }, JsonRequestBehavior.AllowGet)
+                : Json(new { state = "success", message = "" }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

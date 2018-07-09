@@ -28,6 +28,7 @@
             <li><a ui-sref="listnextofkin" ui-sref-active="link-active">Next of Kin</a></li>
             <li><a ui-sref="listdoctor" ui-sref-active="link-active">Doctor</a></li>
             <li><a ui-sref="listhomeaffairsofficer" ui-sref-active="link-active">Home Affairs Officer</a></li>
+            <li><a ui-sref="listsupplier" ui-sref-active="link-active">Suppliers</a></li>
         </ul>
     </li>
     <li>
@@ -37,10 +38,17 @@
         </a>
     </li>
     <li>
-        <a class="btn-block" ui-sref="listsupplier" ui-sref-active="link-active">
-            <i class="fas fa-chevron-circle-right"></i>
-            <span class="sidebar-nav-item"> Suppliers</span>
+        <a class="btn-block" ui-sref-active="link-active" ng-click="collapseExpand('Places')">
+            <i class="fas fa-chevron-circle-right" ng-show="!getTabByName('Places').Show"></i>
+            <i class="fas fa-chevron-circle-down" ng-show="getTabByName('Places').Show"></i>
+            <span class="sidebar-nav-item">Places</span>
         </a>
+        <ul class="list-unstyled" ng-show="getTabByName('Places').Show">
+            <li><a ui-sref="listhospital" ui-sref-active="link-active">Hospitals</a></li>
+            <li><a ui-sref="listhomeaffairsoffice" ui-sref-active="link-active">Home Affairs Offices</a></li>
+            <li><a ui-sref="listmortuary" ui-sref-active="link-active">Mortuaries</a></li>
+            <li><a ui-sref="listcemetery" ui-sref-active="link-active">Cemeteries</a></li>
+        </ul>
     </li>
 </ul>
 

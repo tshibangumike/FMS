@@ -14,8 +14,7 @@ namespace fms.Service
                 new List<SqlParameter>
                 {
                     new SqlParameter("@pagenumber", pageNumber),
-                    new SqlParameter("@listtype", listType),
-                    new SqlParameter("@stateId", 1)
+                    new SqlParameter("@listtype", listType)
                 });
             return records;
         }
@@ -66,12 +65,15 @@ namespace fms.Service
 
                 var personId = doctor.FirstOrDefault(x => x.Key == "PersonId")?.Value;
                 var hospitalId = doctor.FirstOrDefault(x => x.Key == "HospitalId")?.Value;
+                var practiceNumber = doctor.FirstOrDefault(x => x.Key == "PracticeNumber")?.Value;
 
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Doctor_create]",
                     new List<SqlParameter>
                     {
                         new SqlParameter("@personId", personId),
                         new SqlParameter("@hospitalId", hospitalId),
+                        new SqlParameter("@PracticeNumber", practiceNumber),
+                        new SqlParameter("@stateId", 1)
                     });
                 if (returnValue == 1)
                 {
@@ -82,13 +84,13 @@ namespace fms.Service
                         Message = "record was successfully created!"
                     };
                 }
-                else
-                    return new ReturnObject()
-                    {
-                        Id = personId,
-                        State = "error",
-                        Message = "an error occured while creating this record!"
-                    };
+
+                return new ReturnObject()
+                {
+                    Id = personId,
+                    State = "error",
+                    Message = "an error occured while creating this record!"
+                };
             }
             catch (Exception ex)
             {
@@ -108,12 +110,14 @@ namespace fms.Service
 
                 var personId = doctor.FirstOrDefault(x => x.Key == "Id")?.Value;
                 var hospitalId = doctor.FirstOrDefault(x => x.Key == "HospitalId")?.Value;
+                var practiceNumber = doctor.FirstOrDefault(x => x.Key == "PracticeNumber")?.Value;
 
                 var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Doctor_update]",
                     new List<SqlParameter>
                     {
                         new SqlParameter("@personId", personId),
                         new SqlParameter("@hospitalId", hospitalId),
+                        new SqlParameter("@practiceNumber", practiceNumber)
                     });
                 if (returnValue == 1)
                 {
@@ -124,13 +128,13 @@ namespace fms.Service
                         Message = "record was successfully updated!"
                     };
                 }
-                else
-                    return new ReturnObject()
-                    {
-                        Id = personId,
-                        State = "error",
-                        Message = "an error occured while updating this record!"
-                    };
+
+                return new ReturnObject()
+                {
+                    Id = personId,
+                    State = "error",
+                    Message = "an error occured while updating this record!"
+                };
             }
             catch (Exception ex)
             {

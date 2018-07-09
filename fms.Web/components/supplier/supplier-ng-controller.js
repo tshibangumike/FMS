@@ -20,8 +20,23 @@
                 fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, record);
             };
 
+            $scope.toggleSelection = function (record) {
+                record.Selected = !record.Selected;
+            };
+
             $scope.create = function () {
                 appService.NavigateTo("addsupplier");
+            };
+
+            $scope.edit = function (record) {
+                if (_.isNull(record) || _.isUndefined(record)) {
+                    var selectedRecords = _.filter($scope.records, function (x) { return x.Selected; });
+                    if (_.isNull(selectedRecords) ||
+                        _.isNull(selectedRecords) ||
+                        selectedRecords.length === 0) return;
+                    appService.NavigateTo("editsupplier", { supplierid: selectedRecords[0]["Id"] });
+                } else
+                    appService.NavigateTo("editsupplier", { supplierid: record.Id });
             };
 
             $scope.getSuppliers = function (pageNumber, listType) {
@@ -99,13 +114,28 @@
     ])
     .controller("EditSupplierController",
     [
-        "$scope", "$uibModalInstance", "record",
-        function ($scope, $uibModalInstance, record) {
+        "$scope", "appService", "record",
+        function($scope, appService, record) {
 
-            $scope.supplier = record.data;
+            $scope.record = record.data;
+            $scope.formHasBeenSubmitted = false;
 
-            $scope.cancel = function () {
-                $uibModalInstance.dismiss("cancel");
+            $scope.processForm = function(form) {
+                $scope.formHasBeenSubmitted = true;
+                if (!form.$valid) {
+                    return;
+                }
+                var keyValue = fms.Functions.SplitObjectIntoArray($scope.record);
+                appService.PostForm(fms.Entity.Supplier.Urls.UpdateSupplier, { supplier: keyValue })
+                    .then(function successCallback(response) {
+                            if (response.data.state !== "success") {
+                                fms.Notifications.Toastr.UpdateErrorNotification();
+                            }
+                            fms.Notifications.Toastr.UpdateSuccessNotification();
+                            return appService.RefreshCurrentState();
+                        },
+                        function errorCallback(response) {
+                        });
             };
 
         }

@@ -1,4 +1,18 @@
 ﻿angular.module("fmsApp")
+    .controller("ListMortuaryController",
+        [
+            "$scope", "appService", "records",
+            function($scope, appService, records) {
+
+                $scope.records = records.data;
+                $scope.selectedRecords = [];
+
+                $scope.selectRecord = function(record) {
+                    fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, record);
+                };
+
+            }
+        ])
     .controller("ModalListMortuaryController",
         [
             "$rootScope", "$scope", "$uibModal", "$uibModalInstance", "appService", "records",
@@ -7,19 +21,20 @@
                 $scope.records = records.data;
                 $scope.selectedRecords = [];
 
-                $scope.selectRecord = function (record) {
+                $scope.selectRecord = function(record) {
                     fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, record);
                 };
 
-                $scope.getActiveMortuaries = function () {
+                $scope.getActiveMortuaries = function() {
 
                     appService.GetData(fms.Entity.Mortuary.Urls.GetActiveMortuaries)
                         .then(function successCallback(response) {
 
-                            $scope.records = response.data;
+                                $scope.records = response.data;
 
-                        }, function errorCallback(response) {
-                        });
+                            },
+                            function errorCallback(response) {
+                            });
 
                 };
 

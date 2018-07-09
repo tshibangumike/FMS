@@ -2,7 +2,7 @@
     <div class="row m-1">
         <div class="col-md-12 bg-white">
             <div class="float-left p-4">
-                <h3 class="text-muted font-weight-bold">NEW MEMBER'S FORM</h3>
+                <h3 class="text-muted font-weight-bold">EDIT/VIEW MEMBER'S FORM</h3>
             </div>
         </div>
     </div>
@@ -16,6 +16,10 @@
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-plus-square"></i>
                     New
+                </button>
+                <button type="button" class="btn btn-danger" ng-click="Delete()">
+                    <i class="fas fa-plus-square"></i>
+                    Deactivate
                 </button>
             </div>
         </div>
@@ -95,7 +99,7 @@
                     <table class="table table-sm">
                         <thead>
                             <tr>
-                                <th colspan="6">
+                                <th colspan="9">
                                     <div class="float-right">
                                         <button type="button" class="btn btn-primary btn-sm" ng-disabled="disableEditFuneralBoughtItemButton()">
                                             <i class="fas fa-edit"></i>
@@ -111,19 +115,19 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col"></th>
-                                <th scope="col">Period</th>
+                                <th scope="col">Year</th>
+                                <th scope="col">Month</th>
                                 <th scope="col">Amount</th>
-                                <th scope="col">Date</th>
+                                <th scope="col">Payment Date</th>
                                 <th scope="col">Created On</th>
                                 <th>Proof of Payment</th>
-                                <th></th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="payment in payments">
-                                <th scope="row">{{ $index + 1 }}</th>
-                                <td scope="row">
+                                <td>{{ $index + 1 }}</td>
+                                <td>
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="{{ payment.Id }}"
                                                ng-model="payment.Selected"
@@ -132,21 +136,175 @@
                                         <label class="custom-control-label" for="{{ payment.Id }}"></label>
                                     </div>
                                 </td>
-                                <td>{{ payment.PeriodName }}</td>
-                                <td>{{ payment.Amount }}</td>
-                                <td>{{ payment.PaymentDate }}</td>
-                                <td>{{ payment.CreatedOn }}</td>
                                 <td>
+                                    {{ payment.MonthName }}
+                                </td>
+                                <td>
+                                    {{ payment.YearName }}
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">R</span>
+                                        </div>
+                                        <input type="text" class="form-control" ng-model="payment.Amount" step="1" ng-disabled="true" />
+                                    </div>
+                                </td>
+                                <td>
+                                    {{ payment.PaymentDate }}
+                                </td>
+                                <td>
+                                    {{ payment.CreatedOn }}
+                                </td>
+                                <td>
+                                    <a href="/Document/DownloadDocument?documentId={{ payment.DocumentId }}&documentName={{ payment.PeriodName }}"
+                                       class="btn btn-primary btn-sm"
+                                       target="_blank">
+                                        <i class="fas fa-download"></i>
+                                        Download
+                                    </a>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    New Payment
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" ng-model="newPayment.YearId" step="1" />
+                                </td>
+                                <td>
+                                    <select class="form-control" ng-model="newPayment.MonthId">
+                                        <option ng-repeat="month in months" value="{{ month.Id }}">{{ month.Name }}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">R</span>
+                                        </div>
+                                        <input type="text" class="form-control" ng-model="newPayment.Amount" step="1" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <input type="number"
+                                                   class="form-control"
+                                                   placeholder="Year"
+                                                   name="paymentDate_Year"
+                                                   ng-model="paymentDate.Year"
+                                                   min="1900"
+                                                   max="{{ currentYear }}"
+                                                   ng-minlength="4"
+                                                   ng-maxlength="4"
+                                                   limit-to="4"
+                                                   ng-class="{ 'is-invalid' : form.paymentDate_Year.$invalid && formHasBeenSubmitted }">
+                                            <small class="form-text text-muted ml-2">Year</small>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="number"
+                                                   class="form-control"
+                                                   placeholder="Month"
+                                                   name="paymentDate_Month"
+                                                   ng-model="paymentDate.Month"
+                                                   ng-disabled="!paymentDate.Year"
+                                                   ng-required="paymentDate.Year.length > 0"
+                                                   min="1"
+                                                   max="12"
+                                                   ng-minlength="1"
+                                                   ng-maxlength="2"
+                                                   limit-to="2"
+                                                   ng-class="{ 'is-invalid' : form.paymentDate_Month.$invalid && formHasBeenSubmitted }">
+                                            <small class="form-text text-muted ml-2">Month</small>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="number"
+                                                   class="form-control"
+                                                   placeholder="Day"
+                                                   name="paymentDate_Day"
+                                                   ng-model="paymentDate.Day"
+                                                   ng-required="paymentDate.Month.length > 0"
+                                                   ng-disabled="!paymentDate.Year || !paymentDate.Month"
+                                                   min="1"
+                                                   max="{{ GetLastDayOfMonth(paymentDate.Year, paymentDate.Month) }}"
+                                                   ng-minlength="1"
+                                                   ng-maxlength="2"
+                                                   limit-to="2"
+                                                   ng-class="{ 'is-invalid' : form.paymentDate_Day.$invalid && formHasBeenSubmitted }">
+                                            <small class="form-text text-muted ml-2">Day</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <input type="number"
+                                                   class="form-control"
+                                                   placeholder="Year"
+                                                   ng-model="currentDate.Year"
+                                                   ng-disabled="true" />
+                                            <small class="form-text text-muted ml-2">Year</small>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="number"
+                                                   class="form-control"
+                                                   placeholder="Month"
+                                                   ng-model="currentDate.Month"
+                                                   ng-disabled="true" />
+                                            <small class="form-text text-muted ml-2">Month</small>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="number"
+                                                   class="form-control"
+                                                   placeholder="Day"
+                                                   ng-model="currentDate.Day"
+                                                   ng-required="true"
+                                                   ng-disabled="true" />
+                                            <small class="form-text text-muted ml-2">Day</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="ProofOfPayment"
+                                               onchange="angular.element(this).scope().OnChange_FileInput(this)">
+                                        <label class="custom-file-label" for="ProofOfPayment">Choose file...</label>
+                                        <div class="invalid-feedback">Example invalid custom file feedback</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" ng-click="AddPayment()" ng-disabled="disableAddFuneralBoughtItemButton()">
+                                        <i class="fas fa-plus-square"></i>
+                                        Add
+                                    </button>
+                                </td>
+                            </tr>
+                            <!--<tr ng-repeat="payment in payments">
+                                <td scope="row" class="border">{{ $index + 1 }}</td>
+                                <td scope="row" class="border">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="{{ payment.Id }}"
+                                               ng-model="payment.Selected"
+                                               ng-change="selectFuneralBoughtItemRecord(payment)"
+                                               ng-checked="all">
+                                        <label class="custom-control-label" for="{{ payment.Id }}"></label>
+                                    </div>
+                                </td>
+                                <td class="border">{{ payment.PeriodName }}</td>
+                                <td class="border">R {{ payment.Amount }}</td>
+                                <td class="border">{{ payment.PaymentDate }}</td>
+                                <td class="border">{{ payment.CreatedOn }}</td>
+                                <td class="border">
                                     <span ng-if="payment.DocumentMimeType == 'application/pdf'">
                                         <i class="far fa-file-pdf"></i>
                                     </span>
                                     <span ng-if="payment.DocumentMimeType == 'image/jpeg' || payment.DocumentMimeType == 'image/png'">
                                         <i class="fas fa-image"></i>
-
                                     </span>
                                     {{ payment.PeriodName }}
                                 </td>
-                                <td>
+                                <td class="border">
                                     <a href="/Document/DownloadDocument?documentId={{ payment.DocumentId }}&documentName={{ payment.PeriodName }}"
                                        class="btn btn-primary btn-sm"
                                        target="_blank">
@@ -173,12 +331,52 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="input-group mb-3" id="datetimepicker4" data-target-input="nearest">
-                                        <input type="text" id="paymentDate" class="form-control datetimepicker-input" data-target="#datetimepicker4" />
-                                        <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
-                                            <button class="btn btn-outline-secondary" type="button">
-                                                <i class="fa fa-calendar"></i>
-                                            </button>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <input type="number"
+                                                   class="form-control"
+                                                   placeholder="Year"
+                                                   name="paymentDate_Year"
+                                                   ng-model="paymentDate.Year"
+                                                   min="1900"
+                                                   max="{{ currentYear }}"
+                                                   ng-minlength="4"
+                                                   ng-maxlength="4"
+                                                   limit-to="4"
+                                                   ng-class="{ 'is-invalid' : form.paymentDate_Year.$invalid && formHasBeenSubmitted }">
+                                            <small class="form-text text-muted ml-2">Year</small>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="number"
+                                                   class="form-control"
+                                                   placeholder="Month"
+                                                   name="paymentDate_Month"
+                                                   ng-model="paymentDate.Month"
+                                                   ng-disabled="!paymentDate.Year"
+                                                   ng-required="paymentDate.Year.length > 0"
+                                                   min="1"
+                                                   max="12"
+                                                   ng-minlength="1"
+                                                   ng-maxlength="2"
+                                                   limit-to="2"
+                                                   ng-class="{ 'is-invalid' : form.paymentDate_Month.$invalid && formHasBeenSubmitted }">
+                                            <small class="form-text text-muted ml-2">Month</small>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="number"
+                                                   class="form-control"
+                                                   placeholder="Day"
+                                                   name="paymentDate_Day"
+                                                   ng-model="paymentDate.Day"
+                                                   ng-required="paymentDate.Month.length > 0"
+                                                   ng-disabled="!paymentDate.Year || !paymentDate.Month"
+                                                   min="1"
+                                                   max="{{ GetLastDayOfMonth(paymentDate.Year, paymentDate.Month) }}"
+                                                   ng-minlength="1"
+                                                   ng-maxlength="2"
+                                                   limit-to="2"
+                                                   ng-class="{ 'is-invalid' : form.paymentDate_Day.$invalid && formHasBeenSubmitted }">
+                                            <small class="form-text text-muted ml-2">Day</small>
                                         </div>
                                     </div>
                                 </td>
@@ -197,7 +395,7 @@
                                         Add
                                     </button>
                                 </td>
-                            </tr>
+                            </tr>-->
                         </tbody>
                     </table>
                 </div>

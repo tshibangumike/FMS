@@ -13,6 +13,13 @@ namespace fms.Web.components.supplier
             var records = SupplierService.QueryActiveSuppliers(pageNumber, listType);
             return Json(records, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetSupplierById(Guid supplierId)
+        {
+            var records = SupplierService.QuerySupplierById(supplierId);
+            return Json(records, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult AddSupplier(List<KeyValue> supplier)
         {
             try
@@ -20,12 +27,24 @@ namespace fms.Web.components.supplier
                 var supplierId = Guid.NewGuid().ToString();
                 KeyValueService.AddAttribute(supplier, "Id", supplierId);
                 var supplierReturnObject = SupplierService.InsertSupplier(supplier);
-                return supplierReturnObject.State == "success" ? Json(new { state = "success", supplierId = supplierReturnObject.Id }, JsonRequestBehavior.AllowGet) : Json(new { state = "error", hospital = "" }, JsonRequestBehavior.AllowGet);
+                return supplierReturnObject.State == "success"
+                    ? Json(new {state = "success", supplierId = supplierReturnObject.Id}, JsonRequestBehavior.AllowGet)
+                    : Json(new {state = "error", hospital = ""}, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 return Json(ex.Message, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public ActionResult UpdateSupplier(List<KeyValue> supplier)
+        {
+            if (supplier == null || supplier.Count <= 0)
+                return Json(new {state = "success", message = ""}, JsonRequestBehavior.AllowGet);
+            var supplierReturnObject = SupplierService.UpdateSupplier(supplier);
+            return supplierReturnObject.State == "success"
+                ? Json(new {state = "success", supplierId = supplierReturnObject.Id}, JsonRequestBehavior.AllowGet)
+                : Json(new {state = "success", message = ""}, JsonRequestBehavior.AllowGet);
         }
     }
 }

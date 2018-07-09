@@ -39,5 +39,13 @@ namespace fms.Web.components.deceased
                 ? Json(new {state = "success", deceasedId = deceasedReturnObject.Id}, JsonRequestBehavior.AllowGet)
                 : Json(new {state = "success", message = ""}, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult DeactivateDeceased(Guid deceasedId)
+        {
+            var returnObject = DeceasedService.DeactivateDeceased(deceasedId);
+            return returnObject.State == "success"
+                ? Json(new { state = "success", deceasedId = returnObject.Id }, JsonRequestBehavior.AllowGet)
+                : Json(new { state = "success", message = "" }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

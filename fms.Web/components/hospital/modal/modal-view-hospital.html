@@ -1,4 +1,4 @@
-﻿<form name="newHospitalForm" ng-submit="processForm(newHospitalForm)">
+﻿<form name="form" ng-submit="processForm(form)">
     <div class="modal-header">
         <h3 class="modal-title" id="modal-title">Quick Create New Hospital Form</h3>
     </div>
@@ -6,7 +6,7 @@
         <div class="form-row">
             <div class="form-group col-md-12">
                 <label>Name</label>
-                <input type="text" class="form-control" ng-model="hospital.Name">
+                <input type="text" class="form-control" ng-model="record.Name">
             </div>
         </div>
         <div class="form-row">
@@ -17,16 +17,12 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn btn-labeled btn-success m-1">
-            <span class="btn-label">
-                <i class="fa fa-check-circle"></i>
-            </span>
+        <button type="submit" class="btn btn-success m-1">
+            <i class="fa fa-check-circle"></i>
             Save
         </button>
-        <button type="button" class="btn btn-labeled btn-danger m-1" ng-click="cancel()">
-            <span class="btn-label">
-                <i class="fa fa-ban"></i>
-            </span>
+        <button type="button" class="btn btn-danger m-1" ng-click="cancel()">
+            <i class="fa fa-ban"></i>
             Cancel
         </button>
     </div>

@@ -66,5 +66,13 @@ namespace fms.Web.components.homeaffairsofficer
                     JsonRequestBehavior.AllowGet)
                 : Json(new {state = "success", message = ""}, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult DeactivateHomeAffairsOfficer(Guid homeAffairsOfficerId)
+        {
+            var returnObject = HomeAffairsOfficerService.DeactivateHomeAffairsOfficer(homeAffairsOfficerId);
+            return returnObject.State == "success"
+                ? Json(new { state = "success", homeAffairsOfficerId = returnObject.Id }, JsonRequestBehavior.AllowGet)
+                : Json(new { state = "success", message = "" }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

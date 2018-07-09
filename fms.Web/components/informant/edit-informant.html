@@ -6,12 +6,16 @@
             </div>
         </div>
     </div>
-    <div class="row m-1">
+    <div class="row m-1" ng-if="record.StateId == 1">
         <div class="col-md-12 bg-white p-1">
             <div class="float-left">
                 <button type="submit" class="btn btn-success">
                     <i class="fas fa-save"></i>
                     Save
+                </button>
+                <button type="button" class="btn btn-danger" ng-click="Delete()">
+                    <i class="fas fa-trash-alt"></i>
+                    Delete
                 </button>
             </div>
         </div>
@@ -19,60 +23,94 @@
     <div class="row m-1">
         <div class="col-md-12 bg-white p-1">
             <div class="card border-light">
-                <div class="card-header bg-white">
+                <div class="card-header bg-white" ng-click="collapseExpand('Person')">
                     <div class="float-left">
                         <a class="text-muted font-weight-bold">
                             <div class="btn btn-light">
-                                <i class="fas fa-braille"></i>
+                                <i class="fas fa-angle-up" ng-show="getTabByName('Person').Show"></i>
+                                <i class="fas fa-angle-down" ng-show="!getTabByName('Person').Show"></i>
                             </div>
                             General Information
                         </a>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body" ng-show="getTabByName('Person').Show">
                     <div class="form-row m-2">
                         <div class="form-group col-md-6">
-                            <label class="">First name</label>
-                            <input type="text" class="form-control" ng-model="record.FirstName" />
+                            <label>First name</label> <span ng-if="record.LastName.length > 0" class="required"></span>
+                            <input type="text" class="form-control"
+                                   name="record_FirstName"
+                                   ng-model="record.FirstName"
+                                   ng-required="record.LastName.length > 0"
+                                   ng-class="{ 'is-invalid' : form.record_FirstName.$invalid && formHasBeenSubmitted }" />
+                            <div class="text-danger" ng-show="form.record_FirstName.$invalid && formHasBeenSubmitted">
+                                <span ng-if="form.record_FirstName.$error.required">Please provide a value</span>
+                            </div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label class="">Last name</label>
-                            <input type="text" class="form-control" ng-model="record.LastName" />
-                        </div>
-                    </div>
-                    <div class="form-row m-2">
-                        <div class="form-group col-md-6">
-                            <label class="">ID Number</label>
-                            <input type="text" class="form-control" ng-model="record.SAIdNumber" />
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label>Gender</label>
-                            <div class="custom-controls-stacked d-block">
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" id="deceasedGenderMale" name="deceasedGender" class="custom-control-input" value="1" ng-model="record.GenderId">
-                                    <label class="custom-control-label" for="deceasedGenderMale">Male</label>
-                                </div>
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" id="deceasedGenderFemale" name="deceasedGender" class="custom-control-input" value="2" ng-model="record.GenderId">
-                                    <label class="custom-control-label" for="deceasedGenderFemale">Female</label>
-                                </div>
+                            <label>Last name</label> <span ng-if="record.FirstName.length > 0" class="required"></span>
+                            <input type="text" class="form-control"
+                                   name="record_LastName"
+                                   ng-model="record.LastName"
+                                   ng-required="record.FirstName.length > 0"
+                                   ng-class="{ 'is-invalid' : form.record_LastName.$invalid && formHasBeenSubmitted }" />
+                            <div class="text-danger" ng-show="form.record_LastName.$invalid && formHasBeenSubmitted">
+                                <span ng-if="form.record_LastName.$error.required">Please provide a value</span>
                             </div>
                         </div>
                     </div>
                     <div class="form-row m-2">
                         <div class="form-group col-md-6">
-                            <label>Contact Number</label>
-                            <input type="text" class="form-control" ng-model="record.ContactNumber">
+                            <label>ID Number</label>
+                            <input type="text" class="form-control"
+                                   name="record_SAIdNumber"
+                                   ng-model="record.SAIdNumber" />
                         </div>
                         <div class="form-group col-md-6">
-                            <label>EmailAddress</label>
-                            <input type="text" class="form-control" ng-model="record.EmailAddress">
+                            <label>Gender</label> <span ng-if="record.FirstName.length > 0 || record.LastName.length > 0" class="required"></span>
+                            <div class="custom-controls-stacked d-block">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="recordGenderMale"
+                                           name="record_Gender"
+                                           class="custom-control-input"
+                                           value="1"
+                                           ng-model="record.GenderId"
+                                           ng-required="record.FirstName.length > 0 || record.LastName.length > 0"
+                                           ng-class="{ 'is-invalid' : form.record_Gender.$invalid && formHasBeenSubmitted }" />
+                                    <label class="custom-control-label" for="recordGenderMale">Male</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="recordGenderFemale"
+                                           name="record_Gender"
+                                           class="custom-control-input"
+                                           value="2"
+                                           ng-model="record.GenderId"
+                                           ng-required="record.FirstName.length > 0 || record.LastName.length > 0"
+                                           ng-class="{ 'is-invalid' : form.record_Gender.$invalid && formHasBeenSubmitted }" />
+                                    <label class="custom-control-label" for="recordGenderFemale">Female</label>
+                                </div>
+                            </div>
+                            <div class="text-danger" ng-show="form.record_Gender.$invalid && formHasBeenSubmitted">
+                                <span ng-if="form.record_Gender.$error.required">Please provide a value</span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row m-2">
                         <div class="form-group col-md-6">
-                            <label>Relationship to Deceased</label>
-                            <input type="text" class="form-control" ng-model="record.RelationshipToDeceased">
+                            <label>Email Address</label>
+                            <input type="text" class="form-control" ng-model="record.EmailAddress">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Contact number</label> <span ng-if="record.FirstName.length > 0 || record.LastName.length > 0" class="required"></span>
+                            <input type="text"
+                                   class="form-control"
+                                   name="record_ContactNumber"
+                                   ng-model="record.ContactNumber"
+                                   ng-required="record.FirstName.length > 0 || record.LastName.length > 0"
+                                   ng-class="{ 'is-invalid' : form.record_ContactNumber.$invalid && formHasBeenSubmitted }" />
+                            <div class="text-danger" ng-show="form.record_ContactNumber.$invalid && formHasBeenSubmitted">
+                                <span ng-if="form.record_ContactNumber.$error.required">Please provide a value</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -80,6 +118,39 @@
         </div>
     </div>
     <div class="row m-1">
+        <div class="col-md-12 bg-white p-1">
+            <div class="card border-light">
+                <div class="card-header bg-white" ng-click="collapseExpand('Informant')">
+                    <div class="float-left">
+                        <a class="text-muted font-weight-bold">
+                            <div class="btn btn-light">
+                                <i class="fas fa-angle-up" ng-show="getTabByName('Informant').Show"></i>
+                                <i class="fas fa-angle-down" ng-show="!getTabByName('Informant').Show"></i>
+                            </div>
+                            Informant Information
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body" ng-show="getTabByName('Informant').Show">
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>Relationship to Deceased</label> <span ng-if="record.FirstName.length > 0 || record.LastName.length > 0" class="required"></span>
+                            <input type="text"
+                                   class="form-control"
+                                   name="record_RelationshipToDeceased"
+                                   ng-model="record.RelationshipToDeceased"
+                                   ng-required="record.FirstName.length > 0 || record.LastName.length > 0"
+                                   ng-class="{ 'is-invalid' : form.record_RelationshipToDeceased.$invalid && formHasBeenSubmitted }" />
+                            <div class="text-danger" ng-show="form.record_RelationshipToDeceased.$invalid && formHasBeenSubmitted">
+                                <span ng-if="form.record_RelationshipToDeceased.$error.required">Please provide a value</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1" ng-if="record.StateId == 1">
         <div class="col-md-12 bg-white p-1">
             <div class="float-left">
                 <button type="submit" class="btn btn-success">

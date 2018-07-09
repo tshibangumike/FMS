@@ -1,0 +1,240 @@
+﻿<form name="form" ng-submit="processForm(form)" novalidate>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white">
+            <div class="float-left p-4">
+                <h3 class="text-muted font-weight-bold">VIEW/EDIT INFORMANT'S FORM</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1">
+            <div class="float-left">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1">
+            <div class="card border-light">
+                <div class="card-header bg-white">
+                    <div class="float-left">
+                        <a class="text-muted font-weight-bold">
+                            <div class="btn btn-light">
+                                <i class="fas fa-braille"></i>
+                            </div>
+                            General Information
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>First name</label> <span class="required"></span>
+                            <input type="text"
+                                   name="record_FirstName"
+                                   class="form-control"
+                                   ng-model="record.FirstName"
+                                   ng-required="true"
+                                   ng-minlength="2"
+                                   ng-maxlength="75"
+                                   limit-to="75"
+                                   ng-class="{ 'is-invalid' : form.deceased_FirstName.$invalid && formHasBeenSubmitted }" />
+                            <div class="text-danger" ng-show="form.deceased_FirstName.$invalid && formHasBeenSubmitted">
+                                <span ng-if="form.deceased_FirstName.$error.required">Please provide a value</span>
+                                <span ng-if="form.deceased_FirstName.$error.minlength">Value must be contain at lease 2 letters.</span>
+                                <span ng-if="form.deceased_FirstName.$error.maxlength">Value must be contain at most 75 letters</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Last name</label> <span class="required"></span>
+                            <input type="text"
+                                   name="deceased_LastName"
+                                   class="form-control"
+                                   ng-model="record.LastName"
+                                   ng-required="true"
+                                   ng-minlength="2"
+                                   ng-maxlength="75"
+                                   limit-to="75"
+                                   ng-class="{ 'is-invalid' : form.deceased_LastName.$invalid && formHasBeenSubmitted }" />
+                            <div class="text-danger" ng-show="form.deceased_LastName.$invalid && formHasBeenSubmitted">
+                                <span ng-if="form.deceased_LastName.$error.required">Please provide a value</span>
+                                <span ng-if="form.deceased_LastName.$error.minlength">Value must be contain at lease 2 letters.</span>
+                                <span ng-if="form.deceased_LastName.$error.maxlength">Value must be contain at most 75 letters</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>ID Number </label> <span class="required"></span>
+                            <input type="text"
+                                   class="form-control"
+                                   name="deceased_SAIdNumber"
+                                   ng-model="record.SAIdNumber"
+                                   ng-change="OnChange_SAIdNumber('deceased', deceased.SAIdNumber)"
+                                   ng-minlength="13"
+                                   ng-maxlength="13"
+                                   limit-to="13"
+                                   ng-required="true"
+                                   ng-class="{ 'is-invalid' : form.deceased_SAIdNumber.$invalid && formHasBeenSubmitted }" />
+                            <div class="text-danger" ng-show="form.deceased_SAIdNumber.$invalid && formHasBeenSubmitted">
+                                <span ng-if="form.deceased_SAIdNumber.$error.required">Please provide a value</span>
+                                <span ng-if="form.deceased_SAIdNumber.$error.minlength">Value must be 13 digits long.</span>
+                                <span ng-if="form.deceased_SAIdNumber.$error.maxlength">Value must be 13 digits long.</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Birthday</label> <span class="required"></span>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <input type="number"
+                                           class="form-control"
+                                           placeholder="Year"
+                                           name="deceasedDOB_Year"
+                                           ng-model="deceasedDOB.Year"
+                                           ng-change="OnChange_Year('deceasedDOB', deceasedDOB.Year)"
+                                           ng-required="true"
+                                           ng-min="1900"
+                                           ng-max="{{ currentYear }}"
+                                           ng-minlength="4"
+                                           ng-maxlength="4"
+                                           limit-to="4"
+                                           ng-class="{ 'is-invalid' : form.deceasedDOB_Year.$invalid && formHasBeenSubmitted }">
+                                    <small class="form-text text-muted ml-2">Year</small>
+                                </div>
+                                <div class="col-sm">
+                                    <input type="number"
+                                           class="form-control"
+                                           placeholder="Month"
+                                           name="deceasedDOB_Month"
+                                           ng-model="deceasedDOB.Month"
+                                           ng-required="true"
+                                           ng-disabled="!deceasedDOB.Year"
+                                           ng-change="OnChange_Month('deceasedDOB', deceasedDOB.Month)"
+                                           ng-min="1"
+                                           ng-max="12"
+                                           ng-minlength="1"
+                                           ng-maxlength="2"
+                                           limit-to="2"
+                                           ng-class="{ 'is-invalid' : form.deceasedDOB_Month.$invalid && formHasBeenSubmitted }">
+                                    <small class="form-text text-muted ml-2">Month</small>
+                                </div>
+                                <div class="col-sm">
+                                    <input type="number"
+                                           class="form-control"
+                                           placeholder="Day"
+                                           name="deceasedDOB_Day"
+                                           ng-model="deceasedDOB.Day"
+                                           ng-required="true"
+                                           ng-disabled="!deceasedDOB.Year || !deceasedDOB.Month"
+                                           ng-min="1"
+                                           ng-max="{{ GetLastDayOfMonth(deceasedDOB.Year, deceasedDOB.Month) }}"
+                                           ng-minlength="1"
+                                           ng-maxlength="2"
+                                           limit-to="2"
+                                           ng-class="{ 'is-invalid' : form.deceasedDOB_Day.$invalid && formHasBeenSubmitted }">
+                                    <small class="form-text text-muted ml-2">Day</small>
+                                </div>
+                            </div>
+                            <div class="row text-danger" ng-show="(form.deceasedDOB_Year.$invalid && formHasBeenSubmitted) || (form.deceasedDOB_Month.$invalid && formHasBeenSubmitted) || (form.deceasedDOB_Day.$invalid && formHasBeenSubmitted)">
+                                <span class="col-md-12" ng-if="form.deceasedDOB_Year.$error.required">Please fill out the year block (1st block)</span>
+                                <span class="col-md-12" ng-if="form.deceasedDOB_Year.$error.ngMin || form.deceasedDOB_Year.$error.ngMax">Year value must be between than 1830 and {{ currentYear }}</span>
+
+                                <span class="col-md-12" ng-if="form.deceasedDOB_Month.$error.required">Please fill out the month block (2nd block)</span>
+                                <span class="col-md-12" ng-if="form.deceasedDOB_Month.$error.ngMin || form.deceasedDOB_Month.$error.ngMax">Month value must be between 1 and 12</span>
+
+                                <span class="col-md-12" ng-if="form.deceasedDOB_Day.$error.required">Please fill out the day block (3rd block)</span>
+                                <span class="col-md-12" ng-if="form.deceasedDOB_Day.$error.ngMin || form.deceasedDOB_Day.$error.ngMax">Day value must be between 1 and {{ GetLastDayOfMonth(deceasedDOB.Year, deceasedDOB.Month) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row m-2">
+                        <div class="form-group col-md-6">
+                            <label>Gender</label> <span class="required"></span>
+                            <div class="custom-controls-stacked d-block">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio"
+                                           id="deceasedGenderMale"
+                                           name="deceased_Gender"
+                                           class="custom-control-input"
+                                           value="1"
+                                           ng-model="decrecordeased.GenderId"
+                                           ng-required="true"
+                                           ng-class="{ 'is-invalid' : form.deceased_Gender.$invalid && formHasBeenSubmitted }" />
+                                    <label class="custom-control-label" for="deceasedGenderMale">Male</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio"
+                                           id="deceasedGenderFemale"
+                                           name="deceased_Gender"
+                                           class="custom-control-input"
+                                           value="2"
+                                           ng-model="record.GenderId"
+                                           ng-required="true"
+                                           ng-class="{ 'is-invalid' : form.deceased_Gender.$invalid && formHasBeenSubmitted }" />
+                                    <label class="custom-control-label" for="deceasedGenderFemale">Female</label>
+                                </div>
+                            </div>
+                            <div class="text-danger" ng-show="form.eppei_gender.$invalid && formHasBeenSubmitted">
+                                <span ng-if="form.eppei_gender.$error.required">{{ GetRequiredFieldErrorMessage('radio') }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>The body of the deceased was retrieved from</label>
+                            <div class="custom-controls-stacked d-block">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio"
+                                           id="hospital"
+                                           name="placeOfDeath"
+                                           class="custom-control-input"
+                                           value="Hospital"
+                                           ng-model="record.WhereWasTheBodyRetrieved"
+                                           ng-required="true"
+                                           ng-class="{ 'is-invalid' : form.placeOfDeath.$invalid && formHasBeenSubmitted }" />
+                                    <label class="custom-control-label" for="hospital">Hospital</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio"
+                                           id="mortuary"
+                                           name="placeOfDeath"
+                                           class="custom-control-input"
+                                           value="Home"
+                                           ng-model="record.WhereWasTheBodyRetrieved"
+                                           ng-required="true"
+                                           ng-class="{ 'is-invalid' : form.placeOfDeath.$invalid && formHasBeenSubmitted }" />
+                                    <label class="custom-control-label" for="mortuary">Home</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio"
+                                           id="other"
+                                           name="placeOfDeath"
+                                           class="custom-control-input"
+                                           value="Other"
+                                           ng-model="record.WhereWasTheBodyRetrieved"
+                                           ng-required="true"
+                                           ng-class="{ 'is-invalid' : form.placeOfDeath.$invalid && formHasBeenSubmitted }" />
+                                    <label class="custom-control-label" for="other">Other</label>
+                                </div>
+                            </div>
+                            <div class="text-danger" ng-show="form.placeOfDeath.$invalid && formHasBeenSubmitted">
+                                <span ng-if="form.placeOfDeath.$error.required">Please provide a value</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-12 bg-white p-1">
+            <div class="float-left">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

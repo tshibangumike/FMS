@@ -5,7 +5,8 @@
         function ($scope) {
 
             $scope.tabs = [
-                { Name: "People", Show: false }
+                { Name: "People", Show: false },
+                { Name: "Places", Show: false }
             ];
 
             $scope.collapseExpand = function (elementId) {

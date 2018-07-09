@@ -123,7 +123,10 @@
     <Content Include="components\account\login.html" />
     <Content Include="components\base\base-ng-controller.js" />
     <Content Include="components\base\base.html" />
+    <Content Include="components\cemetery\add-cemetery.html" />
     <Content Include="components\cemetery\cemetery-ng-controller.js" />
+    <Content Include="components\cemetery\edit-cemetery.html" />
+    <Content Include="components\cemetery\list-cemetery.html" />
     <Content Include="components\cemetery\modal\modal-view-cemetery.html" />
     <Content Include="components\cemetery\modal\modal-add-cemetery.html" />
     <Content Include="components\cemetery\modal\modal-list-cemetery.html" />
@@ -142,6 +145,7 @@
     <Content Include="components\funeral\edit-funeral.html" />
     <Content Include="components\funeral\funeral-ng-controller.js" />
     <Content Include="components\funeral\list-funeral.html" />
+    <Content Include="components\homeaffairsofficer\add-homeaffairsofficer.html" />
     <Content Include="components\homeaffairsofficer\edit-homeaffairsofficer.html" />
     <Content Include="components\homeaffairsofficer\list-homeaffairsofficer.html" />
     <Content Include="components\homeaffairsofficer\modal\modal-view-homeaffairsofficer.html" />
@@ -150,8 +154,11 @@
     <Content Include="components\homeaffairsofficer\modal\modal-list-homeaffairsofficer.html" />
     <Content Include="components\homeaffairsofficer\homeaffairsofficer-ng-controller.js" />
     <Content Include="components\homeaffairsoffice\homeaffairsoffice-ng-controller.js" />
+    <Content Include="components\homeaffairsoffice\add-homeaffairsoffice.html" />
+    <Content Include="components\homeaffairsoffice\edit-homeaffairsoffice.html" />
+    <Content Include="components\homeaffairsoffice\list-homeaffairsoffice.html" />
     <Content Include="components\homeaffairsoffice\modal\modal-add-homeaffairsoffice.html" />
-    <Content Include="components\homeaffairsoffice\modal\modal-edit-homeaffairsoffice.html" />
+    <Content Include="components\homeaffairsoffice\modal\modal-view-homeaffairsoffice.html" />
     <Content Include="components\homeaffairsoffice\modal\modal-list-homeaffairsoffice.html" />
     <Content Include="components\hospital\hospital-ng-controller.js" />
     <Content Include="components\hospital\list-hospital.html" />
@@ -166,6 +173,9 @@
     <Content Include="components\member\add-member.html" />
     <Content Include="components\member\edit-member.html" />
     <Content Include="components\member\list-member.html" />
+    <Content Include="components\mortuary\add-mortuary.html" />
+    <Content Include="components\mortuary\edit-mortuary.html" />
+    <Content Include="components\mortuary\list-mortuary.html" />
     <Content Include="components\mortuary\modal\modal-view-mortuary.html" />
     <Content Include="components\mortuary\mortuary-ng-controller.js" />
     <Content Include="components\mortuary\modal\modal-add-mortuary.html" />
@@ -177,10 +187,14 @@
     <Content Include="components\payment\add-payment.html" />
     <Content Include="components\payment\edit-payment.html" />
     <Content Include="components\payment\paymennt-ng-controller.js" />
+    <Content Include="components\shared\confirmationdialog\confirmation-dialog.html" />
+    <Content Include="components\shared\confirmationdialog\confirmationdialog-ng-controller.js" />
     <Content Include="components\shared\editview-topbar-buttons.html" />
     <Content Include="components\shared\createview-topbar-buttons.html" />
     <Content Include="components\shared\listview-topbar-buttons.html" />
     <Content Include="components\shared\lookup-list-template.html" />
+    <Content Include="components\person\edit-person.html" />
+    <Content Include="components\shared\person-information.html" />
     <Content Include="components\supplier\add-supplier.html" />
     <Content Include="components\supplier\edit-supplier.html" />
     <Content Include="components\supplier\list-supplier.html" />
@@ -209,6 +223,7 @@
     <Content Include="css\fms.css" />
     <Content Include="css\tempusdominus-bootstrap.min.css" />
     <Content Include="Global.asax" />
+    <Content Include="img\logo.png" />
     <Content Include="index.html" />
     <Content Include="js\config\app-directive.js" />
     <Content Include="js\config\app-factory.js" />
@@ -424,6 +439,8 @@
       <DependentUpon>BBU_DEVDataSet.xsd</DependentUpon>
     </Content>
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\BBU - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\BBU - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

@@ -20,13 +20,13 @@ namespace fms.Service
             return records;
         }
 
-        public static Dictionary<string, object> QueryHomeAffairsOfficeById(Guid hosptitalId)
+        public static Dictionary<string, object> QueryHomeAffairsOfficeById(Guid homeAffairsOfficeId)
         {
             var records = SharedService.ExecuteGetSqlStoredProcedure(
                 "[bbu].[HomeAffairsOffice_queryHomeAffairsOfficebyid]",
                 new List<SqlParameter>
                 {
-                    new SqlParameter("@id", hosptitalId),
+                    new SqlParameter("@id", homeAffairsOfficeId)
                 });
             if (records != null && records.Count == 1) return records[0];
             return null;

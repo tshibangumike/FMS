@@ -46,6 +46,7 @@ a, a:hover, a:focus {
 .main {
     background-color: #F4F3EF;
     overflow: auto;
+    margin-top: -20px;
 }
 
 /* ---------------------------------------------------

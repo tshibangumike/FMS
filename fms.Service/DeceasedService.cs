@@ -15,7 +15,6 @@ namespace fms.Service
             {
                 new SqlParameter("@pagenumber", pageNumber),
                 new SqlParameter("@listtype", listType),
-                new SqlParameter("@stateId", 1)
             });
             return records;
         }
@@ -61,7 +60,8 @@ namespace fms.Service
                         new SqlParameter("@dateOfDeath", parsedDateOfDeath),
                         new SqlParameter("@placeOfDeath", placeOfDeath),
                         new SqlParameter("@whereWasTheBodyRetrieved", whereWasTheBodyRetrieved),
-                        new SqlParameter("@causeOfDeath", causeOfDeath)
+                        new SqlParameter("@causeOfDeath", causeOfDeath),
+                        new SqlParameter("@stateId", 1)
                     });
                 if (returnValue == 1)
                 {
@@ -121,13 +121,50 @@ namespace fms.Service
                         Message = "record was successfully updated!"
                     };
                 }
-                else
+
+                return new ReturnObject()
+                {
+                    Id = personId,
+                    State = "error",
+                    Message = "an error occured while updating this record!"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ReturnObject()
+                {
+                    Id = "",
+                    State = "error",
+                    Message = ex.Message
+                };
+            }
+        }
+
+        public static ReturnObject DeactivateDeceased(Guid deceasedId)
+        {
+            try
+            {
+                var returnValue = SharedService.ExecutePostSqlStoredProcedure("[bbu].[Deceased_deactivate]",
+                    new List<SqlParameter>
+                    {
+                        new SqlParameter("@personId", deceasedId)
+                    });
+                if (returnValue == 1)
+                {
                     return new ReturnObject()
                     {
-                        Id = personId,
-                        State = "error",
-                        Message = "an error occured while updating this record!"
+                        Id = deceasedId.ToString(),
+                        State = "success",
+                        Message = "record was successfully updated!"
                     };
+                }
+
+                return new ReturnObject()
+                {
+                    Id = deceasedId.ToString(),
+                    State = "error",
+                    Message = "an error occured while updating this record!"
+                };
             }
             catch (Exception ex)
             {

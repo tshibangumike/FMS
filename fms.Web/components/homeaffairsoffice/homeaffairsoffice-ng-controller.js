@@ -1,16 +1,16 @@
 ﻿angular.module("fmsApp")
     .controller("ListHomeAffairsOfficeController",
         [
-            "$rootScope", "$scope", "appService", "homeAffairsOfficers",
-            function($rootScope, $scope, appService, homeAffairsOfficers) {
+            "$rootScope", "$scope", "appService", "records",
+            function ($rootScope, $scope, appService, records) {
 
-                $scope.records = homeAffairsOfficers.data;
+                $scope.records = records.data;
                 $scope.selectedRecords = [];
                 $scope.pageNumber = 1;
                 $scope.listType = 1;
                 $scope.totalPageNumber = 0;
 
-                this.init = function () {
+                this.init = function() {
                     if ($scope.records.length > 0) {
                         $scope.totalPageNumber = $scope.records[0]["TotalPageNumber"];
                     }
@@ -32,27 +32,27 @@
                         appService.NavigateTo("edithomeaffairsofficer", { homeaffairsofficerid: record["Id"] });
                 };
 
-                $scope.getHomeAffairOffices = function (pageNumber, listType) {
+                $scope.getHomeAffairOffices = function(pageNumber, listType) {
                     appService.GetData(
                             fms.Entity.HomeAffairsOffice.Urls.GetActiveHomeAffairsOffices,
                             {
                                 pageNumber: pageNumber,
                                 listType: listType
                             })
-                        .then(function (response) {
+                        .then(function(response) {
 
                                 $scope.records = response.data;
                             },
-                            function (response) {
+                            function(response) {
                             });
                 };
 
-                $scope.startFromBegining = function () {
+                $scope.startFromBegining = function() {
                     $scope.pageNumber = 1;
                     $scope.getHomeAffairOffices($scope.pageNumber, $scope.listType);
                 };
 
-                $scope.next = function () {
+                $scope.next = function() {
                     $scope.pageNumber++;
                     if ($scope.pageNumber > $scope.totalPageNumber) {
                         $scope.pageNumber--;
@@ -61,7 +61,7 @@
                     $scope.getHomeAffairOffices($scope.pageNumber, $scope.listType);
                 };
 
-                $scope.previous = function () {
+                $scope.previous = function() {
                     $scope.pageNumber--;
                     if ($scope.pageNumber <= 0) {
                         $scope.pageNumber++;
@@ -122,7 +122,7 @@
                 $scope.records = records.data;
                 $scope.selectedRecords = [];
 
-                $scope.selectRecord = function (record) {
+                $scope.selectRecord = function(record) {
                     fms.Functions.AddToOrRemoveFromArrayAnItemBasedOnId($scope.selectedRecords, record);
                 };
 
@@ -190,33 +190,7 @@
             function($scope, $uibModal, $uibModalInstance, appService, record) {
 
                 $scope.formHasBeenSubmitted = true;
-                $scope.homeAffairsOfficer = record.data;
-
-                $scope.getHospitals = function() {
-
-                    var modalInstance = $uibModal.open({
-                        animation: true,
-                        ariaLabelledBy: "modal-title",
-                        ariaDescribedBy: "modal-body",
-                        templateUrl: "/components/hospital/modal/modal-list-hospital.html",
-                        controller: "ListHospitalController",
-                        size: "lg",
-                        backdrop: false,
-                        resolve: {
-                            records: [
-                                "appService", function(appService) {
-                                    return appService.GetData("/Hospital/GetActiveHospitals");
-                                }
-                            ]
-                        }
-                    });
-
-                    modalInstance.result.then(function(selectedRecord) {
-                        $scope.doctor["HospitalName"] = selectedRecord.Name;
-                        $scope.doctor["HospitalId"] = selectedRecord.Id;
-                    });
-
-                };
+                $scope.record = record.data;
 
                 $scope.cancel = function() {
                     $uibModalInstance.dismiss();

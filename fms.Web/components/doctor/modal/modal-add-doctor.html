@@ -59,7 +59,7 @@
         <div class="form-row m-2">
             <div class="form-group col-md-12">
                 <label class="">Email Address</label>
-                <input type="text" class="form-control" ng-model="doctor.EmailAddress">
+                <input type="email" class="form-control" ng-model="doctor.EmailAddress">
             </div>
         </div>
         <div class="form-row m-2">
@@ -74,6 +74,20 @@
                     </div>
                 </div>
                 <input type="hidden" ng-model="doctor.HospitalId" />
+            </div>
+            <div class="form-group col-md-12">
+               <label ng-class="{ 'text-danger' : form.doctor_PracticeNumber.$invalid && formHasBeenSubmitted }">
+                   Practice Number <span class="required"></span>
+               </label>
+                <input type="text"
+                       class="form-control"
+                       name="doctor_PracticeNumber"
+                       ng-model="doctor.PracticeNumber"
+                       ng-required="true"
+                       ng-class="{ 'is-invalid' : form.doctor_PracticeNumber.$invalid && formHasBeenSubmitted }" />
+                <div class="text-danger" ng-messages="form.doctor_PracticeNumber.$error" ng-if="form.doctor_PracticeNumber.$invalid && formHasBeenSubmitted">
+                    <div ng-message="required">Please provide a value</div>
+                </div>
             </div>
         </div>
     </div>

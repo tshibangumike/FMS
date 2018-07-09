@@ -1,0 +1,162 @@
+﻿<div class="form-row m-2">
+    <div class="form-group col-md-6">
+        <label>First name</label> <span class="required"></span>
+        <input type="text"
+               name="record_FirstName"
+               class="form-control"
+               ng-model="record.FirstName"
+               ng-required="true"
+               ng-minlength="2"
+               ng-maxlength="75"
+               limit-to="75"
+               ng-class="{ 'is-invalid' : form.record_FirstName.$invalid && formHasBeenSubmitted }" />
+        <div class="text-danger" ng-show="form.record_FirstName.$invalid && formHasBeenSubmitted">
+            <span ng-if="form.record_FirstName.$error.required">Please provide a value</span>
+            <span ng-if="form.record_FirstName.$error.minlength">Value must be contain at lease 2 letters.</span>
+            <span ng-if="form.record_FirstName.$error.maxlength">Value must be contain at most 75 letters</span>
+        </div>
+    </div>
+    <div class="form-group col-md-6">
+        <label>Last name</label> <span class="required"></span>
+        <input type="text"
+               name="record_LastName"
+               class="form-control"
+               ng-model="record.LastName"
+               ng-required="true"
+               ng-minlength="2"
+               ng-maxlength="75"
+               limit-to="75"
+               ng-class="{ 'is-invalid' : form.record_LastName.$invalid && formHasBeenSubmitted }" />
+        <div class="text-danger" ng-show="form.record_LastName.$invalid && formHasBeenSubmitted">
+            <span ng-if="form.record_LastName.$error.required">Please provide a value</span>
+            <span ng-if="form.record_LastName.$error.minlength">Value must be contain at lease 2 letters.</span>
+            <span ng-if="form.record_LastName.$error.maxlength">Value must be contain at most 75 letters</span>
+        </div>
+    </div>
+</div>
+<div class="form-row m-2">
+    <div class="form-group col-md-6">
+        <label>ID Number </label> <span class="required"></span>
+        <input type="text"
+               class="form-control"
+               name="record_SAIdNumber"
+               ng-model="record.SAIdNumber"
+               ng-change="OnChange_SAIdNumber('record', record.SAIdNumber)"
+               ng-minlength="13"
+               ng-maxlength="13"
+               limit-to="13"
+               ng-required="true"
+               ng-class="{ 'is-invalid' : form.record_SAIdNumber.$invalid && formHasBeenSubmitted }" />
+        <div class="text-danger" ng-show="form.record_SAIdNumber.$invalid && formHasBeenSubmitted">
+            <span ng-if="form.record_SAIdNumber.$error.required">Please provide a value</span>
+            <span ng-if="form.record_SAIdNumber.$error.minlength">Value must be 13 digits long.</span>
+            <span ng-if="form.record_SAIdNumber.$error.maxlength">Value must be 13 digits long.</span>
+        </div>
+    </div>
+    <div class="form-group col-md-6">
+        <label>Birthday</label> <span class="required"></span>
+        <div class="row">
+            <div class="col-sm">
+                <input type="number"
+                       class="form-control"
+                       placeholder="Year"
+                       name="recordDOB_Year"
+                       ng-model="recordDOB.Year"
+                       ng-change="OnChange_Year('recordDOB', recordDOB.Year)"
+                       ng-required="true"
+                       ng-min="1900"
+                       ng-max="{{ currentYear }}"
+                       ng-minlength="4"
+                       ng-maxlength="4"
+                       limit-to="4"
+                       ng-class="{ 'is-invalid' : form.recordDOB_Year.$invalid && formHasBeenSubmitted }">
+                <small class="form-text text-muted ml-2">Year</small>
+            </div>
+            <div class="col-sm">
+                <input type="number"
+                       class="form-control"
+                       placeholder="Month"
+                       name="recordDOB_Month"
+                       ng-model="recordDOB.Month"
+                       ng-required="true"
+                       ng-disabled="!recordDOB.Year"
+                       ng-change="OnChange_Month('recordDOB', recordDOB.Month)"
+                       ng-min="1"
+                       ng-max="12"
+                       ng-minlength="1"
+                       ng-maxlength="2"
+                       limit-to="2"
+                       ng-class="{ 'is-invalid' : form.recordDOB_Month.$invalid && formHasBeenSubmitted }">
+                <small class="form-text text-muted ml-2">Month</small>
+            </div>
+            <div class="col-sm">
+                <input type="number"
+                       class="form-control"
+                       placeholder="Day"
+                       name="recordDOB_Day"
+                       ng-model="recordDOB.Day"
+                       ng-required="true"
+                       ng-disabled="!recordDOB.Year || !recordDOB.Month"
+                       ng-min="1"
+                       ng-max="{{ GetLastDayOfMonth(recordDOB.Year, recordDOB.Month) }}"
+                       ng-minlength="1"
+                       ng-maxlength="2"
+                       limit-to="2"
+                       ng-class="{ 'is-invalid' : form.recordDOB_Day.$invalid && formHasBeenSubmitted }">
+                <small class="form-text text-muted ml-2">Day</small>
+            </div>
+        </div>
+        <div class="row text-danger" ng-show="(form.recordDOB_Year.$invalid && formHasBeenSubmitted) || (form.recordDOB_Month.$invalid && formHasBeenSubmitted) || (form.recordDOB_Day.$invalid && formHasBeenSubmitted)">
+            <span class="col-md-12" ng-if="form.recordDOB_Year.$error.required">Please fill out the year block (1st block)</span>
+            <span class="col-md-12" ng-if="form.recordDOB_Year.$error.ngMin || form.recordDOB_Year.$error.ngMax">Year value must be between than 1830 and {{ currentYear }}</span>
+
+            <span class="col-md-12" ng-if="form.recordDOB_Month.$error.required">Please fill out the month block (2nd block)</span>
+            <span class="col-md-12" ng-if="form.recordDOB_Month.$error.ngMin || form.recordDOB_Month.$error.ngMax">Month value must be between 1 and 12</span>
+
+            <span class="col-md-12" ng-if="form.recordDOB_Day.$error.required">Please fill out the day block (3rd block)</span>
+            <span class="col-md-12" ng-if="form.recordDOB_Day.$error.ngMin || form.recordDOB_Day.$error.ngMax">Day value must be between 1 and {{ GetLastDayOfMonth(recordDOB.Year, recordDOB.Month) }}</span>
+        </div>
+    </div>
+</div>
+<div class="form-row m-2">
+    <div class="form-group col-md-6">
+        <label>Gender</label> <span class="required"></span>
+        <div class="custom-controls-stacked d-block">
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio"
+                       id="recordGenderMale"
+                       name="record_Gender"
+                       class="custom-control-input"
+                       value="1"
+                       ng-model="record.GenderId"
+                       ng-required="true"
+                       ng-class="{ 'is-invalid' : form.record_Gender.$invalid && formHasBeenSubmitted }" />
+                <label class="custom-control-label" for="recordGenderMale">Male</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio"
+                       id="recordGenderFemale"
+                       name="record_Gender"
+                       class="custom-control-input"
+                       value="2"
+                       ng-model="record.GenderId"
+                       ng-required="true"
+                       ng-class="{ 'is-invalid' : form.record_Gender.$invalid && formHasBeenSubmitted }" />
+                <label class="custom-control-label" for="recordGenderFemale">Female</label>
+            </div>
+        </div>
+        <div class="text-danger" ng-show="form.eppei_gender.$invalid && formHasBeenSubmitted">
+            <span ng-if="form.eppei_gender.$error.required">{{ GetRequiredFieldErrorMessage('radio') }}</span>
+        </div>
+    </div>
+    <div class="form-group col-md-6">
+        <label>Contact Number</label>
+        <input type="text" class="form-control" ng-model="record.ContactNumber">
+    </div>
+</div>
+<div class="form-row m-2">
+    <div class="form-group col-md-6">
+        <label>Email Address</label>
+        <input type="text" class="form-control" ng-model="record.EmailAddress">
+    </div>
+</div>

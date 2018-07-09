@@ -39,5 +39,13 @@ namespace fms.Web.components.informant
                 ? Json(new {state = "success", informantId = informantReturnObject.Id}, JsonRequestBehavior.AllowGet)
                 : Json(new {state = "success", message = ""}, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult DeactivateInformant(Guid informantId)
+        {
+            var returnObject = InformantService.DeactivateInformant(informantId);
+            return returnObject.State == "success"
+                ? Json(new { state = "success", informantId = returnObject.Id }, JsonRequestBehavior.AllowGet)
+                : Json(new { state = "success", message = "" }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

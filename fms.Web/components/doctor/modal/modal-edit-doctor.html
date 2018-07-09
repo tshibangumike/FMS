@@ -44,16 +44,18 @@
         </div>
         <div class="form-row m-2">
             <div class="form-group col-md-12">
-                <label for="inputCity" class="">Name of Hospital in Which Death Was Confirmed</label>
+                <label class="">Hospital</label>
                 <input type="text" class="form-control" ng-model="doctor.HospitalName" ng-disabled="true">
+            </div>
+            <div class="form-group col-md-12">
+                <label class="">Practice Number</label>
+                <input type="text" class="form-control" ng-model="doctor.PracticeNumber" ng-disabled="true">
             </div>
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-labeled btn-danger m-1" ng-click="close()">
-            <span class="btn-label">
+        <button type="button" class="btn btn-danger m-1" ng-click="close()">
                 <i class="fa fa-ban"></i>
-            </span>
             Close
         </button>
     </div>
